@@ -1,0 +1,3 @@
+div(class="content-container")
+    div(class="list-group")
+        a(target="_blank" ng-href="getCourseWare?cid={{courseWare.cwid}}&type={{courseWare.mimetype}}" class="list-group-item" ng-repeat="courseWare in courseWares") {{courseWare.cname}}

@@ -1,0 +1,6 @@
+ul(class="nav nav-tabs nav-pills")
+    li(role="presentation" uib-btn-radio="'my-courses'" ng-model="checked")
+        a(ui-sref="logined.learningSystem.myCourses") 我的课程
+    li(role="presentation" uib-btn-radio="'add-course'" ng-model="checked")
+        a(ui-sref="logined.learningSystem.addCourse") 新建课程
+div(ui-view="")

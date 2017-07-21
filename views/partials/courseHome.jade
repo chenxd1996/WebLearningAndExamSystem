@@ -1,0 +1,10 @@
+div(class="content-container")
+    div(class="bg-white block-container mb-15")
+        label(class="fs-16") 课程教师:&nbsp;
+        span {{teachers}}
+    div(class="bg-white block-container mb-15")
+        label(class="fs-16") 课程面向:&nbsp;
+        span {{remark}}
+    div(class="bg-white block-container")
+        label(class="fs-16") 课程描述:
+        div(ng-bind-html="description | trustHtml")

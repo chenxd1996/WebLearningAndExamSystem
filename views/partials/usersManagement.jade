@@ -1,0 +1,14 @@
+ul(class="nav nav-tabs")
+    li(role="presentation" uib-btn-radio="'users-management'" ng-model="checked" uib-dropdown)
+        a(uib-dropdown-toggle) 用户管理&nbsp;
+            span(class="caret")
+        ul(class="dropdown-menu" uib-dropdown-menu role="menu")
+            li(role="menuitem")
+                a(ui-sref="logined.usersManagement.addUser") 添加用户
+            li(role="menuitem")
+                a(ui-sref="logined.usersManagement.editUser") 编辑用户
+            li(role="menuitem")
+                a(ui-sref="logined.usersManagement.deleteUser") 删除用户
+    li(role="presentation" uib-btn-radio="'users-list'" ng-model="checked")
+        a(ui-sref="logined.usersManagement.usersList") 用户列表
+div(ui-view="")

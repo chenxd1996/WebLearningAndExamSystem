@@ -1,0 +1,30 @@
+div(class="panel panel-info")
+    div(class="panel-heading")
+        h3 添加用户
+    div(class="panel-body panelBody")
+        div(class="col-xs-6 col-xs-offset-3")
+            div(class="input-group formInterval")
+                span(class="input-group-addon") 身份
+                select(class="form-control" ng-model="levelSelected" ng-options="option for option in options" required)
+            div(class="input-group formInterval" ng-if="levelSelected == '学生'")
+                span(class="input-group-addon") 学号
+                input(type="text" class="form-control" ng-model="user.id" placeholder="学号" required)
+            div(class="input-group formInterval" ng-if="levelSelected == '教师'")
+                span(class="input-group-addon") 工号
+                input(type="text" class="form-control" ng-model="user.id" placeholder="工号" required)
+            div(class="input-group formInterval")
+                span(class="input-group-addon") 姓名
+                input(type="text" class="form-control" ng-model="user.name" placeholder="姓名" required)
+            div(class="input-group formInterval" ng-if="levelSelected == '学生'")
+                span(class="input-group-addon") 学院
+                input(type="text" class="form-control" ng-model="user.college" placeholder="学院, 例如：数据科学与计算机学院" required)
+            div(class="input-group formInterval" ng-if="levelSelected == '学生'")
+                span(class="input-group-addon") 专业
+                input(type="text" class="form-control" ng-model="user.major" placeholder="专业, 例如：软件工程" required)
+            div(class="input-group formInterval" ng-if="levelSelected == '学生'")
+                span(class="input-group-addon") 年级
+                input(type="number" min="2000" class="form-control" ng-model="user.grade" placeholder="年级, 例如：2015" required)
+            div(class="input-group formInterval" ng-if="levelSelected == '学生'")
+                span(class="input-group-addon") 班级
+                input(type="number" min="1" class="form-control" ng-model="user.class" placeholder="班级, 例如：1" required)
+            button(class="btn btn-primary pull-right" ng-click="submit()") 添加

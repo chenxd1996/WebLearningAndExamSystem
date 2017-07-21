@@ -1,0 +1,24 @@
+{
+  "name": "examsystem",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "angular-file-upload": "^2.5.0",
+    "angularjs-toaster": "^2.1.0",
+    "body-parser": "~1.17.1",
+    "connect-redis": "^3.3.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "express-mysql-session": "^1.2.1",
+    "express-session": "^1.15.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.8.1",
+    "multer": "^1.3.0",
+    "mysql": "~2.13.0",
+    "serve-favicon": "~2.4.2"
+  }
+}

@@ -1,0 +1,15 @@
+ul(class="nav nav-tabs nav-pills")
+    li(role="presentation" uib-btn-radio="'course-home'" ng-model="checked")
+        a(ui-sref="logined.courseDetail.courseHome({courseID: courseID})") 课程主页
+    li(role="presentation" uib-btn-radio="'course-data'" ng-model="checked" uib-dropdown)
+        a(uib-dropdown-toggle ui-sref="logined.courseDetail.courseData({courseID: courseID})" ng-if="userInfo.level == 1") 课程资料
+        a(uib-dropdown-toggle ng-if="userInfo.level == 2") 课程资料
+            i(class="caret")
+        ul(class="dropdown-menu" uib-dropdown-menu role="menu" ng-if="userInfo.level == 2")
+            li(role="menuitem")
+                a(ui-sref="logined.courseDetail.courseData({courseID: courseID})") 所有资料
+            li(role="menuitem")
+                a(ui-sref="logined.courseDetail.addCourseData({courseID: courseID})") 上传资料
+    li(role="presentation" uib-btn-radio="'course-members'" ng-model="checked")
+        a(ui-sref="logined.courseDetail.courseMembers") 课程成员
+div(ui-view="")

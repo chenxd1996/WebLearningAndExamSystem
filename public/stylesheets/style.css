@@ -1,0 +1,202 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  background-color: #f1f1f1 !important;
+  font: "Arial", "sans-serif";
+}
+
+a {
+  color: #00B7FF;
+}
+
+.myNav {
+  padding-right: 0 !important;
+  height: 100%;
+}
+
+.navNarrow {
+  width: 4%;
+  min-width: 55px;
+}
+
+.navWide {
+  width: 10%;
+  min-width: 137px;
+}
+
+.logoutBottom {
+  position: relative !important;
+  top: 50%;
+}
+
+.mainView {
+  width: 95.5%;
+}
+
+.Offset {
+  margin-left:4.5%;
+}
+
+.header {
+  height: 130px;
+  background-image: url("../images/header.png");
+}
+
+.formInterval {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.panelBody {
+  min-height: 500px;
+}
+
+.content-container {
+  padding: 36px;
+}
+
+.block-container {
+  padding: 36px;
+  border-radius: 5px;
+}
+
+.course-item {
+  max-width: 400px;
+  width: 90%;
+}
+
+.courseWare-item {
+  max-width: 400px;
+  height: 200px;
+  width: 90%;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.inbl {
+  display: inline-block;
+}
+
+.mb-5 {
+  margin-bottom: 5px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.mr-5 {
+  margin-right: 5px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.mr-15 {
+  margin-right: 15px;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.mt-5 {
+  margin-top: 5px;
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+.pt-5 {
+  padding-top: 5px;
+}
+
+.pt-10 {
+  padding-top: 10px;
+}
+
+.pr-10 {
+  padding-right:10px;
+}
+
+.pl-10 {
+  padding-left:10px;
+}
+
+.pl-20 {
+  padding-left: 20px;
+}
+
+.pb-5 {
+  padding-bottom:5px;
+}
+
+.pb-10 {
+  padding-bottom: 10px;
+}
+
+
+.fs-13 {
+  font-size: 13px;
+}
+
+.fs-16 {
+  font-size: 16px;
+}
+
+.cl-info {
+  color: #5bc0de;
+}
+
+.cl-green {
+  color: #00ce00;
+}
+
+.file {
+  opacity: 0;
+  width: 110.047px !important;
+  height: 34px !important;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+.upload-btn {
+  position: relative;
+  overflow: hidden;
+  width: 110.047px !important;
+  height: 34px !important;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 4px;
+  background-color: #F5F5F5;
+}
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background: #fff ;
+}
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color:rgba(7, 170, 247, 0.7);
+}
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color:rgba(7, 170, 247, 1);
+}
