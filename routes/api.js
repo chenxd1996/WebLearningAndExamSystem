@@ -363,3 +363,62 @@ exports.getCourseWare = function (req, res) {
     });
 };
 
+exports.addExerciseBank = function (req, res) {
+    var eid = new Date().getTime();
+    con.query("insert into ExerciseBank " +
+        "value(?, ?)", [eid, req.body.name], function (err, result) {
+        if (err) {
+            console.log("addExerciseBank: " + err);
+            res.json({
+                status: false
+            });
+        } else {
+            con.query("insert into ExerciseBankCourse " +
+                "value(?, ?)", [eid, req.body.id], function (err, result) {
+                if (err) {
+                    console.log("insert into ExerciseBankCourse: " + err);
+                } else {
+                    res.json({
+                        status: true
+                    });
+                }
+            });
+        }
+    });
+};
+
+exports.getExerciseBanks = function (req, res) {
+    if (req.body.level == 1) {
+        con.query("select * from StudentCourse sc, Course c, ExerciseBank e, ExerciseBankCourse ec " +
+            "where sc.sid = ? and sc.cid = c.cid and ec.cid = c.cid and e.eid = ec.eid;", req.body.id, function (err, result) {
+            if (err) {
+                console.log("get student exercise banks: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                console.log(result);
+                res.json({
+                    status: true,
+                    result: result
+                });
+            }
+        });
+    } else if (req.body.level == 2) {
+        con.query("select * from TeacherCourse tc, Course c, ExerciseBank e, ExerciseBankCourse ec " +
+            "where tc.tid = ? and tc.cid = c.cid and ec.cid = c.cid and e.eid = ec.eid;", req.body.id, function (err, result) {
+            if (err) {
+                console.log("get teacher exercise banks:" + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                res.json({
+                    status: true,
+                    result: result
+                });
+            }
+        });
+    }
+
+};

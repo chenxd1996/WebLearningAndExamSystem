@@ -63,6 +63,27 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/:courseID/add-course-data",
         controller: addCourseDataCtrl,
         templateUrl: "partials/addCourseData"
+    }).state("logined.exerciseSystem.addExerciseBank", {
+        url: "/exercise-system/add-exercise-bank",
+        controller: addExerciseBankCtrl,
+        templateUrl: "partials/addExerciseBank"
+    }).state("logined.exerciseSystem.myExerciseBank", {
+        url: "/exercise-system/my-exercise-bank",
+        controller: myExerciseBankCtrl,
+        templateUrl: "partials/myExerciseBank"
+    }).state("logined.exerciseBankDetail", {
+        url: "/exercise-system/exerciseBank-detail",
+        params: {exerciseBankID: null},
+        controller: exerciseBankDetailCtrl,
+        templateUrl: "partials/exerciseBankDetail"
+    }).state("logined.exerciseBankDetail.addExercise", {
+        url: "/:exerciseBankID/add-exercise",
+        controller: addExerciseCtrl,
+        templateUrl: "partials/addExercise"
+    }).state("logined.exerciseBankDetail.allExercise", {
+        url: "/:exerciseBankID/all-exercise",
+        controller: allExerciseCtrl,
+        templateUrl: "partials/allExercise"
     });
     $locationProvider.html5Mode(true);
 }]);

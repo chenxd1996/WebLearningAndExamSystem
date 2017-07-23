@@ -1,0 +1,12 @@
+div(class="content-container")
+    div(class="course-item bg-white pt-5 pr-10 pr-10 pb-5 pl-20 mr-15 mb-15 inbl" ng-repeat = "eb in result")
+        div(class="fs-16 pt-10 pb-10")
+            a(ui-sref="logined.exerciseBankDetail.allExercise({exerciseBankID: eb.eid})") {{eb.cname + " / " + eb.ename}}
+        div(class="fs-13 mb-10 cl-info")
+            i(class="fa-users fa fa-fw mr-10 fa-user-circle-o")
+            span(ng-if="userInfo.level == 1") 角色是学生
+            span(ng-if="userInfo.level == 2") 角色是老师
+        div(class="fs-13 mb-5 mr-20")
+            a(href="#")
+                i(class="fa fa-fw fa-bar-chart mr-10")
+                span 题目 10

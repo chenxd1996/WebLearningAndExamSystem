@@ -1,2 +1,6 @@
-div
-    p exercise system
+ul(class="nav nav-tabs nav-pills")
+    li(role="presentation" uib-btn-radio="'my-exercise-bank'" ng-model="checked")
+        a(ui-sref="logined.exerciseSystem.myExerciseBank") 我的题库
+    li(role="presentation" uib-btn-radio="'add-exercise-bank'" ng-model="checked")
+        a(ui-sref="logined.exerciseSystem.addExerciseBank") 新建题库
+div(ui-view="")

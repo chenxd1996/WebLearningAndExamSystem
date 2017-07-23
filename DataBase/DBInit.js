@@ -63,14 +63,45 @@ function DBInit() {
             }
     });
 
-    con.query("create table if not exists Exercise(" +
+    con.query("create table if not exists ExerciseBank(" +
         "eid varchar(32)," +
         "ename varchar(20)," +
         "primary key(eid))", function (err, result) {
             if (err) {
+                console.log("ExerciseBank: " + err);
+            }
+    });
+
+    con.query("create table if not exists Exercise(" +
+        "eid varchar(32)," +
+        "ebid varchar(32)," +
+        "description varchar(1000)," +
+        "primary key(eid)," +
+        "foreign key(ebid) references ExerciseBank(eid) on delete cascade on update cascade);", function (err, result) {
+            if (err) {
                 console.log("Exercise: " + err);
             }
     });
+
+    con.query("create table if not exists Op(" +
+        "op varchar(2)," +
+        "description varchar(500)," +
+        "eid varchar(32)," +
+        "foreign key(eid) references Exercise(eid) on delete cascade on update cascade);", function (err, result) {
+            if (err) {
+                console.log("Op: " + err);
+            }
+    });
+
+    con.query("create table if not exists Anwser(" +
+        "op varchar(2)," +
+        "eid varchar(32)," +
+        "foreign key(eid) references Exercise(eid) on delete cascade on update cascade);", function (err, result) {
+            if (err) {
+                console.log("Anwser: " + err);
+            }
+    });
+
 
     con.query("create table if not exists Exam(" +
         "eid varchar(32)," +
@@ -105,7 +136,7 @@ function DBInit() {
         }
     });
 
-    con.query("create table if not exists TeacherCourseWare(" +
+    /*con.query("create table if not exists TeacherCourseWare(" +
         "tid varchar(10)," +
         "cid varchar(32)," +
         "primary key(tid, cid)," +
@@ -114,9 +145,9 @@ function DBInit() {
             if (err) {
                 console.log("TeacherCourseWare: " + err);
             }
-    });
+    });*/
 
-    con.query("create table if not exists StudentCourseWare(" +
+    /*con.query("create table if not exists StudentCourseWare(" +
         "sid varchar(10)," +
         "cid varchar(32)," +
         "primary key(sid, cid)," +
@@ -125,9 +156,9 @@ function DBInit() {
             if (err) {
                 console.log("StudentCourceWare: " + err);
             }
-    });
+    });*/
 
-    con.query("create table if not exists TeacherExercise(" +
+    /*con.query("create table if not exists TeacherExercise(" +
         "tid varchar(10)," +
         "eid varchar(32)," +
         "primary key(tid, eid)," +
@@ -136,9 +167,9 @@ function DBInit() {
             if (err) {
                 console.log("TeacherExercise: " + err);
             }
-    });
+    });*/
 
-    con.query("create table if not exists StudentExercise(" +
+    /*con.query("create table if not exists StudentExercise(" +
         "sid varchar(10)," +
         "eid varchar(32)," +
         "primary key(sid, eid)," +
@@ -147,7 +178,7 @@ function DBInit() {
             if (err) {
                 console.log("StudentExercise: " + err);
             }
-    });
+    });*/
 
     con.query("create table if not exists TeacherExam(" +
         "tid varchar(10)," +
@@ -183,11 +214,11 @@ function DBInit() {
             }
     });
 
-    con.query("create table if not exists ExerciseCourse(" +
+    con.query("create table if not exists ExerciseBankCourse(" +
         "eid varchar(32)," +
         "cid varchar(32)," +
         "primary key(eid, cid)," +
-        "foreign key(eid) references Exercise(eid) on delete cascade on update cascade," +
+        "foreign key(eid) references ExerciseBank(eid) on delete cascade on update cascade," +
         "foreign key(cid) references Course(cid) on delete cascade on update cascade)", function (err, result) {
             if (err) {
                 console.log("ExerciseCourse: " + err);

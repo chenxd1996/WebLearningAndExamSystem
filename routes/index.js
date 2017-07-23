@@ -39,6 +39,10 @@ router.post('/getCourseWares', api.getCourseWares);
 
 router.get('/getCourseWare', api.getCourseWare);
 
+router.post('/addExerciseBank', api.addExerciseBank);
+
+router.post('/getExerciseBanks', api.getExerciseBanks);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

@@ -210,12 +210,12 @@ function courseDataCtrl($scope, $stateParams, $http) {
     }).success(function (res) {
         $scope.courseWares = res.result;
     });
-    $scope.getCourseWare = function(courseWareID, type) {
+    /*$scope.getCourseWare = function(courseWareID, type) {
         console.log(courseWareID);
         $http.get('/getCourseWare/?' + "cid=" + courseWareID + "&type=" + type).success(function (res) {
 
         });
-    }
+    }*/
 }
 
 function addCourseDataCtrl($scope, $stateParams, FileUploader) {
@@ -228,6 +228,82 @@ function addCourseDataCtrl($scope, $stateParams, FileUploader) {
     });
 }
 
-function exerciseSystemCtrl($scope) {
+function exerciseSystemCtrl($scope, $location) {
+    var options = ['add-exercise-bank', 'my-exercise-bank'];
+    var path = $location.path();
+    for (var i = 0; i < options.length; i++) {
+        if (path.indexOf(options[i]) >= 0) {
+            $scope.checked = options[i];
+        }
+    }
+}
+
+function addExerciseBankCtrl($scope, $rootScope, $http, toaster) {
+    $scope.exerciseBank = {};
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post('/getMyCourses', $rootScope.userInfo).
+                success(function (res) {
+                    var courses = res.result.courses;
+                    $scope.courses = [];
+                    for(var i = 0; i < courses.length; i++) {
+                        if (courses[i].endTime > new Date().getTime()) {
+                            $scope.courses.push({
+                                name: courses[i].cname + "(" + courses[i].remark + ")",
+                                id: courses[i].cid
+                            });
+                        }
+                    }
+            });
+        }
+    });
+
+    $scope.submit = function () {
+        $scope.exerciseBank.id = $scope.courseSelected.id;
+        $http.post('/addExerciseBank', $scope.exerciseBank).
+            success(function (res) {
+                if (res.status) {
+                    toaster.pop("success", "创建成功!", "", 2000);
+                } else {
+                    toaster.pop("error", "创建失败!", "", 2000);
+                }
+        });
+    }
+}
+
+function myExerciseBankCtrl($scope, $http, $rootScope) {
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post('/getExerciseBanks', $rootScope.userInfo)
+                .success(function (res) {
+                    $scope.result = res.result;
+                    //console.log($scope.result);
+            });
+        }
+    });
+}
+
+function exerciseBankDetailCtrl($scope, $rootScope, $stateParams, $location) {
+    $scope.exerciseBankID = $stateParams.exerciseBankID;
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $scope.userInfo = $rootScope.userInfo;
+        }
+    });
+    var options = ['add-exercise', 'all-exercise'];
+    var path = $location.path();
+    for (var i = 0; i < options.length; i++) {
+        if (path.indexOf(options[i]) >= 0) {
+            $scope.checked = options[i];
+        }
+    }
+}
+
+function addExerciseCtrl($scope) {
 
 }
+
+function allExerciseCtrl($scope) {
+
+}
+
