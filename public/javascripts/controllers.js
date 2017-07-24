@@ -327,7 +327,7 @@ function allExerciseCtrl($scope, $http, $stateParams) {
     $http.post('/getExercise', {
         ebid: $stateParams.exerciseBankID
     }).success(function (res) {
-
+        console.log(res.result);
     });
 }
 

@@ -463,6 +463,16 @@ exports.addExercise = function (req, res) {
     });
 };
 
-exports.getExercise = function (res, req) {
-    
+exports.getExercise = function (req, res) {
+    var ebid = req.body.ebid;
+    con.query("select *, e.description as ed from Exercise e, Op o where " +
+        "e.ebid = ? and o.eid = e.eid group by e.eid;", ebid, function (err, result) {
+        if (err) {
+            console.log("get exercise: " + err);
+        } else {
+            res.json({
+                result: result
+            });
+        }
+    });
 };
