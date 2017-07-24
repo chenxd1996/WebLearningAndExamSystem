@@ -299,11 +299,35 @@ function exerciseBankDetailCtrl($scope, $rootScope, $stateParams, $location) {
     }
 }
 
-function addExerciseCtrl($scope) {
-
+function addExerciseCtrl($scope, $http, $stateParams, toaster) {
+    $scope.options = [];
+    $scope.$watch('optionsNum', function () {
+        $scope.options = [];
+        for (var i = 0; i < $scope.optionsNum; i++) {
+            $scope.options.push({
+                op: String.fromCharCode(65 + i)
+            });
+        }
+    });
+    $scope.submit = function () {
+        $http.post('/addExercise', {
+            ebid: $stateParams.exerciseBankID,
+            description: $scope.editorText,
+            options: $scope.options,
+            answers: $scope.answer.trim().replace(/\s/g,"").split('+')
+        }).success(function (res) {
+            if (res.status) {
+                toaster.pop('success', '添加成功!', '', 2000);
+            }
+        })
+    }
 }
 
-function allExerciseCtrl($scope) {
+function allExerciseCtrl($scope, $http, $stateParams) {
+    $http.post('/getExercise', {
+        ebid: $stateParams.exerciseBankID
+    }).success(function (res) {
 
+    });
 }
 

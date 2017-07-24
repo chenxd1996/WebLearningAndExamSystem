@@ -422,3 +422,47 @@ exports.getExerciseBanks = function (req, res) {
     }
 
 };
+
+exports.addExercise = function (req, res) {
+    var description = req.body.description;
+    var options = req.body.options;
+    var answers = req.body.answers;
+    var ebid = req.body.ebid;
+    var eid = new Date().getTime();
+    con.query("insert into Exercise " +
+        "value(?,?,?);", [eid, ebid, description],function (err, result) {
+        if (err) {
+            console.log("Insert into Exercise " + err);
+        } else {
+            var query = "";
+            for (var i = 0; i < options.length; i++) {
+                query += "insert into Op value('" + options[i].op +
+                    "', '" + options[i].description + "', '" + eid + "');";
+            }
+            con.query(query, function (err, result) {
+                if (err) {
+                    console.log("Insert into Op " + err);
+                } else {
+                    var query = "";
+                    for (var i = 0; i < answers.length; i++) {
+                        query += "insert into Answer value('" + answers[i] +
+                                "', '" + eid + "');";
+                    }
+                    con.query(query, function (err, result) {
+                        if (err) {
+                            console.log("Insert into Answer: " + err);
+                        } else {
+                            res.json({
+                                status: true
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+};
+
+exports.getExercise = function (res, req) {
+    
+};

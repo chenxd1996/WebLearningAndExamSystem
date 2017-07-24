@@ -75,7 +75,7 @@ function DBInit() {
     con.query("create table if not exists Exercise(" +
         "eid varchar(32)," +
         "ebid varchar(32)," +
-        "description varchar(1000)," +
+        "description text," +
         "primary key(eid)," +
         "foreign key(ebid) references ExerciseBank(eid) on delete cascade on update cascade);", function (err, result) {
             if (err) {
@@ -85,7 +85,7 @@ function DBInit() {
 
     con.query("create table if not exists Op(" +
         "op varchar(2)," +
-        "description varchar(500)," +
+        "description varchar(5000)," +
         "eid varchar(32)," +
         "foreign key(eid) references Exercise(eid) on delete cascade on update cascade);", function (err, result) {
             if (err) {
@@ -93,12 +93,12 @@ function DBInit() {
             }
     });
 
-    con.query("create table if not exists Anwser(" +
+    con.query("create table if not exists Answer(" +
         "op varchar(2)," +
         "eid varchar(32)," +
         "foreign key(eid) references Exercise(eid) on delete cascade on update cascade);", function (err, result) {
             if (err) {
-                console.log("Anwser: " + err);
+                console.log("Answer: " + err);
             }
     });
 
