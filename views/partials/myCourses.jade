@@ -8,7 +8,7 @@ div(class="content-container")
         div(class="fs-13 mb-10")
             i(class="fa fa-fw fa-calendar mr-10")
             span {{course.endTime | date: 'yyyy-MM-dd'}}
-        div(class="fs-13 mb-10 cl-info")
+        div(class="fs-13 mb-10" ng-class="{1: 'cl-info', 2: 'cl-success'}[userInfo.level]")
             i(class="fa-users fa fa-fw mr-10 fa-user-circle-o")
             span(ng-if="userInfo.level == 1") 角色是学生
             span(ng-if="userInfo.level == 2") 角色是老师

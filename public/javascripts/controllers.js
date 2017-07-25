@@ -68,7 +68,12 @@ function homeCtrl($scope, $location, $rootScope, $http, $state) {
 
 //controller for learning system router
 
-function learningSystemCtrl($scope, $location) {
+function learningSystemCtrl($scope, $location, $rootScope) {
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $scope.userInfo = $rootScope.userInfo;
+        }
+    });
     var options = ['my-courses', 'add-course'];
     var path = $location.path();
     for (var i = 0; i < options.length; i++) {
@@ -278,6 +283,7 @@ function myExerciseBankCtrl($scope, $http, $rootScope) {
             $http.post('/getExerciseBanks', $rootScope.userInfo)
                 .success(function (res) {
                     $scope.result = res.result;
+                    $scope.counts = res.counts;
             });
         }
     });
@@ -325,9 +331,12 @@ function addExerciseCtrl($scope, $http, $stateParams, toaster) {
 
 function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout) {
     $scope.status = $stateParams.status;
+    $scope.done = 0;
+    $scope.correctNum = 0;
 
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
+            $scope.userInfo = $rootScope.userInfo;
             $http.post('/getExercise', {
                 ebid: $stateParams.exerciseBankID,
                 userInfo: $rootScope.userInfo
@@ -340,14 +349,15 @@ function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout) {
                         if ($scope.status == 'uncompleted') {
                             toDelete.push(i);
                         } else {
+                            $scope.questions[i].isShow = true;
+                            $scope.questions[i].answers = $scope.questions[i].answer.trim().replace(/\s/g,"");
+                            if ($scope.questions[i].stuAnswer == $scope.questions[i].answer) {
+                                $scope.questions[i].isTrue = true;
+                                $scope.correctNum += 1;
+                            } else {
+                                $scope.questions[i].isTrue = false;
+                            }
                             for (var j = 0; j < $scope.options[i].length; j++) {
-                                $scope.questions[i].isShow = true;
-                                $scope.questions[i].answers = $scope.questions[i].answer.trim().replace(/\s/g,"");
-                                if ($scope.questions[i].stuAnswer == $scope.questions[i].answer) {
-                                    $scope.questions[i].isTrue = true;
-                                } else {
-                                    $scope.questions[i].isTrue = false;
-                                }
                                 if ($scope.questions[i].stuAnswer.indexOf($scope.options[i][j].op) >= 0) {
                                     $scope.options[i][j].checked = true;
                                 }
@@ -382,6 +392,7 @@ function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout) {
             options: ops,
             userInfo: $rootScope.userInfo
         }).success(function (res) {
+            $scope.done += 1;
             var result = res.result;
             $scope.questions[index].answers = result[0].answer.trim().replace(/\s/g,"");
             if (answers == $scope.questions[index].answers) {

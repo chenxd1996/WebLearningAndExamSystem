@@ -3,11 +3,10 @@ div(class="content-container")
         div(class="fs-16 pt-10 pb-10")
             a(ng-if="userInfo.level == 1" ui-sref="logined.exerciseBankDetail.exercise({exerciseBankID: eb.eid, status: 'uncompleted'})") {{eb.cname + " / " + eb.ename}}
             a(ng-if="userInfo.level == 2" ui-sref="logined.exerciseBankDetail.exercise({exerciseBankID: eb.eid, status: 'all'})") {{eb.cname + " / " + eb.ename}}
-        div(class="fs-13 mb-10 cl-info")
+        div(class="fs-13 mb-10" ng-class="{1: 'cl-info', 2: 'cl-success'}[userInfo.level]")
             i(class="fa-users fa fa-fw mr-10 fa-user-circle-o")
             span(ng-if="userInfo.level == 1") 角色是学生
             span(ng-if="userInfo.level == 2") 角色是老师
         div(class="fs-13 mb-5 mr-20")
-            a(href="#")
-                i(class="fa fa-fw fa-bar-chart mr-10")
-                span 题目 10
+            i(class="fa fa-fw fa-bar-chart mr-10")
+            span 题目 {{counts[$index][0].exerciseNum}}

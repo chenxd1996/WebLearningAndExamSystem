@@ -389,18 +389,31 @@ exports.addExerciseBank = function (req, res) {
 
 exports.getExerciseBanks = function (req, res) {
     if (req.body.level == 1) {
-        con.query("select * from StudentCourse sc, Course c, ExerciseBank e, ExerciseBankCourse ec " +
-            "where sc.sid = ? and sc.cid = c.cid and ec.cid = c.cid and e.eid = ec.eid;", req.body.id, function (err, result) {
+        con.query("select c.cname, eb.eid, eb.ename from StudentCourse sc, Course c, ExerciseBank eb, ExerciseBankCourse ec " +
+            "where sc.sid = ? and sc.cid = c.cid and ec.cid = c.cid and eb.eid = ec.eid;", req.body.id, function (err, result) {
             if (err) {
                 console.log("get student exercise banks: " + err);
                 res.json({
                     status: false
                 });
             } else {
-                res.json({
-                    status: true,
-                    result: result
+                var query = "";
+                for (var i = 0; i < result.length; i++) {
+                    query += "select Count(*) as exerciseNum from Exercise e, ExerciseBank eb " +
+                        "where e.ebid = eb.eid and eb.eid = '" + result[i].eid + "';";
+                }
+                con.query(query, function (err, rows) {
+                    if (err) {
+                        console.log("Get exercises count: " + err);
+                    } else {
+                        res.json({
+                            status: true,
+                            result: result,
+                            counts: rows
+                        });
+                    }
                 });
+
             }
         });
     } else if (req.body.level == 2) {
@@ -412,9 +425,21 @@ exports.getExerciseBanks = function (req, res) {
                     status: false
                 });
             } else {
-                res.json({
-                    status: true,
-                    result: result
+                var query = "";
+                for (var i = 0; i < result.length; i++) {
+                    query += "select Count(*) as exerciseNum from Exercise e, ExerciseBank eb " +
+                        "where e.ebid = eb.eid and eb.eid = '" + result[i].eid + "';";
+                }
+                con.query(query, function (err, rows) {
+                    if (err) {
+                        console.log("Get exercises count: " + err);
+                    } else {
+                        res.json({
+                            status: true,
+                            result: result,
+                            counts: rows
+                        });
+                    }
                 });
             }
         });
@@ -470,8 +495,8 @@ exports.getExercise = function (req, res) {
     if (userInfo) {
         var query = "";
         if (userInfo.level == 1) {
-            query = "select *, e.eid as eid from Exercise e left join Answer a on e.eid = a.eid " +
-                "left join StudentExercise se on e.eid = se.eid " +
+            query = "select *, e.eid as eid from Exercise e left join StudentExercise se on e.eid = se.eid " +
+                "left join Answer a on se.eid = a.eid " +
                 "where " +
                 "e.ebid = ? order by e.eid;"
         } else if (userInfo.level == 2) {

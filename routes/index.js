@@ -53,7 +53,7 @@ router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');
     }
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: '自主学习与考试系统' });
 });
 
 module.exports = router;

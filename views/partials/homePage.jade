@@ -1,4 +1,4 @@
-ul(class="nav nav-pills nav-stacked navbar-inverse navbar-fixed-top myNav navNarrow text-center" responsive-navigation)
+ul(ng-if="userInfo.level == 2" class="nav nav-pills nav-stacked navbar-inverse navbar-fixed-top myNav navNarrow text-center" responsive-navigation)
     li(role="presentation" ng-model="checked" uib-btn-radio="'learning-system'")
         a(ui-sref="logined.learningSystem.myCourses")
             span(class="glyphicon glyphicon-book" aria-hidden="true")
@@ -27,5 +27,29 @@ ul(class="nav nav-pills nav-stacked navbar-inverse navbar-fixed-top myNav navNar
         a(ui-sref="login" ng-click="logout()")
             span(class="glyphicon glyphicon-log-out" aria-hidden="true")
                 span(ng-if="showDetail")  退出登录
-div(class="header")
+ul(ng-if="userInfo.level == 1" class="nav nav-pills nav-stacked navbar-inverse navbar-fixed-top myNav navNarrow text-center" responsive-navigation)
+    li(role="presentation" ng-model="checked" uib-btn-radio="'learning-system'")
+        a(ui-sref="logined.learningSystem.myCourses")
+            span(class="glyphicon glyphicon-book" aria-hidden="true")
+                span(ng-if="showDetail")  学习系统
+    li(role="presentation" ng-model="checked" uib-btn-radio="'exercise-system'")
+        a(ui-sref="logined.exerciseSystem.myExerciseBank")
+            span(class="glyphicon glyphicon-tasks" aria-hidden="true")
+                span(ng-if="showDetail")  题库系统
+    li(role="presentation" ng-model="checked" uib-btn-radio="'exam-system'")
+        a(href="#")
+            span(class="glyphicon glyphicon-pencil" aria-hidden="true")
+                span(ng-if="showDetail")  考试系统
+    li(role="presentation" ng-model="checked" uib-btn-radio="'my-infomation'")
+        a(href="#")
+            span(class="glyphicon glyphicon-info-sign" aria-hidden="true")
+                span(ng-if="showDetail")  个人资料
+    li(role="presentation" ng-model="checked" uib-btn-radio="'message-center'")
+        a(href="#")
+            span(class="glyphicon glyphicon-comment" aria-hidden="true")
+                span(ng-if="showDetail")  通知中心
+    li(role="presentation" class="logoutBottom" ng-model="checked" uib-btn-radio="'/homePage/logout'")
+        a(ui-sref="login" ng-click="logout()")
+            span(class="glyphicon glyphicon-log-out" aria-hidden="true")
+                span(ng-if="showDetail")  退出登录
 div(class="mainView Offset" ui-view="")

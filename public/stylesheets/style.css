@@ -15,6 +15,7 @@ a {
 .myNav {
   padding-right: 0 !important;
   height: 100%;
+  margin-top: 50px;
 }
 
 .navNarrow {
@@ -41,8 +42,22 @@ a {
 }
 
 .header {
-  height: 130px;
-  background-image: url("../images/header.png");
+  width: 100%;
+  background: #34e89e;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #0f3443, #34e89e);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #0f3443, #34e89e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  height: 50px;
+  position: fixed;
+  top: 0;
+  z-index: 3;
+}
+
+.logo {
+  height: 50px;
+  background-size: contain;
+  z-index: 5;
+  background-image: url("../images/logo.png");
+  background-repeat: no-repeat;
 }
 
 .formInterval {
@@ -122,6 +137,14 @@ a {
   margin-top: 15px;
 }
 
+.mt-50 {
+  margin-top: 50px;
+}
+
+.mt-60 {
+  margin-top: 60px;
+}
+
 .pt-5 {
   padding-top: 5px;
 }
@@ -167,6 +190,10 @@ a {
   color: #00ce00;
 }
 
+.cl-success {
+  color: #5cb85c;
+}
+
 .file {
   opacity: 0;
   width: 110.047px !important;
@@ -182,6 +209,23 @@ a {
   width: 110.047px !important;
   height: 34px !important;
 }
+
+.question-answer-progress {
+  z-index: 999;
+  position: fixed;
+  top: 100px;
+  right: 10px;
+  color: #479ea2;
+  font-size: 25px;
+  width: 400px;
+}
+
+.question-answer-progress .progress {
+  width: 250px;
+  display: inline-block;
+  margin: 0 20px 0 0;
+}
+
 
 ::-webkit-scrollbar {
   width: 5px;

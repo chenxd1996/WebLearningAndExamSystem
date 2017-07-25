@@ -1,10 +1,16 @@
 div(class="content-container")
-    div(class="bg-white block-container mb-15")
-        label(class="fs-16") 课程教师:&nbsp;
-        span {{teachers}}
-    div(class="bg-white block-container mb-15")
-        label(class="fs-16") 课程面向:&nbsp;
-        span {{remark}}
-    div(class="bg-white block-container")
-        label(class="fs-16") 课程描述:
-        div(ng-bind-html="description | trustHtml")
+    div(class="panel panel-info")
+        div(class="panel-heading")
+            h1(class="panel-title") 课程教师
+        div(class="panel-body")
+            span {{teachers}}
+    div(class="panel panel-warning")
+        div(class="panel-heading")
+            h1(class="panel-title") 课程面向
+        div(class="panel-body")
+            span {{remark}}
+    div(class="panel panel-success")
+        div(class="panel-heading")
+            h1(class="panel-title") 课程描述
+        div(class="panel-body")
+            div(ng-bind-html="description | trustHtml")

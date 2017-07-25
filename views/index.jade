@@ -1,6 +1,8 @@
 extends layout
 
 block content
-    div(ui-view="")
+    div(class="header")
+        div(class="logo")
+    div(ui-view="" class="mt-60")
     toaster-container(toaster-options="{'close-button':false, 'time-out':{ 'toast-warning': 2000, 'toast-error': 0 } }")
 
