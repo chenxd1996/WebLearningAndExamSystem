@@ -1,5 +1,5 @@
 div(class="content-container")
-    div(class="panel" ng-repeat="question in questions" ng-class="{true: 'panel-success', false: 'panel-danger'}[question.isTrue]")
+    div(class="panel" ng-repeat="question in questions" ng-class="{'panel-success' : question.isTrue, 'panel-danger' : !question.isTrue && question.isShow, 'panel-info': !question.isShow}")
         div(class="panel-heading")
             h4 Question {{$index + 1}}
         div(class="panel-body")

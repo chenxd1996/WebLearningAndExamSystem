@@ -325,40 +325,45 @@ function addExerciseCtrl($scope, $http, $stateParams, toaster) {
 
 function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout) {
     $scope.status = $stateParams.status;
-    $http.post('/getExercise', {
-        ebid: $stateParams.exerciseBankID,
-        userInfo: $rootScope.userInfo
-    }).success(function (res) {
-        $scope.questions = res.exercise;
-        $scope.options = res.options;
-        var toDelete = [];
-        for (var i = 0; i < $scope.options.length; i++) {
-            if ($scope.questions[i].stuAnswer) {
-                if ($scope.status == 'uncompleted') {
-                    toDelete.push(i);
-                } else {
-                    for (var j = 0; j < $scope.options[i].length; j++) {
-                        $scope.questions[i].isShow = true;
-                        $scope.questions[i].answers = $scope.questions[i].answer.trim().replace(/\s/g,"");
-                        if ($scope.questions[i].stuAnswer == $scope.questions[i].answer) {
-                            $scope.questions[i].isTrue = true;
+
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post('/getExercise', {
+                ebid: $stateParams.exerciseBankID,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                $scope.questions = res.exercise;
+                $scope.options = res.options;
+                var toDelete = [];
+                for (var i = 0; i < $scope.options.length; i++) {
+                    if ($scope.questions[i].stuAnswer) {
+                        if ($scope.status == 'uncompleted') {
+                            toDelete.push(i);
                         } else {
-                            $scope.questions[i].isTrue = false;
+                            for (var j = 0; j < $scope.options[i].length; j++) {
+                                $scope.questions[i].isShow = true;
+                                $scope.questions[i].answers = $scope.questions[i].answer.trim().replace(/\s/g,"");
+                                if ($scope.questions[i].stuAnswer == $scope.questions[i].answer) {
+                                    $scope.questions[i].isTrue = true;
+                                } else {
+                                    $scope.questions[i].isTrue = false;
+                                }
+                                if ($scope.questions[i].stuAnswer.indexOf($scope.options[i][j].op) >= 0) {
+                                    $scope.options[i][j].checked = true;
+                                }
+                            }
                         }
-                        if ($scope.questions[i].stuAnswer.indexOf($scope.options[i][j].op) >= 0) {
-                            $scope.options[i][j].checked = true;
+                    } else {
+                        if ($scope.status == 'completed') {
+                            toDelete.push(i);
                         }
                     }
                 }
-            } else {
-                if ($scope.status == 'completed') {
-                    toDelete.push(i);
+                for (var i = toDelete.length - 1; i >= 0; i--) {
+                    $scope.questions.splice(toDelete[i], 1);
+                    $scope.options.splice(toDelete[i], 1);
                 }
-            }
-        }
-        for (var i = toDelete.length - 1; i >= 0; i--) {
-            $scope.questions.splice(toDelete[i], 1);
-            $scope.options.splice(toDelete[i], 1);
+            });
         }
     });
 
