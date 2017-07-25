@@ -466,7 +466,7 @@ exports.addExercise = function (req, res) {
 exports.getExercise = function (req, res) {
     var ebid = req.body.ebid;
     var result = {};
-    var userInfo = req.session.userInfo;
+    var userInfo = req.body.userInfo;
     if (userInfo) {
         var query = "";
         if (userInfo.level == 1) {
