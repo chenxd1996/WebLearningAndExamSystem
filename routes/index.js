@@ -47,6 +47,8 @@ router.post('/addExercise', api.addExercise);
 
 router.post('/getExercise', api.getExercise);
 
+router.post('/submitAndGetAnswer', api.submitAndGetAnswer);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

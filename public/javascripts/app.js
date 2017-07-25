@@ -80,10 +80,10 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/:exerciseBankID/add-exercise",
         controller: addExerciseCtrl,
         templateUrl: "partials/addExercise"
-    }).state("logined.exerciseBankDetail.allExercise", {
-        url: "/:exerciseBankID/all-exercise",
-        controller: allExerciseCtrl,
-        templateUrl: "partials/allExercise"
+    }).state("logined.exerciseBankDetail.exercise", {
+        url: "/:exerciseBankID/exercise/:status",
+        controller: exerciseCtrl,
+        templateUrl: "partials/exercise"
     });
     $locationProvider.html5Mode(true);
 }]);

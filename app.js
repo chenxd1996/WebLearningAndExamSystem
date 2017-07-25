@@ -29,7 +29,7 @@ var options = {
     user: 'root',
     password: 'root',
     database: 'session',
-    checkExpirationInterval: 3 * 60 * 60 * 1000
+    checkExpirationInterval: 6 * 60 * 60 * 1000
 };
 
 app.use(session({
@@ -40,7 +40,7 @@ app.use(session({
     cookie: {
         path: '/',
         httpOnly: true,
-        maxAge: 60 * 60 * 1000
+        maxAge: 60 * 60 * 1000 * 6
     }
 }));
 

@@ -397,7 +397,6 @@ exports.getExerciseBanks = function (req, res) {
                     status: false
                 });
             } else {
-                console.log(result);
                 res.json({
                     status: true,
                     result: result
@@ -443,12 +442,13 @@ exports.addExercise = function (req, res) {
                 if (err) {
                     console.log("Insert into Op " + err);
                 } else {
-                    var query = "";
-                    for (var i = 0; i < answers.length; i++) {
-                        query += "insert into Answer value('" + answers[i] +
-                                "', '" + eid + "');";
+                    var answer = "";
+                    for (var i = 0; i < answers.length - 1; i++) {
+                        answer += answers[i] + " ";
                     }
-                    con.query(query, function (err, result) {
+                    answer += answers[answers.length - 1];
+                    con.query("insert into Answer " +
+                        "value(?, ?);",[answer, eid], function (err, result) {
                         if (err) {
                             console.log("Insert into Answer: " + err);
                         } else {
@@ -465,14 +465,72 @@ exports.addExercise = function (req, res) {
 
 exports.getExercise = function (req, res) {
     var ebid = req.body.ebid;
-    con.query("select *, e.description as ed from Exercise e, Op o where " +
-        "e.ebid = ? and o.eid = e.eid group by e.eid;", ebid, function (err, result) {
-        if (err) {
-            console.log("get exercise: " + err);
-        } else {
-            res.json({
-                result: result
-            });
+    var result = {};
+    var userInfo = req.session.userInfo;
+    if (userInfo) {
+        var query = "";
+        if (userInfo.level == 1) {
+            query = "select *, e.eid as eid from Exercise e left join Answer a on e.eid = a.eid " +
+                "left join StudentExercise se on e.eid = se.eid " +
+                "where " +
+                "e.ebid = ? order by e.eid;"
+        } else if (userInfo.level == 2) {
+            query = "select * from Exercise e left join Answer a on e.eid = a.eid " +
+                "where " +
+                "e.ebid = ? order by e.eid;"
         }
-    });
+        con.query(query, [ebid, userInfo.id], function (err, result1) {
+            if (err) {
+                console.log("get exercise: " + err);
+            } else {
+                result.exercise = result1;
+                var query = "";
+                for (var i = 0; i < result1.length; i++) {
+                    query += "select * from Op " +
+                        "where eid = '" + result1[i].eid + "' order by eid;";
+                }
+                con.query(query, function (err, result2) {
+                    if (err) {
+                        console.log("get options: " + err);
+                    } else {
+                        if (result1.length == 1) {
+                            result.options = [];
+                            result.options.push(result2);
+                        } else {
+                            result.options = result2;
+                        }
+                        res.json(result);
+                    }
+                });
+            }
+        });
+    }
+};
+
+exports.submitAndGetAnswer = function (req, res) {
+    var options = req.body.options;
+    var userInfo = req.body.userInfo;
+    var answer = "";
+    for (var i = 0; i < options.length - 1; i++) {
+        answer += options[i].op + " ";
+    }
+    answer += options[options.length - 1].op;
+    if (userInfo && userInfo.level == 1) {
+        con.query("insert into StudentExercise " +
+            "value(?,?,?);", [userInfo.id, options[0].eid, answer], function (err, result) {
+            if (err) {
+                console.log("Insert into StudentExercise: " + err);
+            }
+            con.query("select * from Answer " +
+                "where eid = ?;", options[0].eid, function (err, result) {
+                if (err) {
+                    console.log("get answer in submitAndGetAnswer: " + err);
+                } else {
+                    res.json({
+                        result: result
+                    });
+                }
+            });
+        })
+    }
 };

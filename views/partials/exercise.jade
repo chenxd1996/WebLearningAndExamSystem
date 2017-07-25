@@ -1,0 +1,14 @@
+div(class="content-container")
+    div(class="panel" ng-repeat="question in questions" ng-class="{true: 'panel-success', false: 'panel-danger'}[question.isTrue]")
+        div(class="panel-heading")
+            h4 Question {{$index + 1}}
+        div(class="panel-body")
+            div(ng-bind-html="question.description | trustHtml" class="mb-10")
+            div(ng-repeat="option in options[$index]")
+                label(class="checkbox-inline")
+                    input(type="checkbox" ng-model="option.checked" ng-disabled="question.isShow")
+                    span {{option.op + ". "}}
+                    span(ng-bind-html="option.description | trustHtml")
+            div(ng-if="question.isShow" class="alert mt-10" role="alert" ng-class="{true: 'alert-success', false: 'alert-danger'}[question.isTrue]")
+                span 正确答案: {{question.answers}}
+            button(ng-disabled="question.isShow" class="btn btn-sm btn-primary pull-right" ng-click="submit(options[$index], $index)") 提交

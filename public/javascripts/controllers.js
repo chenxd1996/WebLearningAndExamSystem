@@ -274,10 +274,10 @@ function addExerciseBankCtrl($scope, $rootScope, $http, toaster) {
 function myExerciseBankCtrl($scope, $http, $rootScope) {
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
+            $scope.userInfo = $rootScope.userInfo;
             $http.post('/getExerciseBanks', $rootScope.userInfo)
                 .success(function (res) {
                     $scope.result = res.result;
-                    //console.log($scope.result);
             });
         }
     });
@@ -290,7 +290,7 @@ function exerciseBankDetailCtrl($scope, $rootScope, $stateParams, $location) {
             $scope.userInfo = $rootScope.userInfo;
         }
     });
-    var options = ['add-exercise', 'all-exercise'];
+    var options = ['add-exercise', 'all', 'completed', 'uncompleted'];
     var path = $location.path();
     for (var i = 0; i < options.length; i++) {
         if (path.indexOf(options[i]) >= 0) {
@@ -323,11 +323,57 @@ function addExerciseCtrl($scope, $http, $stateParams, toaster) {
     }
 }
 
-function allExerciseCtrl($scope, $http, $stateParams) {
+function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout) {
+    $scope.status = $stateParams.status;
     $http.post('/getExercise', {
         ebid: $stateParams.exerciseBankID
     }).success(function (res) {
-        console.log(res.result);
+        $scope.questions = res.exercise;
+        $scope.options = res.options;
+        for (var i = 0; i < $scope.options.length; i++) {
+            for (var j = 0; j < $scope.options[i].length; j++) {
+                if ($scope.questions[i].stuAnswer) {
+                    $scope.questions[i].isShow = true;
+                    $scope.questions[i].answers = $scope.questions[i].answer.trim().replace(/\s/g,"");
+                    if ($scope.questions[i].stuAnswer == $scope.questions[i].answer) {
+                        $scope.questions[i].isTrue = true;
+                    } else {
+                        $scope.questions[i].isTrue = false;
+                    }
+                    if ($scope.questions[i].stuAnswer.indexOf($scope.options[i][j].op) >= 0) {
+                        $scope.options[i][j].checked = true;
+                    }
+                }
+            }
+        }
     });
+
+    $scope.submit = function (options, index) {
+        var ops = [];
+        var answers = "";
+
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].checked) {
+                ops.push(options[i]);
+                answers += options[i].op;
+            }
+        }
+
+        $http.post('/submitAndGetAnswer', {
+            options: ops,
+            userInfo: $rootScope.userInfo
+        }).success(function (res) {
+            var result = res.result;
+            $scope.questions[index].answers = result[0].answer.trim().replace(/\s/g,"");
+            if (answers == $scope.questions[index].answers) {
+                $scope.questions[index].isTrue = true;
+            } else {
+                $scope.questions[index].isTrue = false;
+            }
+            $timeout(function () {
+                $scope.questions[index].isShow = true;
+            });
+        });
+    }
 }
 

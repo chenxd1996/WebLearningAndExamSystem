@@ -1,9 +1,11 @@
 ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 2")
-    li(role="presentation" uib-btn-radio="'all-exercise'" ng-model="checked")
-        a(ui-sref="logined.exerciseBankDetail.allExercise({exerciseBankID: exerciseBankID})") 所有题目
+    li(role="presentation" uib-btn-radio="'all'" ng-model="checked")
+        a(ui-sref="logined.exerciseBankDetail.exercise({exerciseBankID: exerciseBankID, status: 'all'})") 所有题目
     li(role="presentation" uib-btn-radio="'add-exercise'" ng-model="checked")
         a(ui-sref="logined.exerciseBankDetail.addExercise({exerciseBankID: exerciseBankID})") 添加题目
 ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 1")
-    li(role="presentation" uib-btn-radio="'all-exercise'" ng-model="checked")
-        a(ui-sref="logined.exerciseBankDetail.allExercise({exerciseBankID: exerciseBankID})") 所有题目
+    li(role="presentation" uib-btn-radio="'uncompleted'" ng-model="checked")
+        a(ui-sref="logined.exerciseBankDetail.exercise({exerciseBankID: exerciseBankID, status: 'uncompleted'})") 未完成
+    li(role="presentation" uib-btn-radio="'completed'" ng-model="checked")
+        a(ui-sref="logined.exerciseBankDetail.exercise({exerciseBankID: exerciseBankID, status: 'completed'})") 已完成
 div(ui-view="")

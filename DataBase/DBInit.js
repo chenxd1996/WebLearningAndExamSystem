@@ -100,7 +100,7 @@ function DBInit() {
     });
 
     con.query("create table if not exists Answer(" +
-        "op varchar(2)," +
+        "answer varchar(60)," +
         "eid varchar(32)," +
         "foreign key(eid) references Exercise(eid) on delete cascade on update cascade);", function (err, result) {
             if (err) {
@@ -175,16 +175,17 @@ function DBInit() {
             }
     });*/
 
-    /*con.query("create table if not exists StudentExercise(" +
+    con.query("create table if not exists StudentExercise(" +
         "sid varchar(10)," +
         "eid varchar(32)," +
+        "stuAnswer varchar(60)," +
         "primary key(sid, eid)," +
         "foreign key(sid) references Student(sid) on delete cascade on update cascade," +
         "foreign key(eid) references Exercise(eid) on delete cascade on update cascade)", function (err, result) {
             if (err) {
                 console.log("StudentExercise: " + err);
             }
-    });*/
+    });
 
     con.query("create table if not exists TeacherExam(" +
         "tid varchar(10)," +
