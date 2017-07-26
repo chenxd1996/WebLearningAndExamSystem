@@ -134,16 +134,16 @@ a {
   margin-top: 50px;
 }
 
-.mt-60 {
-  margin-top: 60px;
-}
-
 .pt-5 {
   padding-top: 5px;
 }
 
 .pt-10 {
   padding-top: 10px;
+}
+
+.pt-60 {
+  padding-top: 60px;
 }
 
 .pr-10 {
