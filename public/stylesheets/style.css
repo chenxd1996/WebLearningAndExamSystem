@@ -19,13 +19,11 @@ a {
 }
 
 .navNarrow {
-  width: 4%;
-  min-width: 55px;
+  width: 55px;
 }
 
 .navWide {
-  width: 10%;
-  min-width: 137px;
+  width: 137px;
 }
 
 .logoutBottom {
@@ -33,12 +31,8 @@ a {
   top: 50%;
 }
 
-.mainView {
-  width: 95.5%;
-}
-
 .Offset {
-  margin-left:4.5%;
+  margin-left: 60px;
 }
 
 .header {
@@ -49,13 +43,12 @@ a {
   height: 50px;
   position: fixed;
   top: 0;
-  z-index: 3;
+  z-index: 6;
 }
 
 .logo {
   height: 50px;
   background-size: contain;
-  z-index: 5;
   background-image: url("../images/logo.png");
   background-repeat: no-repeat;
 }
@@ -211,17 +204,19 @@ a {
 }
 
 .question-answer-progress {
-  z-index: 999;
+  z-index: 5;
   position: fixed;
   top: 100px;
   right: 10px;
   color: #479ea2;
   font-size: 25px;
-  width: 400px;
+  max-width: 390px;
+  min-width: 318px;
+  width: 30%;
 }
 
 .question-answer-progress .progress {
-  width: 250px;
+  width: 65%;
   display: inline-block;
   margin: 0 20px 0 0;
 }

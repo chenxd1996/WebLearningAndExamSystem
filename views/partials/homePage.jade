@@ -1,3 +1,20 @@
+div(class="header")
+    div(class="logo")
+        div(class="pull-right mt-15 mr-10" uib-dropdown)
+            a(href="#" uib-dropdown-toggle)
+                i(class="fa fa-fw fa-user-o" )
+                i(class="fa fa-fw fa fa-caret-down")
+            ul(class="dropdown-menu" uib-dropdown-menu)
+                li(role="menuitem")
+                    a 姓名：{{userInfo.name}}
+                li(role="menuitem")
+                    a 账号：{{userInfo.id}}
+                li(class="divider")
+                li(role="menuitem")
+                    a(ui-sref="login" ng-click="logout()" class="text-center")
+                        i(class="fa fa-fw fa-sign-out")
+                        span  退出登录
+
 ul(ng-if="userInfo.level == 2" class="nav nav-pills nav-stacked navbar-inverse navbar-fixed-top myNav navNarrow text-center" responsive-navigation)
     li(role="presentation" ng-model="checked" uib-btn-radio="'learning-system'")
         a(ui-sref="logined.learningSystem.myCourses")
@@ -48,8 +65,4 @@ ul(ng-if="userInfo.level == 1" class="nav nav-pills nav-stacked navbar-inverse n
         a(href="#")
             span(class="glyphicon glyphicon-comment" aria-hidden="true")
                 span(ng-if="showDetail")  通知中心
-    li(role="presentation" class="logoutBottom" ng-model="checked" uib-btn-radio="'/homePage/logout'")
-        a(ui-sref="login" ng-click="logout()")
-            span(class="glyphicon glyphicon-log-out" aria-hidden="true")
-                span(ng-if="showDetail")  退出登录
-div(class="mainView Offset" ui-view="")
+div(class="Offset mt-60" ui-view="")
