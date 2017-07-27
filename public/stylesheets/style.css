@@ -206,7 +206,7 @@ a {
 .question-answer-progress {
   z-index: 5;
   position: fixed;
-  top: 100px;
+  top: 70px;
   right: 10px;
   color: #479ea2;
   font-size: 25px;

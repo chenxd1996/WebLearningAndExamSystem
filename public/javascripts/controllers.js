@@ -20,7 +20,7 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
             password: md5.createHash($scope.user.password)
         }).success(function (data) {
             if (data.logined) {
-                toaster.pop('success', "登录成功！", '欢迎回来，' + data.name + '！', 4000);
+                toaster.pop('success', "登录成功！", '欢迎回来，' + data.name + '！', 2000);
                 $rootScope.userInfo = {
                     id: $scope.user.id,
                     name: data.name,
@@ -29,7 +29,7 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
 
                 $state.go('logined.learningSystem.myCourses');
             } else {
-                toaster.pop('error', "登录失败！", '账号或密码错误', 2500);
+                toaster.pop('error', "登录失败！", '账号或密码错误', 2000);
             }
         });
     }
@@ -254,7 +254,7 @@ function addExerciseBankCtrl($scope, $rootScope, $http, toaster) {
                     for(var i = 0; i < courses.length; i++) {
                         if (courses[i].endTime > new Date().getTime()) {
                             $scope.courses.push({
-                                name: courses[i].cname + "(" + courses[i].remark + ")",
+                                name: courses[i].cname + " (" + courses[i].remark + ")",
                                 id: courses[i].cid
                             });
                         }
@@ -407,3 +407,36 @@ function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout) {
     }
 }
 
+function examSystemCtrl($scope, $rootScope, $location) {
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $scope.userInfo = $rootScope.userInfo;
+        }
+    });
+    var options = ['my-exams', 'add-exam'];
+    for (var i  = 0; i < options.length; i++) {
+        if ($location.path().indexOf(options[i]) >= 0) {
+            $scope.checked = options[i];
+        }
+    }
+}
+
+function addExamCtrl($scope, $rootScope, $http) {
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post('/getMyCourses', $rootScope.userInfo).
+            success(function (res) {
+                var courses = res.result.courses;
+                $scope.courses = [];
+                for(var i = 0; i < courses.length; i++) {
+                    if (courses[i].endTime > new Date().getTime()) {
+                        $scope.courses.push({
+                            name: courses[i].cname + " (" + courses[i].remark + ")",
+                            id: courses[i].cid
+                        });
+                    }
+                }
+            });
+        }
+    });
+}

@@ -84,6 +84,14 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/:exerciseBankID/exercise/:status",
         controller: exerciseCtrl,
         templateUrl: "partials/exercise"
+    }).state("logined.examSystem", {
+        url: "/exam-system",
+        controller: examSystemCtrl,
+        templateUrl: "partials/examSystem"
+    }).state("logined.examSystem.addExam", {
+        url: "/add-exam",
+        controller: addExamCtrl,
+        templateUrl: "partials/addExam"
     });
     $locationProvider.html5Mode(true);
 }]);
