@@ -579,7 +579,6 @@ exports.getCourseExerciseBanks = function (req, res) {
 };
 
 exports.addExam = function (req, res) {
-    console.log(req.body);
     var cid = req.body.cid;
     var startTime = new Date(req.body.startTime);
     var endTime = new Date(req.body.endTime);
@@ -596,42 +595,14 @@ exports.addExam = function (req, res) {
     endTime.setMonth(examDate.getMonth());
     endTime.setFullYear(examDate.getFullYear());
     endTime.setSeconds(0);
-    var query = "";
-    for (var i = 0; i < ebs.length; i++) {
-        query += "select e.eid, e.ebid from ExerciseBank eb, Exercise e " +
-            "where eb.eid = '" + ebs[i].eid + "' and eb.eid = e.ebid;";
-    }
-    con.query(query, function (err, result) {
-        if (err) {
-            console.log(err);
-        } else {
-            for (var i = 0; i < ebs.length; i++) {
-                ebs[i].exercise = [];
-                var exerciseAll;
-                for (var j = 0; j < result.length; j++) {
-                    if (ebs[i].eid == result[j][0].ebid) {
-                        exerciseAll = result[j];
-                        break;
-                    }
-                }
-                for (var j = 0; j < ebs[i].exerciseNum; j++) {
-                    var k = Math.round(Math.random()* (exerciseAll.length - 1));
-                    while (ebs[i].exercise.indexOf(k) >= 0) {
-                        k = Math.round(Math.random()* (exerciseAll.length - 1));
-                    }
-                    ebs[i].exercise.push(exerciseAll[k].eid);
-                }
-            }
-        }
-    });
-    /*con.query("insert into Exam " +
+    con.query("insert into Exam " +
         "value(?, ?, ?, ? ,?);", [eid, ename, examPoints, startTime.getTime(), endTime.getTime()], function (err, result) {
         if (err) {
             console.log("Insert into Exam: " + err);
         } else {
             var query = "";
             for (var i = 0; i < ebs.length; i++) {
-                if (ebs[i].exerciseCount > 0) {
+                if (ebs[i].exerciseNum > 0) {
                     query += "insert into ExamExerciseBank " +
                         "value('" + eid + "', '" + ebs[i].eid + "');";
                 }
@@ -645,12 +616,74 @@ exports.addExam = function (req, res) {
                            if (err) {
                                console.log("Insert into ExamCourse: "  + err);
                            } else {
-
+                               var query = "";
+                               for (var i = 0; i < ebs.length; i++) {
+                                   query += "select e.eid, e.ebid from ExerciseBank eb, Exercise e " +
+                                       "where eb.eid = '" + ebs[i].eid + "' and eb.eid = e.ebid;";
+                               }
+                               con.query(query, function (err, result) {
+                                   if (err) {
+                                       console.log("Get exercise in addExam: " + err);
+                                   } else {
+                                       var query = "";
+                                       for (var i = 0; i < ebs.length; i++) {
+                                           ebs[i].exercise = [];
+                                           var exerciseAll;
+                                           for (var j = 0; j < result.length; j++) {
+                                               if (ebs[i].eid == result[j][0].ebid) {
+                                                   exerciseAll = result[j];
+                                                   break;
+                                               }
+                                           }
+                                           for (var j = 0; j < ebs[i].exerciseNum; j++) {
+                                               var k = Math.round(Math.random()* (exerciseAll.length - 1));
+                                               while (ebs[i].exercise.indexOf(exerciseAll[k].eid) >= 0) {
+                                                   k = Math.round(Math.random()* (exerciseAll.length - 1));
+                                               }
+                                               ebs[i].exercise.push(exerciseAll[k].eid);
+                                               query += "insert into ExamExercise " +
+                                                   "value('" + eid + "', '" + exerciseAll[k].eid + "');";
+                                           }
+                                       }
+                                       con.query(query, function (err, result) {
+                                           if (err) {
+                                               console.log("Insert into ExamExercise: " + err);
+                                           } else {
+                                               res.json({
+                                                   status: true
+                                               })
+                                           }
+                                       });
+                                   }
+                               });
                            }
                        }
                    );
                }
             });
         }
-    });*/
+    });
+};
+
+exports.getMyExams = function (req, res) {
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 1) {
+        con.query("select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, StudentCourse sc " +
+            "where sc.sid = ? and sc.cid = ec.cid and ec.eid = e.eid and c.cid = sc.cid;", userInfo.id, function (err, result) {
+            if (err) {
+                console.log("Get my exams: " + err);
+            } else {
+                res.json(result);
+            }
+        });
+    } else if (userInfo.level == 2) {
+        con.query("select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
+            "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid;", userInfo.id, function (err, result) {
+            if (err) {
+                console.log("Get my exams: " + err);
+            } else {
+                res.json(result);
+            }
+        });
+    }
 };

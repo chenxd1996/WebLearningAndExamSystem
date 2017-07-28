@@ -53,6 +53,8 @@ router.post('/getCourseExerciseBanks', api.getCourseExerciseBanks);
 
 router.post('/addExam', api.addExam);
 
+router.post('/getMyExams', api.getMyExams);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

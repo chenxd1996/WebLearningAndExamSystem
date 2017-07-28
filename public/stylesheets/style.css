@@ -114,6 +114,10 @@ a {
   margin-right: 15px;
 }
 
+.mr-20 {
+  margin-right: 20px;
+}
+
 .ml-20 {
   margin-left: 20px;
 }
@@ -185,6 +189,10 @@ a {
 
 .cl-success {
   color: #5cb85c;
+}
+
+.cl-red {
+  color: #f0ad4e;
 }
 
 .file {

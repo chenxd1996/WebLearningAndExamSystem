@@ -421,7 +421,7 @@ function examSystemCtrl($scope, $rootScope, $location) {
     }
 }
 
-function addExamCtrl($scope, $rootScope, $http) {
+function addExamCtrl($scope, $rootScope, $http, toaster) {
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post('/getMyCourses', $rootScope.userInfo).
@@ -472,9 +472,25 @@ function addExamCtrl($scope, $rootScope, $http) {
         exam.exerciseNum = $scope.exerciseNum;
         exam.examPoints = $scope.examPoints;
         exam.ebs = $scope.ebs;
-        console.log(exam);
         $http.post('/addExam', exam).success(function (res) {
-
+            if (res.status) {
+                toaster.pop("success", "创建成功", "", 2000);
+            } else {
+                toaster.pop("error", "创建失败", "", 2000);
+            }
         });
     }
+}
+
+function myExamsCtrl($scope, $http, $rootScope) {
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post("/getMyExams", {
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                $scope.exams = res;
+                console.log(res);
+            });
+        }
+    });
 }

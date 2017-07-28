@@ -1,0 +1,15 @@
+div(class="content-container")
+    div(class="course-item bg-white pt-5 pr-10 pr-10 pb-5 pl-20 mr-15 mb-15 inbl" ng-repeat = "exam in exams")
+        div(class="fs-16 pt-10 pb-10")
+            a(ui-sref="logined.examDetail({courseID: course.cid})") {{exam.cname}} / {{exam.ename}}
+        div(class="fs-13 mb-10 cl-red")
+            i(class="fa fa-fw fa-calendar mr-10")
+            span(class="mr-10") {{exam.startTime | date: 'yyyy-MM-dd'}}
+            i(class="fa fa-fw fa-clock-o ml-20 mr-10")
+            span {{exam.startTime | date: 'HH:mm:ss'}} - {{exam.endTime | date: 'HH:mm:ss'}}
+        div(class="fs-13 mb-10 " ng-class="{1: 'cl-info', 2: 'cl-success'}[userInfo.level]")
+            i(class="fa-users fa fa-fw mr-10 fa-user-circle-o")
+            span(ng-if="userInfo.level == 1") 角色是学生
+            span(ng-if="userInfo.level == 2") 角色是老师
+            i(class="fa fa-fw fa-circle mr-10 ml-20 cl-green")
+            span 进行中
