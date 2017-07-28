@@ -112,6 +112,7 @@ function DBInit() {
     con.query("create table if not exists Exam(" +
         "eid varchar(32)," +
         "ename varchar(20)," +
+        "points float," +
         "startTime varchar(32)," +
         "endTime varchar(32)," +
         "primary key(eid))", function (err, result) {
@@ -240,6 +241,28 @@ function DBInit() {
         "foreign key(cid) references Course(cid) on delete cascade on update cascade)", function (err, result) {
             if (err) {
                 console.log("ExamCourse: " + err);
+            }
+    });
+
+    con.query("create table if not exists ExamExerciseBank(" +
+        "eid varchar(32)," +
+        "ebid varchar(32)," +
+        "primary key(eid, ebid)," +
+        "foreign key(eid) references Exam(eid) on delete cascade on update cascade," +
+        "foreign key(ebid) references ExerciseBank(eid) on delete cascade on update cascade);", function (err, result) {
+            if (err) {
+                console.log("ExamExerciseBank: " + err);
+            }
+    });
+
+    con.query("create table if not exists ExamExercise(" +
+        "eid varchar(32)," +
+        "exid varchar(32)," +
+        "primary key(eid, exid)," +
+        "foreign key(eid) references Exam(eid) on delete cascade on update cascade," +
+        "foreign key(exid) references Exercise(eid) on delete cascade on update cascade);", function (err, result) {
+            if (err) {
+                console.log("ExamExercise: " + err);
             }
     });
 

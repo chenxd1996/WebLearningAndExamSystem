@@ -439,4 +439,42 @@ function addExamCtrl($scope, $rootScope, $http) {
             });
         }
     });
+
+    $scope.dateOptions = {
+        minDate: new Date(),
+        startingDay: 1
+    };
+
+    $scope.dtOpen = function () {
+        $scope.isDtOpen = true;
+    };
+
+    $scope.hstep = 1;
+    $scope.mstep = 1;
+
+    $scope.getCourseExerciseBanks = function () {
+        $http.post('/getCourseExerciseBanks', {
+            cid: $scope.courseSelected.id
+        }).success(function (res) {
+            if (res.status) {
+                $scope.ebs = res.result;
+            }
+        });
+    };
+
+    $scope.submit = function () {
+        var exam = {};
+        exam.cid = $scope.courseSelected.id;
+        exam.examName = $scope.examName;
+        exam.examDate = $scope.examDate;
+        exam.startTime = $scope.startTime;
+        exam.endTime = $scope.endTime;
+        exam.exerciseNum = $scope.exerciseNum;
+        exam.examPoints = $scope.examPoints;
+        exam.ebs = $scope.ebs;
+        console.log(exam);
+        $http.post('/addExam', exam).success(function (res) {
+
+        });
+    }
 }

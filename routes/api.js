@@ -559,3 +559,98 @@ exports.submitAndGetAnswer = function (req, res) {
         })
     }
 };
+
+exports.getCourseExerciseBanks = function (req, res) {
+    var cid = req.body.cid;
+    con.query("select eb.eid, eb.ename from ExerciseBank eb, ExerciseBankCourse ebc " +
+        "where ebc.cid = ? and eb.eid = ebc.eid", cid, function (err, result) {
+        if (err) {
+            console.log("Get course's exercise banks: " + err);
+            res.json({
+                status: false
+            });
+        } else {
+            res.json({
+                status: true,
+                result: result
+            });
+        }
+    });
+};
+
+exports.addExam = function (req, res) {
+    console.log(req.body);
+    var cid = req.body.cid;
+    var startTime = new Date(req.body.startTime);
+    var endTime = new Date(req.body.endTime);
+    var examDate = new Date(req.body.examDate);
+    var ename = req.body.examName;
+    var examPoints = req.body.examPoints;
+    var eid = new Date().getTime();
+    var ebs = req.body.ebs;
+    startTime.setDate(examDate.getDate());
+    startTime.setMonth(examDate.getMonth());
+    startTime.setFullYear(examDate.getFullYear());
+    startTime.setSeconds(0);
+    endTime.setDate(examDate.getDate());
+    endTime.setMonth(examDate.getMonth());
+    endTime.setFullYear(examDate.getFullYear());
+    endTime.setSeconds(0);
+    var query = "";
+    for (var i = 0; i < ebs.length; i++) {
+        query += "select e.eid, e.ebid from ExerciseBank eb, Exercise e " +
+            "where eb.eid = '" + ebs[i].eid + "' and eb.eid = e.ebid;";
+    }
+    con.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            for (var i = 0; i < ebs.length; i++) {
+                ebs[i].exercise = [];
+                var exerciseAll;
+                for (var j = 0; j < result.length; j++) {
+                    if (ebs[i].eid == result[j][0].ebid) {
+                        exerciseAll = result[j];
+                        break;
+                    }
+                }
+                for (var j = 0; j < ebs[i].exerciseNum; j++) {
+                    var k = Math.round(Math.random()* (exerciseAll.length - 1));
+                    while (ebs[i].exercise.indexOf(k) >= 0) {
+                        k = Math.round(Math.random()* (exerciseAll.length - 1));
+                    }
+                    ebs[i].exercise.push(exerciseAll[k].eid);
+                }
+            }
+        }
+    });
+    /*con.query("insert into Exam " +
+        "value(?, ?, ?, ? ,?);", [eid, ename, examPoints, startTime.getTime(), endTime.getTime()], function (err, result) {
+        if (err) {
+            console.log("Insert into Exam: " + err);
+        } else {
+            var query = "";
+            for (var i = 0; i < ebs.length; i++) {
+                if (ebs[i].exerciseCount > 0) {
+                    query += "insert into ExamExerciseBank " +
+                        "value('" + eid + "', '" + ebs[i].eid + "');";
+                }
+            }
+            con.query(query, function (err, result) {
+               if (err) {
+                   console.log("Insert into ExamExerciseBank: " + err);
+               } else {
+                   con.query("insert into ExamCourse " +
+                       "value(?, ?)", [eid, cid], function (err, result) {
+                           if (err) {
+                               console.log("Insert into ExamCourse: "  + err);
+                           } else {
+
+                           }
+                       }
+                   );
+               }
+            });
+        }
+    });*/
+};
