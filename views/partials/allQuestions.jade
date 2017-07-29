@@ -1,0 +1,31 @@
+div(class="content-container")
+    div(ng-if="userInfo.level == 1" class="panel" ng-repeat="question in questions" ng-class="{'panel-success' : question.isTrue, 'panel-danger' : !question.isTrue && question.isShow, 'panel-info': !question.isShow}")
+        div(class="panel-heading")
+            h4 Question {{$index + 1}}
+        div(class="panel-body")
+            div(ng-bind-html="question.description | trustHtml" class="mb-10")
+            div(ng-repeat="option in options[$index]")
+                label(class="checkbox-inline")
+                    input(type="checkbox" ng-model="option.checked" ng-disabled="question.isShow" ng-change="changeAnswer(question.eid, options[$parent.$index])")
+                    span {{option.op + ". "}}
+                    span(ng-bind-html="option.description | trustHtml")
+    div(ng-if="userInfo.level == 2" class="panel panel-info" ng-repeat="question in questions")
+        div(class="panel-heading")
+            h4 Question {{$index + 1}}
+        div(class="panel-body")
+            div(ng-bind-html="question.description | trustHtml" class="mb-10")
+            div(ng-repeat="option in options[$index]")
+                span {{option.op + ". "}}
+                    span(ng-bind-html="option.description | trustHtml")
+            div(class="alert mt-10 alert-info" role="alert")
+                span 正确答案: {{question.answer}}
+    div(class="panel panel-default question-answer-progress" ng-if="userInfo.level == 1")
+        div(class="panel-heading")
+            h5(class="panel-title") 进度
+                span(class="pull-right cl-warning")
+                    i(class="fa fa-fw fa-clock-o")
+                    span haha
+        div(class="panel-body")
+            div(class="progress")
+                div(class="progress-bar" role="progressbar" aria-valuenow="{{done}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (done / questions.length) * 100 + '%'}" style="width: 0%;")
+            span {{done}} / {{questions.length}}

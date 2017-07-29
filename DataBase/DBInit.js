@@ -266,6 +266,20 @@ function DBInit() {
             }
     });
 
+    con.query("create table if not exists StudentExamQuestion(" +
+        "sid varchar(10)," +
+        "eid varchar(32)," +
+        "exid varchar(32)," +
+        "stuAnswer varchar(60)," +
+        "primary key(sid, eid, exid)," +
+        "foreign key(eid) references Exam(eid) on delete cascade on update cascade," +
+        "foreign key(sid) references Student(sid) on delete cascade on update cascade," +
+        "foreign key(exid) references Exercise(eid) on delete cascade on update cascade);", function (err, result) {
+            if (err) {
+                console.log("StudentExamQuestion: " + err);
+            }
+    });
+
     con.query("select count(*) from Admin", function (err, result) {
         if (result[0]['count(*)'] == 0) {
             con.query("insert into Admin " +

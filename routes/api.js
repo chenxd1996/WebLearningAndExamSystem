@@ -687,3 +687,83 @@ exports.getMyExams = function (req, res) {
         });
     }
 };
+
+exports.getExamQuestions = function(req, res) {
+    var userInfo = req.body.userInfo;
+    var eid = req.body.eid;
+    var result = {};
+    if (userInfo) {
+        var query = "";
+        if (userInfo.level == 1) {
+            query = "select e.description, e.eid, seq.stuAnswer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid, Exercise e " +
+                "where ee.eid = ? and ee.exid = e.eid " +
+                "order by e.eid;"
+        } else if (userInfo.level == 2) {
+            query = "select a.answer, e.description, e.eid from ExamExercise ee, Exercise e, Answer a " +
+                "where ee.eid = ? and ee.exid = e.eid and a.eid = e.eid " +
+                "order by e.eid;"
+        }
+        con.query(query, eid, function (err, result1) {
+            if (err) {
+                console.log("get exercise in getExamQuestions: " + err);
+            } else {
+                result.exercise = result1;
+                var query = "";
+                for (var i = 0; i < result1.length; i++) {
+                    query += "select * from Op " +
+                        "where eid = '" + result1[i].eid + "' order by eid;";
+                }
+                con.query(query, function (err, result2) {
+                    if (err) {
+                        console.log("get options in getExamQuestions: " + err);
+                    } else {
+                        if (result1.length == 1) {
+                            result.options = [];
+                            result.options.push(result2);
+                        } else {
+                            result.options = result2;
+                        }
+                        res.json(result);
+                    }
+                });
+            }
+        });
+    }
+};
+
+exports.saveAnswerInExam = function (req, res) {
+    var sid = req.body.sid;
+    var exid = req.body.exid;
+    var eid = req.body.eid;
+    var options = req.body.options;
+    var answer = "";
+    con.query("select endTime from Exam " +
+        "where eid = ?;", eid, function (err, result) {
+        if (err) {
+            console.log("Get exam endTime in saveAnswerInExam: " + err);
+        } else {
+            if (new Date().setTime(result[0]['endTime']) < new Date().getTime()) {
+                res.json({
+                    status: false
+                });
+            } else {
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].checked) {
+                        answer += options[i].op + " ";
+                    }
+                }
+                con.query("insert into StudentExamQuestion " +
+                    "value(?, ?, ?, ?) on duplicate key update stuAnswer = ?;", [sid, eid, exid, answer, answer], function (err, result) {
+                    if (err) {
+                        console.log("Insert into StudentExamQuestion: " + err);
+                    } else {
+                        res.json({
+                            status: true
+                        });
+                    }
+                });
+            }
+        }
+    });
+
+};

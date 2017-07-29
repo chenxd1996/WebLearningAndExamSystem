@@ -55,6 +55,10 @@ router.post('/addExam', api.addExam);
 
 router.post('/getMyExams', api.getMyExams);
 
+router.post('/getExamQuestions', api.getExamQuestions);
+
+router.post('/saveAnswerInExam', api.saveAnswerInExam);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

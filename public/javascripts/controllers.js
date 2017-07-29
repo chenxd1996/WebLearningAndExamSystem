@@ -489,8 +489,72 @@ function myExamsCtrl($scope, $http, $rootScope) {
                 userInfo: $rootScope.userInfo
             }).success(function (res) {
                 $scope.exams = res;
-                console.log(res);
+                //console.log(res);
             });
         }
     });
+}
+
+function examDetailCtrl($scope, $location, $stateParams) {
+    var options = ['all-questions', 'exam-result'];
+    $scope.eid = $stateParams.examID;
+    for (var i = 0; i < options.length; i++) {
+        if ($location.path().indexOf(options[i]) >= 0) {
+            $scope.checked = options[i];
+            break;
+        }
+    }
+}
+
+function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster) {
+    var eid = $stateParams.examID;
+    $scope.done = 0;
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post("/getExamQuestions",{
+                userInfo: $rootScope.userInfo,
+                eid: eid
+            }).success(function (res) {
+                $scope.questions = res.exercise;
+                $scope.options = res.options;
+                for (var i = 0; i < $scope.options.length; i++) {
+                    if ($scope.questions[i].stuAnswer) {
+                        $scope.done += 1;
+                        for (var j = 0; j < $scope.options[i].length; j++) {
+                            if ($scope.questions[i].stuAnswer.indexOf($scope.options[i][j].op) >= 0) {
+                                $scope.options[i][j].checked = true;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    $scope.changeAnswer = function (exid, options) {
+        $http.post('/saveAnswerInExam', {
+            sid: $rootScope.userInfo.id,
+            exid: exid,
+            eid: eid,
+            options: options
+        }).success(function (res) {
+            if (!res.status) {
+                toaster.pop("error", "考试已结束，不能修改答案", "", 2000);
+            } else {
+                $scope.done = 0;
+                for (var i = 0; i < $scope.options.length; i++) {
+                    var count = 0;
+                    for (var j = 0; j < $scope.options[i].length; j++) {
+                        if ($scope.options[i][j].checked) {
+                            count += 1;
+                            break;
+                        }
+                    }
+                    if (count != 0) {
+                        $scope.done += 1;
+                    }
+                }
+            }
+        });
+    }
 }

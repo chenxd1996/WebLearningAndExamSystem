@@ -96,9 +96,15 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/my-exams",
         controller: myExamsCtrl,
         templateUrl: "partials/myExams"
-    }).state("logied.examDetail", {
-        url: "/exam-system/exam-detail"
-        controller: 
+    }).state("logined.examDetail", {
+        url: "/exam-system/exam-detail",
+        params: {examID: null},
+        controller: examDetailCtrl,
+        templateUrl: "partials/examDetail"
+    }).state("logined.examDetail.allQuestions", {
+        url: "/:examID/all-questions",
+        controller: allQuestionsCtrl,
+        templateUrl: "partials/allQuestions"
     });
     $locationProvider.html5Mode(true);
 }]);
