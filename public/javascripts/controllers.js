@@ -506,7 +506,7 @@ function examDetailCtrl($scope, $location, $stateParams) {
     }
 }
 
-function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster) {
+function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $timeout) {
     var eid = $stateParams.examID;
     $scope.done = 0;
     $rootScope.$watch('userInfo', function () {
@@ -515,6 +515,9 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster) {
                 userInfo: $rootScope.userInfo,
                 eid: eid
             }).success(function (res) {
+                $scope.startTime = res.exam.startTime;
+                $scope.endTime = res.exam.endTime;
+                $scope.now = res.now;
                 $scope.questions = res.exercise;
                 $scope.options = res.options;
                 for (var i = 0; i < $scope.options.length; i++) {
@@ -539,7 +542,7 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster) {
             options: options
         }).success(function (res) {
             if (!res.status) {
-                toaster.pop("error", "考试已结束，不能修改答案", "", 2000);
+                toaster.pop("warning", "考试已结束，不能修改答案", "", 2000);
             } else {
                 $scope.done = 0;
                 for (var i = 0; i < $scope.options.length; i++) {
@@ -556,5 +559,29 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster) {
                 }
             }
         });
-    }
+    };
+
+    setInterval(function () {
+        $scope.now = $scope.now + 1000;
+        if ($scope.endTime >= $scope.now) {
+            $timeout(function () {
+                var ms = $scope.endTime - $scope.now;
+                var hours = ms / (1000 * 60 * 60);
+                ms = ms % (1000 * 60 * 60);
+                var minutes = ms / (1000 * 60);
+                ms = ms % (1000 * 60);
+                var seconds = ms / 1000;
+                $scope.leftTime  = new Date();
+                $scope.leftTime.setHours(hours);
+                $scope.leftTime.setMinutes(minutes);
+                $scope.leftTime.setSeconds(seconds);
+            });
+        }
+    }, 1000);
+
+    setInterval(function () {
+        $http.get('/getSystemTime').success(function (res) {
+            $scope.now = res.now;
+        });
+    }, 1000 * 60);
 }

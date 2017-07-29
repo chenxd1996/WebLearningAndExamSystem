@@ -9,6 +9,8 @@ div(class="content-container")
                     input(type="checkbox" ng-model="option.checked" ng-disabled="question.isShow" ng-change="changeAnswer(question.eid, options[$parent.$index])")
                     span {{option.op + ". "}}
                     span(ng-bind-html="option.description | trustHtml")
+            div(ng-if="question.isShow" class="alert mt-10" role="alert" ng-class="{true: 'alert-success', false: 'alert-danger'}[question.isTrue]")
+                span 正确答案: {{question.answers}}
     div(ng-if="userInfo.level == 2" class="panel panel-info" ng-repeat="question in questions")
         div(class="panel-heading")
             h4 Question {{$index + 1}}
@@ -24,7 +26,7 @@ div(class="content-container")
             h5(class="panel-title") 进度
                 span(class="pull-right cl-warning")
                     i(class="fa fa-fw fa-clock-o")
-                    span haha
+                    span 剩余时间: {{leftTime | date: "HH:mm:ss"}}
         div(class="panel-body")
             div(class="progress")
                 div(class="progress-bar" role="progressbar" aria-valuenow="{{done}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (done / questions.length) * 100 + '%'}" style="width: 0%;")
