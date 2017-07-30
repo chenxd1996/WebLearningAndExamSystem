@@ -7,9 +7,15 @@ div(class="content-container")
             span(class="mr-10") {{exam.startTime | date: 'yyyy-MM-dd'}}
             i(class="fa fa-fw fa-clock-o ml-20 mr-10")
             span {{exam.startTime | date: 'HH:mm:ss'}} - {{exam.endTime | date: 'HH:mm:ss'}}
-        div(class="fs-13 mb-10 " ng-class="{1: 'cl-info', 2: 'cl-success'}[userInfo.level]")
-            i(class="fa-users fa fa-fw mr-10 fa-user-circle-o")
-            span(ng-if="userInfo.level == 1") 角色是学生
-            span(ng-if="userInfo.level == 2") 角色是老师
-            i(class="fa fa-fw fa-circle mr-10 ml-20 cl-green")
-            span 进行中
+        div(class="fs-13 mb-10 ")
+            span(ng-class="{1: 'cl-info', 2: 'cl-success'}[userInfo.level]")
+                i(class="fa-users fa fa-fw mr-10 fa-user-circle-o")
+                span(ng-if="userInfo.level == 1") 角色是学生
+                span(ng-if="userInfo.level == 2") 角色是老师
+            span(ng-class="{'notStarted': 'cl-yellow', 'progressing': 'cl-green', 'ended': 'cl-danger'}[status]")
+                i(class="fa fa-fw fa-circle mr-10 ml-20")
+                span(ng-if="status == 'notStarted'") 未开始
+                span(ng-if="status == 'progressing'") 进行中
+                span(ng-if="status == 'ended'") 已结束
+    div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="exams.length == 0")
+        div(class="fs-16") 暂无数据

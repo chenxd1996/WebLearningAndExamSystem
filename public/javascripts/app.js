@@ -93,7 +93,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         controller: addExamCtrl,
         templateUrl: "partials/addExam"
     }).state("logined.examSystem.myExams", {
-        url: "/my-exams",
+        url: "/my-exams/:status",
         controller: myExamsCtrl,
         templateUrl: "partials/myExams"
     }).state("logined.examDetail", {

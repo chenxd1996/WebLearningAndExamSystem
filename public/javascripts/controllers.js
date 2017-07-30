@@ -407,7 +407,7 @@ function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout) {
     }
 }
 
-function examSystemCtrl($scope, $rootScope, $location) {
+function examSystemCtrl($scope, $rootScope, $location, $state) {
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $scope.userInfo = $rootScope.userInfo;
@@ -417,7 +417,17 @@ function examSystemCtrl($scope, $rootScope, $location) {
     for (var i  = 0; i < options.length; i++) {
         if ($location.path().indexOf(options[i]) >= 0) {
             $scope.checked = options[i];
+            break;
         }
+    }
+    var statuses = ['notStarted', 'progressing', 'ended'];
+    for (var i = 0; i < statuses.length; i++) {
+        if ($location.path().indexOf(statuses[i]) >= 0) {
+            $scope.radioModel = statuses[i];
+        }
+    }
+    $scope.changeStatus = function(status) {
+        $state.go('logined.examSystem.myExams', {status: status}, {reload: true});
     }
 }
 
@@ -482,11 +492,13 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
     }
 }
 
-function myExamsCtrl($scope, $http, $rootScope) {
+function myExamsCtrl($scope, $http, $rootScope, $stateParams) {
+    var status = $scope.status = $stateParams.status;
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post("/getMyExams", {
-                userInfo: $rootScope.userInfo
+                userInfo: $rootScope.userInfo,
+                status: status
             }).success(function (res) {
                 $scope.exams = res;
                 //console.log(res);

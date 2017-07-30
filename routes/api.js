@@ -667,20 +667,43 @@ exports.addExam = function (req, res) {
 
 exports.getMyExams = function (req, res) {
     var userInfo = req.body.userInfo;
+    var status = req.body.status;
     if (userInfo.level == 1) {
-        con.query("select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, StudentCourse sc " +
-            "where sc.sid = ? and sc.cid = ec.cid and ec.eid = e.eid and c.cid = sc.cid;", userInfo.id, function (err, result) {
+        var query = "";
+        var now = new Date().getTime();
+        if (status == "notStarted") {
+            query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, StudentCourse sc " +
+                "where sc.sid = ? and sc.cid = ec.cid and ec.eid = e.eid and c.cid = sc.cid and e.startTime > ?;";
+        } else if (status == "progressing") {
+            query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, StudentCourse sc " +
+                "where sc.sid = ? and sc.cid = ec.cid and ec.eid = e.eid and c.cid = sc.cid and e.startTime <= ? and e.endTime >= ?;";
+        } else if (status == "ended") {
+            query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, StudentCourse sc " +
+                "where sc.sid = ? and sc.cid = ec.cid and ec.eid = e.eid and c.cid = sc.cid and e.endTime < ?;";
+        }
+        con.query(query, [userInfo.id, now, now], function (err, result) {
             if (err) {
-                console.log("Get my exams: " + err);
+                console.log("Get student's exams: " + err);
             } else {
                 res.json(result);
             }
         });
     } else if (userInfo.level == 2) {
-        con.query("select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
-            "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid;", userInfo.id, function (err, result) {
+        var query = "";
+        var now = new Date().getTime();
+        if (status == "notStarted") {
+            query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
+                "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid and c.cid = sc.cid and e.startTime > ?;"
+        } else if (status == "progressing") {
+            query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
+                "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid and e.startTime <= ? and e.endTime >= ?;"
+        } else if (status == "ended") {
+            query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
+                "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid and e.endTime < ?;"
+        }
+        con.query(query, [userInfo.id, now, now], function (err, result) {
             if (err) {
-                console.log("Get my exams: " + err);
+                console.log("Get teacher's exams: " + err);
             } else {
                 res.json(result);
             }
@@ -701,10 +724,18 @@ exports.getExamQuestions = function(req, res) {
                 result.exam = result3[0];
                 var query = "";
                 if (userInfo.level == 1) {
-                   // if (result3[0].startTime )
-                    query = "select e.description, e.eid, seq.stuAnswer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid, Exercise e " +
-                        "where ee.eid = ? and ee.exid = e.eid " +
-                        "order by e.eid;"
+                    var now = new Date().getTime();
+                    if (result3[0].startTime > now) {
+
+                    } else if (result3[0].startTime <= now && result3[0].endTime >= now) {
+                        query = "select e.description, e.eid, seq.stuAnswer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid, Exercise e " +
+                            "where ee.eid = ? and ee.exid = e.eid " +
+                            "order by e.eid;"
+                    } else {
+                        query = "select e.description, e.eid, seq.stuAnswer, a.answer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid, Exercise e," +
+                            "Answer a where ee.eid = ? and ee.exid = e.eid and a.eid = ee.exid " +
+                            "order by e.eid;"
+                    }
                 } else if (userInfo.level == 2) {
                     query = "select a.answer, e.description, e.eid from ExamExercise ee, Exercise e, Answer a " +
                         "where ee.eid = ? and ee.exid = e.eid and a.eid = e.eid " +
@@ -712,7 +743,7 @@ exports.getExamQuestions = function(req, res) {
                 }
                 con.query(query, eid, function (err, result1) {
                     if (err) {
-                        console.log("get exercise in getExamQuestions: " + err);
+                        console.log("Get exercise in getExamQuestions: " + err);
                     } else {
                         result.exercise = result1;
                         var query = "";
