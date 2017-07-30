@@ -10,7 +10,7 @@ div(class="content-container")
                     span {{option.op + ". "}}
                     span(ng-bind-html="option.description | trustHtml")
             div(ng-if="question.isShow" class="alert mt-10" role="alert" ng-class="{true: 'alert-success', false: 'alert-danger'}[question.isTrue]")
-                span 正确答案: {{question.answers}}
+                span 正确答案: {{question.answer}}
     div(ng-if="userInfo.level == 2" class="panel panel-info" ng-repeat="question in questions")
         div(class="panel-heading")
             h4 Question {{$index + 1}}
@@ -21,7 +21,7 @@ div(class="content-container")
                     span(ng-bind-html="option.description | trustHtml")
             div(class="alert mt-10 alert-info" role="alert")
                 span 正确答案: {{question.answer}}
-    div(class="panel panel-default question-answer-progress" ng-if="userInfo.level == 1")
+    div(class="panel panel-default question-answer-progress" ng-if="userInfo.level == 1 && status == 'progressing'")
         div(class="panel-heading")
             h5(class="panel-title") 进度
                 span(class="pull-right cl-warning")
@@ -31,3 +31,10 @@ div(class="content-container")
             div(class="progress")
                 div(class="progress-bar" role="progressbar" aria-valuenow="{{done}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (done / questions.length) * 100 + '%'}" style="width: 0%;")
             span {{done}} / {{questions.length}}
+    div(class="panel panel-default question-answer-progress" ng-if="userInfo.level == 1 && status == 'ended'")
+        div(class="panel-heading")
+            h2(class="panel-title") 正确率
+        div(class="panel-body")
+            div(class="progress")
+                div(class="progress-bar" role="progressbar" aria-valuenow="{{correctNum}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (correctNum / questions.length) * 100 + '%'}" style="width: 0%;")
+            span {{correctNum}} / {{questions.length}}

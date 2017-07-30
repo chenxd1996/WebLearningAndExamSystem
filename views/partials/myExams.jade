@@ -1,7 +1,7 @@
 div(class="content-container")
     div(class="course-item bg-white pt-5 pr-10 pr-10 pb-5 pl-20 mr-15 mb-15 inbl" ng-repeat = "exam in exams")
         div(class="fs-16 pt-10 pb-10")
-            a(ui-sref="logined.examDetail({examID: exam.eid})") {{exam.cname}} / {{exam.ename}}
+            a(ui-sref="logined.examDetail.allQuestions({examID: exam.eid, status: status})") {{exam.cname}} / {{exam.ename}}
         div(class="fs-13 mb-10 cl-warning")
             i(class="fa fa-fw fa-calendar mr-10")
             span(class="mr-10") {{exam.startTime | date: 'yyyy-MM-dd'}}

@@ -34,5 +34,5 @@ div(class="content-container")
             h2(class="panel-title") 正确率
         div(class="panel-body")
             div(class="progress")
-                div(class="progress-bar" role="progressbar" aria-valuenow="{{done}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (correctNum / questions.length) * 100 + '%'}" style="width: 0%;")
+                div(class="progress-bar" role="progressbar" aria-valuenow="{{correctNum}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (correctNum / questions.length) * 100 + '%'}" style="width: 0%;")
             span {{correctNum}} / {{questions.length}}

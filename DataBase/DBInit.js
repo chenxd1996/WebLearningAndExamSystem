@@ -112,7 +112,7 @@ function DBInit() {
     con.query("create table if not exists Exam(" +
         "eid varchar(32)," +
         "ename varchar(20)," +
-        "points float," +
+        "points float default 0," +
         "startTime varchar(32)," +
         "endTime varchar(32)," +
         "primary key(eid))", function (err, result) {
@@ -202,7 +202,7 @@ function DBInit() {
     con.query("create table if not exists StudentExam(" +
         "sid varchar(10)," +
         "eid varchar(32)," +
-        "grade float," +
+        "grade float default 0," +
         "primary key(sid, eid)," +
         "foreign key(sid) references Student(sid) on delete cascade on update cascade," +
         "foreign key(eid) references Exam(eid) on delete cascade on update cascade)", function (err, result) {
@@ -271,6 +271,7 @@ function DBInit() {
         "eid varchar(32)," +
         "exid varchar(32)," +
         "stuAnswer varchar(60)," +
+        "point float default 0," +
         "primary key(sid, eid, exid)," +
         "foreign key(eid) references Exam(eid) on delete cascade on update cascade," +
         "foreign key(sid) references Student(sid) on delete cascade on update cascade," +

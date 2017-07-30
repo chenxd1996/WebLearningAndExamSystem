@@ -11,7 +11,7 @@ div(class="header")
                     a 账号：{{userInfo.id}}
                 li(class="divider")
                 li(role="menuitem")
-                    a(ng-click="logout()" ui-sref="login" class="text-center")
+                    a(ng-click="logout()" href="#" class="text-center")
                         i(class="fa fa-fw fa-sign-out")
                         span  退出登录
 
@@ -25,7 +25,7 @@ ul(ng-if="userInfo.level == 2" class="nav nav-pills nav-stacked navbar-inverse n
             span(class="glyphicon glyphicon-tasks" aria-hidden="true")
                 span(ng-if="showDetail")  题库系统
     li(role="presentation" ng-model="checked" uib-btn-radio="'exam-system'")
-        a(ui-sref="logined.examSystem.myExams({status: 'notStarted'})")
+        a(ui-sref="logined.examSystem.myExams({status: 'progressing'})")
             span(class="glyphicon glyphicon-pencil" aria-hidden="true")
                 span(ng-if="showDetail")  考试系统
     li(role="presentation" ng-model="checked" uib-btn-radio="'my-infomation'")
@@ -50,7 +50,7 @@ ul(ng-if="userInfo.level == 1" class="nav nav-pills nav-stacked navbar-inverse n
             span(class="glyphicon glyphicon-tasks" aria-hidden="true")
                 span(ng-if="showDetail")  题库系统
     li(role="presentation" ng-model="checked" uib-btn-radio="'exam-system'")
-        a(ui-sref="logined.examSystem.myExams({status: 'notStarted'})")
+        a(ui-sref="logined.examSystem.myExams({status: 'progressing'})")
             span(class="glyphicon glyphicon-pencil" aria-hidden="true")
                 span(ng-if="showDetail")  考试系统
     li(role="presentation" ng-model="checked" uib-btn-radio="'my-infomation'")

@@ -62,7 +62,9 @@ function homeCtrl($scope, $location, $rootScope, $http, $state) {
         }
     }
     $scope.logout = function () {
-        $http.get('/logout');
+        $http.get('/logout').success(function (res) {
+            $state.go('login');
+        });
     }
 }
 
@@ -215,12 +217,6 @@ function courseDataCtrl($scope, $stateParams, $http) {
     }).success(function (res) {
         $scope.courseWares = res.result;
     });
-    /*$scope.getCourseWare = function(courseWareID, type) {
-        console.log(courseWareID);
-        $http.get('/getCourseWare/?' + "cid=" + courseWareID + "&type=" + type).success(function (res) {
-
-        });
-    }*/
 }
 
 function addCourseDataCtrl($scope, $stateParams, FileUploader) {
@@ -501,7 +497,6 @@ function myExamsCtrl($scope, $http, $rootScope, $stateParams) {
                 status: status
             }).success(function (res) {
                 $scope.exams = res;
-                //console.log(res);
             });
         }
     });
@@ -520,19 +515,39 @@ function examDetailCtrl($scope, $location, $stateParams) {
 
 function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $timeout) {
     var eid = $stateParams.examID;
+    $scope.status = $stateParams.status;
     $scope.done = 0;
+    $scope.correctNum = 0;
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post("/getExamQuestions",{
                 userInfo: $rootScope.userInfo,
                 eid: eid
             }).success(function (res) {
+                console.log(res);
                 $scope.startTime = res.exam.startTime;
                 $scope.endTime = res.exam.endTime;
                 $scope.now = res.now;
                 $scope.questions = res.exercise;
                 $scope.options = res.options;
                 for (var i = 0; i < $scope.options.length; i++) {
+                    if ($scope.status == "notStarted") {
+
+                    } else if ($scope.status == "progressing") {
+
+                    } else if ($scope.status == "ended") {
+                        if ($scope.questions[i].stuAnswer) {
+                            $scope.questions[i].isShow = true;
+                            var stuAnswer = $scope.questions[i].stuAnswer.trim().replace('/\s/g', "");
+                            var answer = $scope.questions[i].answer.trim().replace('/\s/g', "");
+                            if (stuAnswer == answer) {
+                                $scope.questions[i].isTrue = true;
+                                $scope.correctNum++;
+                            } else {
+                                $scope.questions[i].isTrue = false;
+                            }
+                        }
+                    }
                     if ($scope.questions[i].stuAnswer) {
                         $scope.done += 1;
                         for (var j = 0; j < $scope.options[i].length; j++) {
@@ -574,8 +589,8 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
     };
 
     setInterval(function () {
-        $scope.now = $scope.now + 1000;
-        if ($scope.endTime >= $scope.now) {
+        if ($scope.endTime >= $scope.now && $scope.startTime <= $scope.now) {
+            $scope.now = $scope.now + 1000;
             $timeout(function () {
                 var ms = $scope.endTime - $scope.now;
                 var hours = ms / (1000 * 60 * 60);
@@ -592,8 +607,10 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
     }, 1000);
 
     setInterval(function () {
-        $http.get('/getSystemTime').success(function (res) {
-            $scope.now = res.now;
-        });
+        if ($scope.endTime >= $scope.now && $scope.startTime <= $scope.now) {
+            $http.get('/getSystemTime').success(function (res) {
+                $scope.now = res.now;
+            });
+        }
     }, 1000 * 60);
 }

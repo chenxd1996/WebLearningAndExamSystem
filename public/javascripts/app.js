@@ -102,7 +102,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         controller: examDetailCtrl,
         templateUrl: "partials/examDetail"
     }).state("logined.examDetail.allQuestions", {
-        url: "/:examID/all-questions",
+        url: "/:examID/:status/all-questions",
         controller: allQuestionsCtrl,
         templateUrl: "partials/allQuestions"
     });

@@ -73,7 +73,11 @@ exports.loginCheck = function (req, res) {
 };
 
 exports.logout = function (req, res) {
-    req.session.destroy();
+    req.session.destroy(function () {
+        res.json({
+           status: true
+        });
+    });
 };
 
 exports.addUser = function (req, res) {
@@ -469,7 +473,7 @@ exports.addExercise = function (req, res) {
                 } else {
                     var answer = "";
                     for (var i = 0; i < answers.length - 1; i++) {
-                        answer += answers[i] + " ";
+                        answer += answers[i];
                     }
                     answer += answers[answers.length - 1];
                     con.query("insert into Answer " +
@@ -537,7 +541,7 @@ exports.submitAndGetAnswer = function (req, res) {
     var userInfo = req.body.userInfo;
     var answer = "";
     for (var i = 0; i < options.length - 1; i++) {
-        answer += options[i].op + " ";
+        answer += options[i].op;
     }
     answer += options[options.length - 1].op;
     if (userInfo && userInfo.level == 1) {
@@ -693,7 +697,7 @@ exports.getMyExams = function (req, res) {
         var now = new Date().getTime();
         if (status == "notStarted") {
             query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
-                "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid and c.cid = sc.cid and e.startTime > ?;"
+                "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid and e.startTime > ?;"
         } else if (status == "progressing") {
             query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
                 "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid and e.startTime <= ? and e.endTime >= ?;"
@@ -778,7 +782,7 @@ exports.saveAnswerInExam = function (req, res) {
     var eid = req.body.eid;
     var options = req.body.options;
     var answer = "";
-    con.query("select endTime from Exam " +
+    con.query("select endTime, points from Exam " +
         "where eid = ?;", eid, function (err, result) {
         if (err) {
             console.log("Get exam endTime in saveAnswerInExam: " + err);
@@ -790,17 +794,40 @@ exports.saveAnswerInExam = function (req, res) {
             } else {
                 for (var i = 0; i < options.length; i++) {
                     if (options[i].checked) {
-                        answer += options[i].op + " ";
+                        answer += options[i].op;
                     }
                 }
-                con.query("insert into StudentExamQuestion " +
-                    "value(?, ?, ?, ?) on duplicate key update stuAnswer = ?;", [sid, eid, exid, answer, answer], function (err, result) {
+                var point = result[0]['points'];
+                con.query("insert into StudentExamQuestion(sid, eid, exid, stuAnswer) " +
+                    "values(?, ?, ?, ?) on duplicate key update stuAnswer = ?;", [sid, eid, exid, answer, answer], function (err, result) {
                     if (err) {
                         console.log("Insert into StudentExamQuestion: " + err);
                     } else {
-                        res.json({
-                            status: true
-                        });
+                        con.query("update StudentExamQuestion " +
+                            "set point = ? " +
+                            "where sid = ? and eid = ? and exid = ? and stuAnswer = (" +
+                            "select answer from Answer where eid = ?);" +
+                            "update StudentExamQuestion " +
+                            "set point = 0 " +
+                            "where sid = ? and eid = ? and exid = ? and stuAnswer <> (" +
+                            "select answer from Answer where eid = ?);",
+                        [point, sid, eid, exid, exid, sid, eid, exid, exid], function (err, result) {
+                                if (err) {
+                                    console.log("update StudentExamQuestion's point and get grade: " + err);
+                                } else {
+                                    con.query("replace into StudentExam(sid, eid, grade) " +
+                                        "select sid, eid, grade from (select sid, eid, SUM(point) as grade from StudentExamQuestion " +
+                                    "where sid = ? and eid = ?) as tb;", [sid, eid], function (err, result) {
+                                        if (err) {
+                                            console.log("replace into StudentExam: " + err);
+                                        } else {
+                                            res.json({
+                                                status: true
+                                            });
+                                        }
+                                    });
+                                }
+                            });
                     }
                 });
             }
