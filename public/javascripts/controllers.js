@@ -524,9 +524,12 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                 userInfo: $rootScope.userInfo,
                 eid: eid
             }).success(function (res) {
-                console.log(res);
+                if (res.grade) {
+                    $scope.grade = res.grade.grade;
+                }
                 $scope.startTime = res.exam.startTime;
                 $scope.endTime = res.exam.endTime;
+                $scope.points = res.exam.points;
                 $scope.now = res.now;
                 $scope.questions = res.exercise;
                 $scope.options = res.options;

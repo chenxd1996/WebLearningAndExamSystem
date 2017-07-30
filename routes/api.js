@@ -720,7 +720,7 @@ exports.getExamQuestions = function(req, res) {
     var eid = req.body.eid;
     var result = {};
     if (userInfo) {
-        con.query("select startTime, endTime from Exam " +
+        con.query("select startTime, endTime, points from Exam " +
             "where eid = ?;", eid, function (err, result3) {
             if (err) {
                 console.log("Get exam in getExamQuestions: " + err);
@@ -735,8 +735,8 @@ exports.getExamQuestions = function(req, res) {
                         query = "select e.description, e.eid, seq.stuAnswer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid, Exercise e " +
                             "where ee.eid = ? and ee.exid = e.eid " +
                             "order by e.eid;"
-                    } else {
-                        query = "select e.description, e.eid, seq.stuAnswer, a.answer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid, Exercise e," +
+                    } else if (result3[0].endTime < now) {
+                        query = "select e.description, e.eid, seq.stuAnswer, a.answer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid, Exercise e, " +
                             "Answer a where ee.eid = ? and ee.exid = e.eid and a.eid = ee.exid " +
                             "order by e.eid;"
                     }
@@ -764,8 +764,21 @@ exports.getExamQuestions = function(req, res) {
                                     result.options.push(result2);
                                 } else {
                                     result.options = result2;
-                                    result.now = new Date().getTime();
-                                    res.json(result);
+                                    if (result3[0].endTime < now) {
+                                        con.query("select grade from StudentExam " +
+                                            "where sid = ? and eid = ?", [userInfo.id, eid], function (err, result4) {
+                                            if (err) {
+                                                console.log("Get student grade: " + err);
+                                            } else{
+                                                result.grade = result4[0];
+                                                result.now = new Date().getTime();
+                                                res.json(result);
+                                            }
+                                        });
+                                    } else {
+                                        result.now = new Date().getTime();
+                                        res.json(result);
+                                    }
                                 }
                             }
                         });

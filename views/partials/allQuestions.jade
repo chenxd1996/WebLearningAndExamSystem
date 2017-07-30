@@ -24,9 +24,10 @@ div(class="content-container")
     div(class="panel panel-default question-answer-progress" ng-if="userInfo.level == 1 && status == 'progressing'")
         div(class="panel-heading")
             h5(class="panel-title") 进度
-                span(class="pull-right cl-warning")
-                    i(class="fa fa-fw fa-clock-o")
-                    span 剩余时间: {{leftTime | date: "HH:mm:ss"}}
+                span(class="pull-right")
+                    span(class="cl-warning")
+                        i(class="fa fa-fw fa-clock-o")
+                        span 剩余时间: {{leftTime | date: "HH:mm:ss"}}
         div(class="panel-body")
             div(class="progress")
                 div(class="progress-bar" role="progressbar" aria-valuenow="{{done}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (done / questions.length) * 100 + '%'}" style="width: 0%;")
@@ -34,6 +35,9 @@ div(class="content-container")
     div(class="panel panel-default question-answer-progress" ng-if="userInfo.level == 1 && status == 'ended'")
         div(class="panel-heading")
             h2(class="panel-title") 正确率
+                span(class="pull-right cl-info")
+                    i(class="fa fa-fw fa-line-chart mr-5")
+                    span 考试得分: {{grade}} / {{points * questions.length}}
         div(class="panel-body")
             div(class="progress")
                 div(class="progress-bar" role="progressbar" aria-valuenow="{{correctNum}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (correctNum / questions.length) * 100 + '%'}" style="width: 0%;")
