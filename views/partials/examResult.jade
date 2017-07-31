@@ -1,9 +1,34 @@
 div(class="content-container")
     div(ng-if="status=='ended'")
-        div(class="panel panel-info")
+        div(class="panel panel-info rankList")
             div(class="panel-heading")
                 h4 排行榜
             div(class="panel-body")
-                p haha
+                table(class="table")
+                    thead
+                        tr
+                            th(class="text-center") 姓名
+                            th(class="text-center") 专业
+                            th(class="text-center") 年级
+                            th(class="text-center") 班级
+                            th(class="text-center") 成绩
+                            th(class="text-center") 排名
+                    tbody
+                        tr(ng-repeat="student in students_current" style="text-align: center")
+                            td {{student.sname}}
+                            td {{student.major}}
+                            td {{student.Grade}}
+                            td {{student.class}}
+                            td {{student.grade}}
+                            td {{student.rank}}
+                ul(uib-pagination total-items="students.length" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" previous-text="前一页" next-text="后一页")
+        div(class="panel panel-info gdf")
+            div(class="panel-heading")
+                h4 成绩分布
+            div(class="panel-body")
+                canvas(class="chart chart-doughnut" chart-data="data" chart-labels="labels" chart-colors="chartColors")
+                span(ng-repeat="color in chartColors" class="pull-right mr-10 mt-20")
+                    div(style="background-color: {{color}}; width: 10px; height: 10px;")
+                    span {{labels[$index]}}
     div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="status!='ended'")
         span(class="fs-16") 暂无数据

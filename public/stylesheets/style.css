@@ -134,6 +134,10 @@ a {
   margin-top: 15px;
 }
 
+.mt-20 {
+  margin-top: 20px;
+}
+
 .mt-50 {
   margin-top: 50px;
 }
@@ -235,6 +239,30 @@ a {
   width: 65%;
   display: inline-block;
   margin: 0 20px 0 0;
+}
+
+.rankList {
+  width: 45%;
+  min-width: 400px;
+  margin-right: 5%;
+  display: inline-block;
+  height: 554px;
+  float: left;
+}
+
+.gdf {
+  width: 45%;
+  min-width: 400px;
+  display: inline-block;
+  height: 554px;
+}
+
+.chart {
+  max-height: 250px;
+  max-width: 250px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 106px;
 }
 
 ::-webkit-scrollbar {

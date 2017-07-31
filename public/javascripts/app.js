@@ -1,6 +1,6 @@
 
 angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'chart.js', 'toaster', 'angular-md5', 'ngSanitize', 'angularFileUpload']).
-config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsProvider', function ($locationProvider, $stateProvider, $urlRouterProvider, ChartJsProvider) {
+config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsProvider', function ($locationProvider, $stateProvider, ChartJsProvider) {
     $stateProvider
         .state("login", {
             url:"/login",

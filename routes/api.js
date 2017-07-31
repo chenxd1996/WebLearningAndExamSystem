@@ -655,6 +655,11 @@ exports.addExam = function (req, res) {
                                               for (var i = 0; i < ebs.length; i++) {
                                                   ebs[i].exercise = [];
                                                   var exerciseAll;
+                                                  if (result.length == 1) {
+                                                      var tmp = [];
+                                                      tmp.push(result);
+                                                      result = tmp;
+                                                  }
                                                   for (var j = 0; j < result.length; j++) {
                                                       if (ebs[i].eid == result[j][0].ebid) {
                                                           exerciseAll = result[j];
@@ -883,12 +888,14 @@ exports.getSystemTime = function (req, res) {
 
 exports.getExamGrades = function (req, res) {
     var eid = req.body.eid;
-    con.query("select s.sid, s.sname, se.grade from Student s, StudentExam se " +
-        "where s.sid = se.sid and se.eid = ?;", eid, function (err, result) {
+    con.query("select s.sid, s.sname, s.major, s.grade as Grade, s.class, se.grade from Student s, StudentExam se " +
+        "where s.sid = se.sid and se.eid = ? order by se.grade desc;" +
+        "select distinct se.grade from Student s, StudentExam se " +
+        "where s.sid = se.sid and se.eid = ? order by se.grade desc;", [eid, eid], function (err, result) {
             if (err) {
                 console.log("Get student's grade in getExamGrades: " + err);
             } else {
-                console.log(result);
+                res.json(result);
             }
     });
 };

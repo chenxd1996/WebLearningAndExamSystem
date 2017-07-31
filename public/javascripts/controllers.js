@@ -507,7 +507,6 @@ function examDetailCtrl($scope, $location, $stateParams) {
     var options = ['all-questions', 'exam-result'];
     $scope.status = $stateParams.status;
     $scope.eid = $stateParams.examID;
-    console.log($stateParams);
     for (var i = 0; i < options.length; i++) {
         if ($location.path().indexOf(options[i]) >= 0) {
             $scope.checked = options[i];
@@ -527,7 +526,6 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                 userInfo: $rootScope.userInfo,
                 eid: eid
             }).success(function (res) {
-                console.log(res);
                 if (res.grade) {
                     $scope.grade = res.grade.grade;
                 } else {
@@ -640,7 +638,28 @@ function examResultCtrl($scope, $stateParams, $http) {
         $http.post('/getExamGrades', {
             eid: eid
         }).success(function (res) {
-
+            console.log(res);
+            $scope.students = res[0];
+            $scope.disGrades = res[1];
+            for (var i = 0; i < $scope.students.length; i++) {
+                for (var j = 0; j < $scope.disGrades.length; j++) {
+                    if ($scope.students[i].grade == $scope.disGrades[j].grade) {
+                        $scope.students[i].rank = j + 1;
+                        break;
+                    }
+                }
+            }
         });
     }
+    $scope.labels = ["不及格", "60-70", "70-80", "80-90", "90-100"];
+    $scope.data = [300, 500, 100, 50, 80];
+    $scope.chartColors = ['#CC3399', '#CCFF66', '#66CCCC', '#FDB45C', '#FF6666'];
+    $scope.maxSize = 5;
+    $scope.currentPage = 1;
+    $scope.$watch('currentPage', function () {
+        if ($scope.students) {
+            $scope.students_current = $scope.students.slice(($scope.currentPage - 1) * 10, $scope.currentPage * 10 - 1);
+        }
+        console.log($scope.students_current);
+    });
 }
