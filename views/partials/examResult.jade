@@ -1,0 +1,9 @@
+div(class="content-container")
+    div(ng-if="status=='ended'")
+        div(class="panel panel-info")
+            div(class="panel-heading")
+                h4 排行榜
+            div(class="panel-body")
+                p haha
+    div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="status!='ended'")
+        span(class="fs-16") 暂无数据

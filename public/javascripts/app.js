@@ -105,6 +105,10 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/:examID/:status/all-questions",
         controller: allQuestionsCtrl,
         templateUrl: "partials/allQuestions"
+    }).state("logined.examDetail.examResult", {
+        url: "/:examID/:status/exam-result",
+        controller: examResultCtrl,
+        templateUrl: "partials/examResult"
     });
     $locationProvider.html5Mode(true);
 }]);

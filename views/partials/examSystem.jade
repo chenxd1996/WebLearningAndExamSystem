@@ -1,13 +1,9 @@
 ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 1")
     li(role="presentation" uib-btn-radio="'my-exams'" ng-model="checked")
-        a(ui-sref="logined.examSystem.myExams") 我的考试
+        a(ui-sref="logined.examSystem.myExams({status: 'progressing'})") 我的考试
 ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 2")
     li(role="presentation" uib-btn-radio="'my-exams'" ng-model="checked")
-        a(ui-sref="logined.examSystem.myExams") 我的考试
+        a(ui-sref="logined.examSystem.myExams({status: 'progressing'})") 我的考试
     li(role="presentation" uib-btn-radio="'add-exam'" ng-model="checked")
         a(ui-sref="logined.examSystem.addExam") 创建考试
-div(class="btn-group pull-right mr-15")
-    label(class="btn btn-sm btn-default" ng-model="radioModel" uib-btn-radio="'notStarted'" ng-click="changeStatus('notStarted')") 未开始
-    label(class="btn btn-sm btn-default" ng-model="radioModel" uib-btn-radio="'progressing'" ng-click="changeStatus('progressing')") 进行中
-    label(class="btn btn-sm btn-default" ng-model="radioModel" uib-btn-radio="'ended'" ng-click="changeStatus('ended')") 已结束
 div(ui-view="")

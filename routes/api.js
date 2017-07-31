@@ -229,45 +229,53 @@ exports.getMyCourses = function (req, res) {
         } else {
             result.courses = row;
             var query = "";
-            for (var i = 0; i < row.length; i++) {
-                query += "select Count(*) from StudentCourse where " +
-                    "cid = '" + row[i].cid + "';";
-            }
-            con.query(query, function (err, counts) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    if (row.length == 1) {
-                        result.studentCounts = [];
-                        result.studentCounts.push(counts);
-                    } else {
-                        result.studentCounts = counts;
-                    }
-
-                    var query = "";
-                    for (var i = 0; i < row.length; i++) {
-                        query += "select Count(*) from CourseWareCourse where " +
-                            "cid = '" + row[i].cid + "';";
-                    }
-                    con.query(query, function (err, counts) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            if (row.length == 1) {
-                                result.courseWaresCounts = [];
-                                result.courseWaresCounts.push(counts);
-                            } else {
-                                result.courseWaresCounts = counts;
-                            }
-
-                            res.json({
-                                status: true,
-                                result: result
-                            });
-                        }
-                    });
+            if (row.length > 0) {
+                for (var i = 0; i < row.length; i++) {
+                    query += "select Count(*) from StudentCourse where " +
+                        "cid = '" + row[i].cid + "';";
                 }
-            });
+                con.query(query, function (err, counts) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        if (row.length == 1) {
+                            result.studentCounts = [];
+                            result.studentCounts.push(counts);
+                        } else {
+                            result.studentCounts = counts;
+                        }
+
+                        var query = "";
+                        for (var i = 0; i < row.length; i++) {
+                            query += "select Count(*) from CourseWareCourse where " +
+                                "cid = '" + row[i].cid + "';";
+                        }
+                        con.query(query, function (err, counts) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                if (row.length == 1) {
+                                    result.courseWaresCounts = [];
+                                    result.courseWaresCounts.push(counts);
+                                } else {
+                                    result.courseWaresCounts = counts;
+                                }
+
+                                res.json({
+                                    status: true,
+                                    result: result
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                res.json({
+                    status: true,
+                    result: result
+                });
+            }
+
         }
     });
 };
@@ -401,23 +409,29 @@ exports.getExerciseBanks = function (req, res) {
                     status: false
                 });
             } else {
-                var query = "";
-                for (var i = 0; i < result.length; i++) {
-                    query += "select Count(*) as exerciseNum from Exercise e, ExerciseBank eb " +
-                        "where e.ebid = eb.eid and eb.eid = '" + result[i].eid + "';";
-                }
-                con.query(query, function (err, rows) {
-                    if (err) {
-                        console.log("Get exercises count: " + err);
-                    } else {
-                        res.json({
-                            status: true,
-                            result: result,
-                            counts: rows
-                        });
+                if (result.length > 0) {
+                    var query = "";
+                    for (var i = 0; i < result.length; i++) {
+                        query += "select Count(*) as exerciseNum from Exercise e, ExerciseBank eb " +
+                            "where e.ebid = eb.eid and eb.eid = '" + result[i].eid + "';";
                     }
-                });
-
+                    con.query(query, function (err, rows) {
+                        if (err) {
+                            console.log("Get exercises count: " + err);
+                        } else {
+                            res.json({
+                                status: true,
+                                result: result,
+                                counts: rows
+                            });
+                        }
+                    });
+                } else {
+                    res.json({
+                        status: true,
+                        result: result
+                    });
+                }
             }
         });
     } else if (req.body.level == 2) {
@@ -620,45 +634,55 @@ exports.addExam = function (req, res) {
                            if (err) {
                                console.log("Insert into ExamCourse: "  + err);
                            } else {
-                               var query = "";
-                               for (var i = 0; i < ebs.length; i++) {
-                                   query += "select e.eid, e.ebid from ExerciseBank eb, Exercise e " +
-                                       "where eb.eid = '" + ebs[i].eid + "' and eb.eid = e.ebid;";
-                               }
-                               con.query(query, function (err, result) {
-                                   if (err) {
-                                       console.log("Get exercise in addExam: " + err);
-                                   } else {
-                                       var query = "";
-                                       for (var i = 0; i < ebs.length; i++) {
-                                           ebs[i].exercise = [];
-                                           var exerciseAll;
-                                           for (var j = 0; j < result.length; j++) {
-                                               if (ebs[i].eid == result[j][0].ebid) {
-                                                   exerciseAll = result[j];
-                                                   break;
-                                               }
-                                           }
-                                           for (var j = 0; j < ebs[i].exerciseNum; j++) {
-                                               var k = Math.round(Math.random()* (exerciseAll.length - 1));
-                                               while (ebs[i].exercise.indexOf(exerciseAll[k].eid) >= 0) {
-                                                   k = Math.round(Math.random()* (exerciseAll.length - 1));
-                                               }
-                                               ebs[i].exercise.push(exerciseAll[k].eid);
-                                               query += "insert into ExamExercise " +
-                                                   "value('" + eid + "', '" + exerciseAll[k].eid + "');";
-                                           }
-                                       }
-                                       con.query(query, function (err, result) {
-                                           if (err) {
-                                               console.log("Insert into ExamExercise: " + err);
-                                           } else {
-                                               res.json({
-                                                   status: true
-                                               })
-                                           }
-                                       });
-                                   }
+                               con.query("insert into StudentExam(sid, eid) " +
+                                   "select sid, eid from " +
+                                   "(select sid, eid from StudentCourse sc, ExamCourse ec where " +
+                                   "sc.cid = ec.cid and ec.eid = ?) as tb;", eid,
+                               function (err, result) {
+                                  if (err) {
+                                      console.log("insert into StudentExam in addExam: " + err);
+                                  } else {
+                                      var query = "";
+                                      for (var i = 0; i < ebs.length; i++) {
+                                          query += "select e.eid, e.ebid from ExerciseBank eb, Exercise e " +
+                                              "where eb.eid = '" + ebs[i].eid + "' and eb.eid = e.ebid;";
+                                      }
+                                      con.query(query, function (err, result) {
+                                          if (err) {
+                                              console.log("Get exercise in addExam: " + err);
+                                          } else {
+                                              var query = "";
+                                              for (var i = 0; i < ebs.length; i++) {
+                                                  ebs[i].exercise = [];
+                                                  var exerciseAll;
+                                                  for (var j = 0; j < result.length; j++) {
+                                                      if (ebs[i].eid == result[j][0].ebid) {
+                                                          exerciseAll = result[j];
+                                                          break;
+                                                      }
+                                                  }
+                                                  for (var j = 0; j < ebs[i].exerciseNum; j++) {
+                                                      var k = Math.round(Math.random()* (exerciseAll.length - 1));
+                                                      while (ebs[i].exercise.indexOf(exerciseAll[k].eid) >= 0) {
+                                                          k = Math.round(Math.random()* (exerciseAll.length - 1));
+                                                      }
+                                                      ebs[i].exercise.push(exerciseAll[k].eid);
+                                                      query += "insert into ExamExercise " +
+                                                          "value('" + eid + "', '" + exerciseAll[k].eid + "');";
+                                                  }
+                                              }
+                                              con.query(query, function (err, result) {
+                                                  if (err) {
+                                                      console.log("Insert into ExamExercise: " + err);
+                                                  } else {
+                                                      res.json({
+                                                          status: true
+                                                      })
+                                                  }
+                                              });
+                                          }
+                                      });
+                                  }
                                });
                            }
                        }
@@ -727,25 +751,28 @@ exports.getExamQuestions = function(req, res) {
             } else {
                 result.exam = result3[0];
                 var query = "";
+                var params;
                 if (userInfo.level == 1) {
                     var now = new Date().getTime();
+                    params = [userInfo.id, eid];
                     if (result3[0].startTime > now) {
 
                     } else if (result3[0].startTime <= now && result3[0].endTime >= now) {
-                        query = "select e.description, e.eid, seq.stuAnswer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid, Exercise e " +
+                        query = "select e.description, e.eid, seq.stuAnswer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid and seq.sid = ?, Exercise e " +
                             "where ee.eid = ? and ee.exid = e.eid " +
                             "order by e.eid;"
                     } else if (result3[0].endTime < now) {
-                        query = "select e.description, e.eid, seq.stuAnswer, a.answer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid, Exercise e, " +
+                        query = ("select e.description, e.eid, seq.stuAnswer, a.answer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid and seq.sid = ?, Exercise e, " +
                             "Answer a where ee.eid = ? and ee.exid = e.eid and a.eid = ee.exid " +
-                            "order by e.eid;"
+                            "order by e.eid;");
                     }
                 } else if (userInfo.level == 2) {
+                    params = eid;
                     query = "select a.answer, e.description, e.eid from ExamExercise ee, Exercise e, Answer a " +
                         "where ee.eid = ? and ee.exid = e.eid and a.eid = e.eid " +
                         "order by e.eid;"
                 }
-                con.query(query, eid, function (err, result1) {
+                con.query(query, params, function (err, result1) {
                     if (err) {
                         console.log("Get exercise in getExamQuestions: " + err);
                     } else {
@@ -852,4 +879,16 @@ exports.getSystemTime = function (req, res) {
     res.json({
         now: new Date().getTime()
     })
+};
+
+exports.getExamGrades = function (req, res) {
+    var eid = req.body.eid;
+    con.query("select s.sid, s.sname, se.grade from Student s, StudentExam se " +
+        "where s.sid = se.sid and se.eid = ?;", eid, function (err, result) {
+            if (err) {
+                console.log("Get student's grade in getExamGrades: " + err);
+            } else {
+                console.log(result);
+            }
+    });
 };

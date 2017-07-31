@@ -61,6 +61,8 @@ router.post('/saveAnswerInExam', api.saveAnswerInExam);
 
 router.get('/getSystemTime', api.getSystemTime);
 
+router.post('/getExamGrades', api.getExamGrades);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

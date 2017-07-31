@@ -416,15 +416,6 @@ function examSystemCtrl($scope, $rootScope, $location, $state) {
             break;
         }
     }
-    var statuses = ['notStarted', 'progressing', 'ended'];
-    for (var i = 0; i < statuses.length; i++) {
-        if ($location.path().indexOf(statuses[i]) >= 0) {
-            $scope.radioModel = statuses[i];
-        }
-    }
-    $scope.changeStatus = function(status) {
-        $state.go('logined.examSystem.myExams', {status: status}, {reload: true});
-    }
 }
 
 function addExamCtrl($scope, $rootScope, $http, toaster) {
@@ -488,7 +479,7 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
     }
 }
 
-function myExamsCtrl($scope, $http, $rootScope, $stateParams) {
+function myExamsCtrl($scope, $http, $rootScope, $stateParams, $location, $state) {
     var status = $scope.status = $stateParams.status;
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
@@ -500,11 +491,23 @@ function myExamsCtrl($scope, $http, $rootScope, $stateParams) {
             });
         }
     });
+    var statuses = ['notStarted', 'progressing', 'ended'];
+    for (var i = 0; i < statuses.length; i++) {
+        if ($location.path().indexOf(statuses[i]) >= 0) {
+            $scope.radioModel = statuses[i];
+            break;
+        }
+    }
+    $scope.changeStatus = function(status) {
+        $state.go('logined.examSystem.myExams', {status: status}, {reload: true});
+    }
 }
 
 function examDetailCtrl($scope, $location, $stateParams) {
     var options = ['all-questions', 'exam-result'];
+    $scope.status = $stateParams.status;
     $scope.eid = $stateParams.examID;
+    console.log($stateParams);
     for (var i = 0; i < options.length; i++) {
         if ($location.path().indexOf(options[i]) >= 0) {
             $scope.checked = options[i];
@@ -513,7 +516,7 @@ function examDetailCtrl($scope, $location, $stateParams) {
     }
 }
 
-function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $timeout) {
+function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $timeout, $state) {
     var eid = $stateParams.examID;
     $scope.status = $stateParams.status;
     $scope.done = 0;
@@ -524,8 +527,11 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                 userInfo: $rootScope.userInfo,
                 eid: eid
             }).success(function (res) {
+                console.log(res);
                 if (res.grade) {
                     $scope.grade = res.grade.grade;
+                } else {
+                    $scope.grade = 0;
                 }
                 $scope.startTime = res.exam.startTime;
                 $scope.endTime = res.exam.endTime;
@@ -534,13 +540,9 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                 $scope.questions = res.exercise;
                 $scope.options = res.options;
                 for (var i = 0; i < $scope.options.length; i++) {
-                    if ($scope.status == "notStarted") {
-
-                    } else if ($scope.status == "progressing") {
-
-                    } else if ($scope.status == "ended") {
+                    if ($scope.status == "ended") {
+                        $scope.questions[i].isShow = true;
                         if ($scope.questions[i].stuAnswer) {
-                            $scope.questions[i].isShow = true;
                             var stuAnswer = $scope.questions[i].stuAnswer.trim().replace('/\s/g', "");
                             var answer = $scope.questions[i].answer.trim().replace('/\s/g', "");
                             if (stuAnswer == answer) {
@@ -549,6 +551,8 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                             } else {
                                 $scope.questions[i].isTrue = false;
                             }
+                        } else {
+                            $scope.questions[i].isTrue = false;
                         }
                     }
                     if ($scope.questions[i].stuAnswer) {
@@ -559,6 +563,42 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                             }
                         }
                     }
+                }
+                if ($scope.endTime >= $scope.now && $scope.startTime <= $scope.now) {
+                    var timeCounter = setInterval(function () {
+                        if ($scope.endTime >= $scope.now && $scope.startTime <= $scope.now) {
+                            $scope.now = $scope.now + 1000;
+                            $timeout(function () {
+                                var ms = $scope.endTime - $scope.now;
+                                var hours = ms / (1000 * 60 * 60);
+                                ms = ms % (1000 * 60 * 60);
+                                var minutes = ms / (1000 * 60);
+                                ms = ms % (1000 * 60);
+                                var seconds = ms / 1000;
+                                $scope.leftTime  = new Date();
+                                $scope.leftTime.setHours(hours);
+                                $scope.leftTime.setMinutes(minutes);
+                                $scope.leftTime.setSeconds(seconds);
+                            });
+                        } else if ($scope.status == "progressing") {
+                            $state.go("logined.examDetail.allQuestions", {
+                                status: 'ended',
+                                examID: eid
+                            }, {
+                                reload: true
+                            });
+                            clearInterval(sysTimeChecker);
+                            clearInterval(timeCounter);
+                        }
+                    }, 1000);
+
+                    var sysTimeChecker = setInterval(function () {
+                        if ($scope.endTime >= $scope.now && $scope.startTime <= $scope.now) {
+                            $http.get('/getSystemTime').success(function (res) {
+                                $scope.now = res.now;
+                            });
+                        }
+                    }, 1000 * 60);
                 }
             });
         }
@@ -591,29 +631,16 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
         });
     };
 
-    setInterval(function () {
-        if ($scope.endTime >= $scope.now && $scope.startTime <= $scope.now) {
-            $scope.now = $scope.now + 1000;
-            $timeout(function () {
-                var ms = $scope.endTime - $scope.now;
-                var hours = ms / (1000 * 60 * 60);
-                ms = ms % (1000 * 60 * 60);
-                var minutes = ms / (1000 * 60);
-                ms = ms % (1000 * 60);
-                var seconds = ms / 1000;
-                $scope.leftTime  = new Date();
-                $scope.leftTime.setHours(hours);
-                $scope.leftTime.setMinutes(minutes);
-                $scope.leftTime.setSeconds(seconds);
-            });
-        }
-    }, 1000);
+}
 
-    setInterval(function () {
-        if ($scope.endTime >= $scope.now && $scope.startTime <= $scope.now) {
-            $http.get('/getSystemTime').success(function (res) {
-                $scope.now = res.now;
-            });
-        }
-    }, 1000 * 60);
+function examResultCtrl($scope, $stateParams, $http) {
+    $scope.status = $stateParams.status;
+    var eid = $stateParams.examID;
+    if ($scope.status == 'ended') {
+        $http.post('/getExamGrades', {
+            eid: eid
+        }).success(function (res) {
+
+        });
+    }
 }
