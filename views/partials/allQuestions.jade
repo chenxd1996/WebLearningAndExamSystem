@@ -42,3 +42,5 @@ div(class="content-container")
             div(class="progress")
                 div(class="progress-bar" role="progressbar" aria-valuenow="{{correctNum}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (correctNum / questions.length) * 100 + '%'}" style="width: 0%;")
             span {{correctNum}} / {{questions.length}}
+    div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="!questions && userInfo.level")
+        div(class="fs-16") 考试未开始

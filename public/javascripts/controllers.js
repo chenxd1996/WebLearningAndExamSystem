@@ -526,6 +526,9 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                 userInfo: $rootScope.userInfo,
                 eid: eid
             }).success(function (res) {
+                if (!res) {
+                    return;
+                }
                 if (res.grade) {
                     $scope.grade = res.grade.grade;
                 } else {

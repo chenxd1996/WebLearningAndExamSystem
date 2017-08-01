@@ -761,7 +761,7 @@ exports.getExamQuestions = function(req, res) {
                     var now = new Date().getTime();
                     params = [userInfo.id, eid];
                     if (result3[0].startTime > now) {
-
+                        res.json(null);
                     } else if (result3[0].startTime <= now && result3[0].endTime >= now) {
                         query = "select e.description, e.eid, seq.stuAnswer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid and seq.sid = ?, Exercise e " +
                             "where ee.eid = ? and ee.exid = e.eid " +
@@ -777,6 +777,7 @@ exports.getExamQuestions = function(req, res) {
                         "where ee.eid = ? and ee.exid = e.eid and a.eid = e.eid " +
                         "order by e.eid;"
                 }
+
                 con.query(query, params, function (err, result1) {
                     if (err) {
                         console.log("Get exercise in getExamQuestions: " + err);
