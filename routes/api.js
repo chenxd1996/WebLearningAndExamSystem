@@ -787,7 +787,6 @@ exports.getExamQuestions = function(req, res) {
                             query += "select * from Op " +
                                 "where eid = '" + result1[i].eid + "' order by eid;";
                         }
-                        console.log(result1);
                         con.query(query, function (err, result2) {
                             if (err) {
                                 console.log("get options in getExamQuestions: " + err);

@@ -2,16 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3216e0a6-c310-4b3b-97cb-4af60415d0dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/controllers.js" afterPath="$PROJECT_DIR$/public/javascripts/controllers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/style.css" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api.js" afterPath="$PROJECT_DIR$/routes/api.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/addExam.jade" afterPath="$PROJECT_DIR$/views/partials/addExam.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/addExercise.jade" afterPath="$PROJECT_DIR$/views/partials/addExercise.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/allQuestions.jade" afterPath="$PROJECT_DIR$/views/partials/allQuestions.jade" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/examResult.jade" afterPath="$PROJECT_DIR$/views/partials/examResult.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/myCourses.jade" afterPath="$PROJECT_DIR$/views/partials/myCourses.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/myExerciseBank.jade" afterPath="$PROJECT_DIR$/views/partials/myExerciseBank.jade" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -29,11 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="controllers.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="controllers.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/controllers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1957">
-              <caret line="469" column="53" lean-forward="true" selection-start-line="469" selection-start-column="53" selection-end-line="469" selection-end-column="53" />
+            <state relative-caret-position="289">
+              <caret line="661" column="21" lean-forward="false" selection-start-line="661" selection-start-column="21" selection-end-line="661" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -69,11 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="examSystem.jade" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/partials/examSystem.jade">
+      <file leaf-file-name="api.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/api.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="7" column="52" lean-forward="false" selection-start-line="7" selection-start-column="52" selection-end-line="7" selection-end-column="52" />
+            <state relative-caret-position="221">
+              <caret line="892" column="33" lean-forward="false" selection-start-line="892" selection-start-column="33" selection-end-line="892" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -109,11 +102,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="examResult.jade" pinned="false" current-in-tab="true">
+      <file leaf-file-name="examResult.jade" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/partials/examResult.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="21" column="47" lean-forward="false" selection-start-line="21" selection-start-column="47" selection-end-line="21" selection-end-column="47" />
+            <state relative-caret-position="59">
+              <caret line="15" column="25" lean-forward="true" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -205,14 +198,14 @@
         <option value="$PROJECT_DIR$/public/javascripts/app.js" />
         <option value="$PROJECT_DIR$/views/layout.jade" />
         <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
-        <option value="$PROJECT_DIR$/routes/api.js" />
         <option value="$PROJECT_DIR$/views/partials/myExerciseBank.jade" />
         <option value="$PROJECT_DIR$/views/partials/addExercise.jade" />
         <option value="$PROJECT_DIR$/views/partials/myCourses.jade" />
-        <option value="$PROJECT_DIR$/public/javascripts/controllers.js" />
         <option value="$PROJECT_DIR$/views/partials/addExam.jade" />
         <option value="$PROJECT_DIR$/views/partials/allQuestions.jade" />
+        <option value="$PROJECT_DIR$/routes/api.js" />
         <option value="$PROJECT_DIR$/views/partials/examResult.jade" />
+        <option value="$PROJECT_DIR$/public/javascripts/controllers.js" />
       </list>
     </option>
   </component>
@@ -543,12 +536,12 @@
       <workItem from="1501230316618" duration="4382000" />
       <workItem from="1501234717366" duration="171000" />
       <workItem from="1501235184234" duration="100045000" />
-      <workItem from="1501549661750" duration="9956000" />
+      <workItem from="1501549661750" duration="13998000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="554429000" />
+    <option name="totallyTimeSpent" value="558471000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -566,7 +559,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20253165" sideWeight="0.6056911" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28705147" sideWeight="0.5058565" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33900928" sideWeight="0.4941435" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33900928" sideWeight="0.4941435" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24963397" sideWeight="0.19970194" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -876,14 +869,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/api.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-622">
-          <caret line="782" column="28" lean-forward="false" selection-start-line="782" selection-start-column="28" selection-end-line="782" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/partials/exercise.jade">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="527">
@@ -904,14 +889,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="239">
           <caret line="25" column="75" lean-forward="false" selection-start-line="25" selection-start-column="75" selection-end-line="25" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/controllers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1957">
-          <caret line="469" column="53" lean-forward="true" selection-start-line="469" selection-start-column="53" selection-end-line="469" selection-end-column="53" />
           <folding />
         </state>
       </provider>
@@ -964,10 +941,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/routes/api.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="892" column="33" lean-forward="false" selection-start-line="892" selection-start-column="33" selection-end-line="892" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/partials/examResult.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="21" column="47" lean-forward="false" selection-start-line="21" selection-start-column="47" selection-end-line="21" selection-end-column="47" />
+        <state relative-caret-position="59">
+          <caret line="15" column="25" lean-forward="true" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="661" column="21" lean-forward="false" selection-start-line="661" selection-start-column="21" selection-end-line="661" selection-end-column="21" />
           <folding />
         </state>
       </provider>

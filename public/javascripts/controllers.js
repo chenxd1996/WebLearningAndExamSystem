@@ -631,33 +631,57 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
 
 }
 
-function examResultCtrl($scope, $stateParams, $http) {
+function examResultCtrl($scope, $stateParams, $http, $rootScope) {
     $scope.status = $stateParams.status;
     $scope.currentPage = 0;
     var eid = $stateParams.examID;
+    $scope.labels = ["不及格", "60-70", "70-80", "80-90", "90-100"];
+    $scope.data = [0, 0, 0, 0, 0];
+    $scope.chartColors = ['#CC3399', '#CCFF66', '#66CCCC', '#FDB45C', '#FF6666'];
     if ($scope.status == 'ended') {
         $http.post('/getExamGrades', {
             eid: eid
         }).success(function (res) {
             $scope.students = res[0];
             $scope.disGrades = res[1];
-            for (var i = 0; i < $scope.students.length; i++) {
-                for (var j = 0; j < $scope.disGrades.length; j++) {
-                    if ($scope.students[i].grade == $scope.disGrades[j].grade) {
-                        $scope.students[i].rank = j + 1;
-                        break;
+            $rootScope.$watch('userInfo', function () {
+                if ($rootScope.userInfo) {
+                    for (var i = 0; i < $scope.students.length; i++) {
+                        var grade = $scope.students[i].grade.toFixed(1);
+                        if (grade < 60) {
+                            $scope.data[0]++;
+                        } else if (grade >= 60 && grade < 70) {
+                            $scope.data[1]++;
+                        } else if (grade >= 70 && grade < 80) {
+                            $scope.data[2]++;
+                        } else if (grade >= 80 && grade < 90) {
+                            $scope.data[3]++;
+                        } else {
+                            $scope.data[4]++;
+                        }
+                    }
+                    var cmp = $scope.students[0].grade.toFixed(1);
+                    var rank = 1;
+                    for (var i = 0; i < $scope.students.length; i++) {
+                        var grade = $scope.students[i].grade.toFixed(1);
+                        if (grade < cmp) {
+                            rank++;
+                            if (i > 9 && $rootScope.userInfo.level == 1) {
+                                $scope.students.splice(i, $scope.students.length);
+                                break;
+                            }
+                            cmp = grade;
+                        }
+                        $scope.students[i].rank = rank;
+                    }
+                    $scope.studentsPages = [];
+                    for (var i = 0; i < $scope.students.length; i += 10) {
+                        $scope.studentsPages.push($scope.students.slice(i, i + 10));
                     }
                 }
-            }
-            $scope.studentsPages = [];
-            for (var i = 0; i < $scope.students.length; i += 10) {
-                $scope.studentsPages.push($scope.students.slice(i, i + 10));
-            }
+            });
         });
     }
-    $scope.labels = ["不及格", "60-70", "70-80", "80-90", "90-100"];
-    $scope.data = [300, 500, 100, 50, 80];
-    $scope.chartColors = ['#CC3399', '#CCFF66', '#66CCCC', '#FDB45C', '#FF6666'];
 
     $scope.lastPage = function () {
         if ($scope.currentPage > 0) {
