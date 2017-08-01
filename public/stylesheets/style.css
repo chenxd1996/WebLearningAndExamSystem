@@ -248,6 +248,13 @@ a {
   display: inline-block;
   height: 554px;
   float: left;
+  position: relative;
+}
+
+.rankList .pagination {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 .gdf {

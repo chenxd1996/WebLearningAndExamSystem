@@ -10,3 +10,5 @@ div(class="content-container")
         div(class="fs-13 mb-5 mr-20")
             i(class="fa fa-fw fa-bar-chart mr-10")
             span 题目 {{counts[$index][0].exerciseNum}}
+    div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="result.length == 0")
+        div(class="fs-16") 暂无数据

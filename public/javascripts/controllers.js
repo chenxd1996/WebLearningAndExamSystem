@@ -467,7 +467,7 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
         exam.startTime = $scope.startTime;
         exam.endTime = $scope.endTime;
         exam.exerciseNum = $scope.exerciseNum;
-        exam.examPoints = $scope.examPoints;
+        exam.examPoints = 100.0 / $scope.exerciseNum;
         exam.ebs = $scope.ebs;
         $http.post('/addExam', exam).success(function (res) {
             if (res.status) {
@@ -633,12 +633,12 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
 
 function examResultCtrl($scope, $stateParams, $http) {
     $scope.status = $stateParams.status;
+    $scope.currentPage = 0;
     var eid = $stateParams.examID;
     if ($scope.status == 'ended') {
         $http.post('/getExamGrades', {
             eid: eid
         }).success(function (res) {
-            console.log(res);
             $scope.students = res[0];
             $scope.disGrades = res[1];
             for (var i = 0; i < $scope.students.length; i++) {
@@ -649,17 +649,30 @@ function examResultCtrl($scope, $stateParams, $http) {
                     }
                 }
             }
+            $scope.studentsPages = [];
+            for (var i = 0; i < $scope.students.length; i += 10) {
+                $scope.studentsPages.push($scope.students.slice(i, i + 10));
+            }
         });
     }
     $scope.labels = ["不及格", "60-70", "70-80", "80-90", "90-100"];
     $scope.data = [300, 500, 100, 50, 80];
     $scope.chartColors = ['#CC3399', '#CCFF66', '#66CCCC', '#FDB45C', '#FF6666'];
-    $scope.maxSize = 5;
-    $scope.currentPage = 1;
-    $scope.$watch('currentPage', function () {
-        if ($scope.students) {
-            $scope.students_current = $scope.students.slice(($scope.currentPage - 1) * 10, $scope.currentPage * 10 - 1);
+
+    $scope.lastPage = function () {
+        if ($scope.currentPage > 0) {
+            $scope.currentPage--;
         }
-        console.log($scope.students_current);
-    });
+    };
+
+    $scope.nextPage = function () {
+        if ($scope.currentPage < $scope.studentsPages.length - 1) {
+            $scope.currentPage++;
+        }
+    };
+
+    $scope.setPage = function (current) {
+        $scope.currentPage = current;
+    };
+
 }

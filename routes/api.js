@@ -652,14 +652,14 @@ exports.addExam = function (req, res) {
                                               console.log("Get exercise in addExam: " + err);
                                           } else {
                                               var query = "";
+                                              if (result.length == 1) {
+                                                  var tmp = [];
+                                                  tmp.push(result);
+                                                  result = tmp;
+                                              }
                                               for (var i = 0; i < ebs.length; i++) {
                                                   ebs[i].exercise = [];
                                                   var exerciseAll;
-                                                  if (result.length == 1) {
-                                                      var tmp = [];
-                                                      tmp.push(result);
-                                                      result = tmp;
-                                                  }
                                                   for (var j = 0; j < result.length; j++) {
                                                       if (ebs[i].eid == result[j][0].ebid) {
                                                           exerciseAll = result[j];
@@ -787,6 +787,7 @@ exports.getExamQuestions = function(req, res) {
                             query += "select * from Op " +
                                 "where eid = '" + result1[i].eid + "' order by eid;";
                         }
+                        console.log(result1);
                         con.query(query, function (err, result2) {
                             if (err) {
                                 console.log("get options in getExamQuestions: " + err);
@@ -796,21 +797,21 @@ exports.getExamQuestions = function(req, res) {
                                     result.options.push(result2);
                                 } else {
                                     result.options = result2;
-                                    if (result3[0].endTime < now) {
-                                        con.query("select grade from StudentExam " +
-                                            "where sid = ? and eid = ?", [userInfo.id, eid], function (err, result4) {
-                                            if (err) {
-                                                console.log("Get student grade: " + err);
-                                            } else{
-                                                result.grade = result4[0];
-                                                result.now = new Date().getTime();
-                                                res.json(result);
-                                            }
-                                        });
-                                    } else {
-                                        result.now = new Date().getTime();
-                                        res.json(result);
-                                    }
+                                }
+                                if (result3[0].endTime < now) {
+                                    con.query("select grade from StudentExam " +
+                                        "where sid = ? and eid = ?", [userInfo.id, eid], function (err, result4) {
+                                        if (err) {
+                                            console.log("Get student grade: " + err);
+                                        } else{
+                                            result.grade = result4[0];
+                                            result.now = new Date().getTime();
+                                            res.json(result);
+                                        }
+                                    });
+                                } else {
+                                    result.now = new Date().getTime();
+                                    res.json(result);
                                 }
                             }
                         });
@@ -889,7 +890,7 @@ exports.getSystemTime = function (req, res) {
 exports.getExamGrades = function (req, res) {
     var eid = req.body.eid;
     con.query("select s.sid, s.sname, s.major, s.grade as Grade, s.class, se.grade from Student s, StudentExam se " +
-        "where s.sid = se.sid and se.eid = ? order by se.grade desc;" +
+        "where s.sid = se.sid and se.eid = ? order by se.grade desc, s.grade, s.class;" +
         "select distinct se.grade from Student s, StudentExam se " +
         "where s.sid = se.sid and se.eid = ? order by se.grade desc;", [eid, eid], function (err, result) {
             if (err) {

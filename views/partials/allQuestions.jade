@@ -37,7 +37,7 @@ div(class="content-container")
             h2(class="panel-title") 正确率
                 span(class="pull-right cl-info")
                     i(class="fa fa-fw fa-line-chart mr-5")
-                    span 考试得分: {{grade}} / {{points * questions.length}}
+                    span 考试得分: {{grade.toFixed(1)}} / 100
         div(class="panel-body")
             div(class="progress")
                 div(class="progress-bar" role="progressbar" aria-valuenow="{{correctNum}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (correctNum / questions.length) * 100 + '%'}" style="width: 0%;")

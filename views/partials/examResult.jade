@@ -14,21 +14,30 @@ div(class="content-container")
                             th(class="text-center") 成绩
                             th(class="text-center") 排名
                     tbody
-                        tr(ng-repeat="student in students_current" style="text-align: center")
+                        tr(ng-repeat="student in studentsPages[currentPage]" style="text-align: center")
                             td {{student.sname}}
                             td {{student.major}}
                             td {{student.Grade}}
                             td {{student.class}}
-                            td {{student.grade}}
+                            td {{student.grade.toFixed(1)}}
                             td {{student.rank}}
-                ul(uib-pagination total-items="students.length" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" previous-text="前一页" next-text="后一页")
+                ul(class="pagination pagination-sm")
+                    li(ng-class="{'disabled': currentPage == 0}" ng-click="lastPage()")
+                        a(href="#" aria-label="Last")
+                            span(aria-hidden="true") &laquo;
+                    li(ng-repeat="page in studentsPages" ng-class="{'active': currentPage == $index}" ng-click="setPage($index)")
+                        a(href="#")
+                            span {{$index + 1}}
+                    li(ng-class="{'disabled': currentPage == studentsPages.length - 1}" ng-click="nextPage()")
+                        a(href="#" aria-label="Next")
+                            span(aria-hidden="true") &raquo;
         div(class="panel panel-info gdf")
             div(class="panel-heading")
                 h4 成绩分布
             div(class="panel-body")
                 canvas(class="chart chart-doughnut" chart-data="data" chart-labels="labels" chart-colors="chartColors")
-                span(ng-repeat="color in chartColors" class="pull-right mr-10 mt-20")
-                    div(style="background-color: {{color}}; width: 10px; height: 10px;")
-                    span {{labels[$index]}}
+                span(ng-repeat="color in chartColors.slice().reverse()" class="mr-10 mt-50 pull-right")
+                    span(class="mr-5" style="background-color: {{color}}; width: 10px; height: 10px; display: inline-block")
+                    span {{labels.slice().reverse()[$index]}}
     div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="status!='ended'")
         span(class="fs-16") 暂无数据

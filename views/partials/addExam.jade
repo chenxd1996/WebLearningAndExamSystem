@@ -19,10 +19,11 @@ div(class="panel panel-info")
             div(class="mb-5" uib-timepicker ng-model="endTime"  hour-step="hstep" minute-step="mstep" min="startTime")
             label 考试内容
             input(type="number" min="1" class="form-control mb-5" ng-model="exerciseNum" placeholder="题目数量" uib-tooltip="请输入考试题目数量" tooltip-trigger="'focus'" tooltip-placement="top")
-            input(type="number" min="1" class="form-control mb-5" ng-model="examPoints" placeholder="题目分数" uib-tooltip="请输入每道题目的分数" tooltip-trigger="'focus'" tooltip-placement="top")
             hr
             div(class="input-group mb-10" ng-repeat="eb in ebs")
                 span(class="input-group-addon") {{eb.ename}}
                 input(type="number" min="0" class="form-control" ng-model="eb.exerciseNum" uib-tooltip="{{'请输入从' + eb.ename + '题库选取的题目数，' }}" tooltip-trigger="'focus'" tooltip-placement="top")
+            div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="!ebs || ebs.length == 0")
+                div(class="fs-16") 暂无题库
             hr
             button(class="btn btn-primary pull-right" ng-click="submit()") 创建考试

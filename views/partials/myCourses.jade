@@ -20,3 +20,5 @@ div(class="content-container")
                 span 课程资料 {{result.courseWaresCounts[$index][0]['Count(*)']}}
             i(class="fa fa-fw fa-circle mr-10 ml-20 cl-green")
             span 进行中
+    div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="result.courses.length == 0")
+        div(class="fs-16") 暂无数据
