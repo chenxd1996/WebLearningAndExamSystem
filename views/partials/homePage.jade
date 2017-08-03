@@ -37,7 +37,7 @@ ul(ng-if="userInfo.level == 2" class="nav nav-pills nav-stacked navbar-inverse n
             span(class="glyphicon glyphicon-user" aria-hidden="true")
                 span(ng-if="showDetail")  用户管理
     li(role="presentation" ng-model="checked" uib-btn-radio="'message-center'")
-        a(ui-sref="logined.messagesCenter")
+        a(ui-sref="logined.messagesCenter.allMessages")
             span(class="glyphicon glyphicon-comment" aria-hidden="true")
                 span(ng-if="showDetail")
                     span(class="mr-2")  通知中心
@@ -60,7 +60,7 @@ ul(ng-if="userInfo.level == 1" class="nav nav-pills nav-stacked navbar-inverse n
             span(class="glyphicon glyphicon-info-sign" aria-hidden="true")
                 span(ng-if="showDetail")  个人资料
     li(role="presentation" ng-model="checked" uib-btn-radio="'message-center'")
-        a(ui-sref="logined.messagesCenter")
+        a(ui-sref="logined.messagesCenter.allMessages")
             span(class="glyphicon glyphicon-comment" aria-hidden="true")
                 span(ng-if="showDetail")
                     span(class="mr-2")  通知中心

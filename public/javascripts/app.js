@@ -121,6 +121,10 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/all-messages",
         controller: allMessagesCtrl,
         templateUrl: "partials/allMessages"
+    }).state("logined.messageDetail", {
+        url: "/message-center/messageDetail/:mid",
+        controller: messageDetailCtrl,
+        templateUrl: "partials/messageDetail"
     });
     $locationProvider.html5Mode(true);
 }]);

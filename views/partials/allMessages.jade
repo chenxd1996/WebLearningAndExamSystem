@@ -1,4 +1,21 @@
 div(class="content-container messages-list")
     ul
         li(ng-repeat="message in messages")
-            span haa
+            div(class="message-op col-xs-1")
+                a(ng-click="check($index)" class="fa-lg fa fa-fw fa-trash-o"  uib-tooltip="点击将删除该消息" tooltip-trigger="'mouseenter'" tooltip-placement="top")
+            div(class="message-info col-xs-8")
+                div(class="message-poster mb-10")
+                    span {{message.tname}}
+                div
+                    a(ng-href="{{message.link}}") 发布了课程通知 "{{message.title}}"
+            div(class="message-type col-xs-1")
+                div(ng-if="message.tname" class="text-center")
+                    i(class="fa fa-lg fa-fw fa-book mb-5")
+                    div
+                        span 课程公告
+                div(ng-if="!message.tname" class="text-center")
+                    i(class="fa fa-lg fa-fw fa-bullhorn mb-5")
+                    div
+                        span 系统通知
+            div(class="message-postTime col-xs-2")
+                span {{message.mid | date:'yyyy-MM-dd HH:mm'}}

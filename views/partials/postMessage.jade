@@ -12,5 +12,7 @@ div(class="panel panel-info")
             label(class="checkbox-inline")
                 input(type="checkbox" ng-model="message.includeTeacher")
                 span 是否通知课程其他教师？
-            button(class="btn btn-primary pull-right mt-10" ng-click="submit()") 发布
+            button(class="btn btn-primary pull-right mt-10" ng-click="submit()")
+                i(class="fa fa-fw fa-send-o mr-5")
+                span 发布
 

@@ -755,7 +755,20 @@ function allMessagesCtrl($scope, $http, $rootScope) {
                 userInfo: $rootScope.userInfo
             }).success(function (res) {
                 $scope.messages = res;
+                for (var i = 0; i < $scope.messages.length; i++) {
+                    if (!$scope.messages[i].link) {
+                        $scope.messages[i].link = "/homePage/message-center/messageDetail/" + $scope.messages[i].mid;
+                    }
+                }
             });
         }
     });
+
+    $scope.check = function (index) {
+        $scope.messages.splice(index, 1);
+    }
+}
+
+function messageDetailCtrl($scope, $http, $state) {
+
 }

@@ -178,6 +178,10 @@ a {
   padding-bottom: 10px;
 }
 
+.pb-20 {
+  padding-bottom: 20px;
+}
+
 
 .fs-13 {
   font-size: 13px;
@@ -303,6 +307,60 @@ a {
 
 .messages-list ul li:hover {
   background-color: #eee;
+}
+
+.message-op {
+  display: flex;
+  height: 80px;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-op a {
+  text-decoration: none !important;
+}
+
+.message-op a:hover {
+  cursor: pointer;
+}
+
+.message-info {
+  display: flex;
+  height: 80px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.message-info .message-poster {
+  color: #31708f;
+}
+
+.message-type {
+  display: flex;
+  height: 80px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+}
+
+.message-postTime {
+  display: flex;
+  height: 80px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+}
+
+.message-detail {
+  min-height: 550px;
+}
+
+.message-detail-info {
+  color: #9d9d9d;
+  font-size: 12px;
 }
 
 .messagesUnread {
