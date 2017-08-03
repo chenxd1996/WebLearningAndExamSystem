@@ -900,3 +900,60 @@ exports.getExamGrades = function (req, res) {
             }
     });
 };
+
+exports.addMessage = function (req, res) {
+    var message = req.body.message;
+    var tid = req.body.tid;
+    var mid = new Date().getTime();
+    con.query("insert into Message(mid, cid, title, content, posterId) " +
+        "values(?, ?, ?, ?, ?);", [mid, message.courseSelected.id, message.title, message.text, tid], function (err, result) {
+        if (err) {
+            console.log("Insert into Message in addMessage: " + err);
+        } else {
+            var query = "";
+            if (message.includeTeacher) {
+                query = "insert into StudentMessage(sid, mid) " +
+                    "select sid, mid from (" +
+                    "select sc.sid, m.mid from StudentCourse sc, Message m where " +
+                    "sc.cid = ? and m.mid = ?) as tb;" +
+                    "insert into TeacherMessage(tid, mid) " +
+                    "select tid, mid from (" +
+                    "select tc.tid, m.mid from TeacherCourse tc, Message m where " +
+                    "tc.cid = ? and m.mid = ? and tc.tid <> ?) as tb";
+            } else {
+                query = "insert into StudentMessage(sid, mid) " +
+                    "select sid, mid from (" +
+                    "select sc.sid, m.mid from StudentCourse sc, Message m where " +
+                    "sc.cid = ? and m.mid = ?) as tb;";
+            }
+            con.query(query, [message.courseSelected.id, mid, message.courseSelected.id, mid, tid], function (err, result) {
+                if (err) {
+                    console.log("Insert into StudentMessage or TeacherMessage: " + err);
+                } else {
+                    res.json({
+                        status: true
+                    });
+                }
+            });
+        }
+    });
+};
+
+exports.getMessages = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var query = "";
+    if (userInfo.level == 1) {
+        query = "select m.mid, m.cid, m.link, m.title, m.content, t.tname from Message m left join Teacher t on m.posterId = t.tid, StudentMessage sm " +
+            "where sm.sid = ? and sm.mid = m.mid;";
+    } else if (userInfo.level == 2) {
+        query = "select m.mid, m.cid, m.link, m.title, m.content, t.tname from Message m left join Teacher t on m.posterId = t.tid, TeacherMessage tm " +
+            "where tm.tid = ? and tm.mid = m.mid;";
+    }
+    con.query(query, userInfo.id, function (err, result) {
+        if (err) {
+            console.log("Get messages: " + err);
+        } else {
+            res.json(result);
+        }
+    });
+};

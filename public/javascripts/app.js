@@ -109,6 +109,18 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/:examID/:status/exam-result",
         controller: examResultCtrl,
         templateUrl: "partials/examResult"
+    }).state("logined.messagesCenter", {
+        url: "/message-center",
+        controller: messageCenterCtrl,
+        templateUrl: "partials/messageCenter"
+    }).state("logined.messagesCenter.postMessage", {
+        url: "/post-message",
+        controller: postMessageCtrl,
+        templateUrl: "partials/postMessage"
+    }).state("logined.messagesCenter.allMessages", {
+        url: "/all-messages",
+        controller: allMessagesCtrl,
+        templateUrl: "partials/allMessages"
     });
     $locationProvider.html5Mode(true);
 }]);

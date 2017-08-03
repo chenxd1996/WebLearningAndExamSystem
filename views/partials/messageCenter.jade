@@ -1,0 +1,9 @@
+ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 1")
+    li(role="presentation" uib-btn-radio="'all-messages'" ng-model="checked")
+        a(ui-sref="logined.messagesCenter.allMessages") 所有通知
+ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 2")
+    li(role="presentation" uib-btn-radio="'all-messages'" ng-model="checked")
+        a(ui-sref="logined.messagesCenter.allMessages") 所有通知
+    li(role="presentation" uib-btn-radio="'post-message'" ng-model="checked")
+        a(ui-sref="logined.messagesCenter.postMessage") 发布通知
+div(ui-view="")

@@ -703,3 +703,59 @@ function examResultCtrl($scope, $stateParams, $http, $rootScope) {
     };
 
 }
+
+function messageCenterCtrl($scope, $location) {
+    var options = ['all-messages', 'post-message'];
+    for (var i = 0; i < options.length; i++) {
+        if ($location.path().indexOf(options[i]) >= 0) {
+            $scope.checked = options[i];
+            break;
+        }
+    }
+}
+
+
+function postMessageCtrl($scope, $rootScope, $http, toaster) {
+    $scope.message = {};
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post('/getMyCourses', $rootScope.userInfo).
+            success(function (res) {
+                var courses = res.result.courses;
+                $scope.courses = [];
+                for(var i = 0; i < courses.length; i++) {
+                    if (courses[i].endTime > new Date().getTime()) {
+                        $scope.courses.push({
+                            name: courses[i].cname + " (" + courses[i].remark + ")",
+                            id: courses[i].cid
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    $scope.submit = function () {
+        $scope.message.text = $scope.editorText;
+        $http.post('/addMessage', {
+            tid: $rootScope.userInfo.id,
+            message: $scope.message
+        }).success(function (res) {
+            if (res.status) {
+                toaster.pop("success", "发布成功！", "", 2000);
+            }
+        });
+    }
+}
+
+function allMessagesCtrl($scope, $http, $rootScope) {
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post('/getMessages', {
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                $scope.messages = res;
+            });
+        }
+    });
+}

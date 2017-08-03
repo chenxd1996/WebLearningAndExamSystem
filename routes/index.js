@@ -63,6 +63,10 @@ router.get('/getSystemTime', api.getSystemTime);
 
 router.post('/getExamGrades', api.getExamGrades);
 
+router.post('/addMessage', api.addMessage);
+
+router.post('/getMessages', api.getMessages);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

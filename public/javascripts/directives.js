@@ -35,9 +35,11 @@ directive('responsiveNavigation', function ($timeout) {
                 $timeout(function () {
                     $scope.showDetail = false;
                 });
-                element.removeClass('navWide');
-                element.addClass('navNarrow');
-                element.addClass('text-center');
+                $timeout(function () {
+                    element.removeClass('navWide');
+                    element.addClass('navNarrow');
+                    element.addClass('text-center');
+                }, 10);
             });
         }
     }}).

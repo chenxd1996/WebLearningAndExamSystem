@@ -102,6 +102,10 @@ a {
   margin-bottom: 15px;
 }
 
+.mr-2 {
+  margin-right: 2px;
+}
+
 .mr-5 {
   margin-right: 5px;
 }
@@ -270,6 +274,48 @@ a {
   margin-left: auto;
   margin-right: auto;
   margin-top: 106px;
+}
+
+.posRelative {
+  position: relative !important;
+}
+
+.alignRight {
+  position: absolute !important;
+  right: 0;
+  clear: both;
+}
+
+.messages-list ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  height: auto;
+  background-color: #f5f5f5;
+}
+
+.messages-list ul li {
+  background-color: #fff;
+  padding: 15px 30px 15px 30px;
+  height: 111px;
+  border-bottom: 1px solid #eee;
+}
+
+.messages-list ul li:hover {
+  background-color: #eee;
+}
+
+.messagesUnread {
+  width: 20px;
+  height: 20px;
+  color: white;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: red;
+  background-color: #ff3535;
+  text-align: center;
+  display: inline-block;
 }
 
 ::-webkit-scrollbar {
