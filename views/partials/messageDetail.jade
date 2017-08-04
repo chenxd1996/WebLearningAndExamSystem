@@ -1,6 +1,8 @@
 div(class="content-container")
-    div(class="bg-white pt-10 pb-20 message-detail")
-        div(class="message-title text-center")
-            h1(class="mb-10") hahha
+    div(class="bg-white pt-10 pb-20 pl-20 pr-20 message-detail")
+        div(class="message-title text-center mb-20")
+            h1(class="mb-10") {{message.title}}
             div(class="message-detail-info")
-                span 六月 17, 2017 / HandsomeChan / ％1 $ S
+                span {{message.mid | date: 'yyyy-MM-dd'}} / {{message.cname}} / {{message.tname}}
+        div(class="message-body")
+            div(ng-bind-html="message.content | trustHtml")

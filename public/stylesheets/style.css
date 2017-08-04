@@ -102,6 +102,10 @@ a {
   margin-bottom: 15px;
 }
 
+.mb-20 {
+  margin-bottom: 20px;
+}
+
 .mr-2 {
   margin-right: 2px;
 }
@@ -161,6 +165,11 @@ a {
 .pr-10 {
   padding-right:10px;
 }
+
+.pr-20 {
+  padding-right:20px;
+}
+
 
 .pl-10 {
   padding-left:10px;

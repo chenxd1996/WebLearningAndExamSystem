@@ -145,7 +145,6 @@ exports.getMajorGradesAndClasses = function (req, res) {
 
 exports.addCourse = function (req, res) {
     var course = req.body;
-    console.log(course.endTime);
     var gradesAndClasses = course.gradesAndClasses;
     var remark = "";
     var len = gradesAndClasses.length;
@@ -155,7 +154,6 @@ exports.addCourse = function (req, res) {
 
     remark += gradesAndClasses[len - 1].major + gradesAndClasses[len - 1].grade + "级" + gradesAndClasses[len - 1].class + "班";
     var cid = Date.now();
-    console.log(cid);
     con.query('insert into Course ' +
         'value(?, ?, ?, ?, ?)', [cid, course.name, remark, course.endTime, course.description], function (err) {
         if (err) {
@@ -164,6 +162,9 @@ exports.addCourse = function (req, res) {
                status: false
             });
         } else {
+            res.json({
+                status: true
+            });
             var query = "";
             var len = course.teachers.length;
             for (var i = 0; i < len - 1; i++) {
@@ -198,10 +199,12 @@ exports.addCourse = function (req, res) {
                           con.query(query, function (err, result) {
                               if (err) {
                                   console.log("Insert into StudentCourse in addCourse: " + err);
+                              } else {
+                                  var mid = new Date().getTime();
+                                  var link = "/homePage/learning-system/my-courses";
+                                  var title = "您有新的课程 '" + course.name + "' ";
+                                  sysMessage(mid, link, title, cid, true);
                               }
-                              res.json({
-                                 status: true
-                              });
                           });
                       }
                    });
@@ -335,6 +338,17 @@ exports.uploadCourseWares = function (req, res) {
                     res.json({
                         status: true
                     });
+                    con.query("select cname from Course " +
+                        "where cid = ?", cid, function (err, result) {
+                        if (err) {
+                            console.log("Get course name in uploadCourseWares: " + err);
+                        } else {
+                            var mid = new Date().getTime();
+                            var link = "/homePage/learning-system/course-detail/" + cid + "/course-data";
+                            var title = "您所在的课程 '" + result[0]['cname'] + "' 有新的课件";
+                            sysMessage(mid, link, title, cid, false);
+                        }
+                    });
                 }
             });
         }
@@ -392,6 +406,17 @@ exports.addExerciseBank = function (req, res) {
                 } else {
                     res.json({
                         status: true
+                    });
+                    con.query("select cname from Course " +
+                        "where cid = ?", req.body.id, function (err, result) {
+                        if (err) {
+                            console.log("Get course name in addExerciseBank: " + err);
+                        } else {
+                            var mid = new Date().getTime();
+                            var link = "/homePage/exercise-system/exercise-system/my-exercise-bank";
+                            var title = "您所在的课程 '" + result[0]['cname'] + "' 有新的题库 '" + req.body.name + "' ";
+                            sysMessage(mid, link, title, req.body.id, false);
+                        }
                     });
                 }
             });
@@ -682,7 +707,18 @@ exports.addExam = function (req, res) {
                                                   } else {
                                                       res.json({
                                                           status: true
-                                                      })
+                                                      });
+                                                      con.query("select cname from Course " +
+                                                          "where cid = ?", cid, function (err, result) {
+                                                          if (err) {
+                                                              console.log("Get course name in addExam: " + err);
+                                                          } else {
+                                                              var mid = new Date().getTime();
+                                                              var link = "/homePage/exam-system/my-exams/notStarted";
+                                                              var title = "您所在的课程 '" + result[0]['cname'] + "' 有新的考试 '" + ename + "' ";
+                                                              sysMessage(mid, link, title, cid, false);
+                                                          }
+                                                      });
                                                   }
                                               });
                                           }
@@ -943,11 +979,11 @@ exports.getMessages = function (req, res) {
     var userInfo = req.body.userInfo;
     var query = "";
     if (userInfo.level == 1) {
-        query = "select m.mid, m.cid, m.link, m.title, m.content, t.tname from Message m left join Teacher t on m.posterId = t.tid, StudentMessage sm " +
-            "where sm.sid = ? and sm.mid = m.mid;";
+        query = "select m.mid, m.cid, m.link, m.title, t.tname from Message m left join Teacher t on m.posterId = t.tid, StudentMessage sm " +
+            "where sm.sid = ? and sm.mid = m.mid order by m.mid desc;";
     } else if (userInfo.level == 2) {
-        query = "select m.mid, m.cid, m.link, m.title, m.content, t.tname from Message m left join Teacher t on m.posterId = t.tid, TeacherMessage tm " +
-            "where tm.tid = ? and tm.mid = m.mid;";
+        query = "select m.mid, m.cid, m.link, m.title, t.tname from Message m left join Teacher t on m.posterId = t.tid, TeacherMessage tm " +
+            "where tm.tid = ? and tm.mid = m.mid order by m.mid desc;";
     }
     con.query(query, userInfo.id, function (err, result) {
         if (err) {
@@ -957,3 +993,47 @@ exports.getMessages = function (req, res) {
         }
     });
 };
+
+exports.getMessageDetail = function (req, res) {
+    con.query("select m.mid, m.title, m.content, t.tname, c.cname from Message m left join Teacher t on m.posterId = t.tid, Course c " +
+        "where mid = ? and m.cid = c.cid;", req.body.mid, function (err, result) {
+        if (err) {
+            console.log("Get message detail: " + err);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+function sysMessage(mid, link, title, cid, includeTeacher) {
+    con.query("insert into Message(mid, link, title, cid) " +
+        "values(?, ?, ?, ?)", [mid, link, title, cid], function (err) {
+        if (err) {
+            console.log("Insert into Message in addCourse: " + err);
+        } else {
+            if (includeTeacher) {
+                con.query("Insert into StudentMessage(sid, mid) " +
+                    "select sid, mid from(" +
+                    "select sc.sid, m.mid from StudentCourse sc, Message m " +
+                    "where sc.cid = m.cid and m.mid = ?) as tb;" +
+                    "Insert into TeacherMessage(tid, mid) " +
+                    "select tid, mid from(" +
+                    "select tc.tid, m.mid from TeacherCourse tc, Message m " +
+                    "where tc.cid = m.cid and m.mid = ?) as tb;", [mid, mid], function (err) {
+                    if (err) {
+                        console.log("Insert into StudentCourse and TeacherCourse " + err);
+                    }
+                });
+            } else {
+                con.query("Insert into StudentMessage(sid, mid) " +
+                    "select sid, mid from(" +
+                    "select sc.sid, m.mid from StudentCourse sc, Message m " +
+                    "where sc.cid = m.cid and m.mid = ?) as tb;", mid, function (err) {
+                    if (err) {
+                        console.log("Insert into StudentCourse " + err);
+                    }
+                });
+            }
+        }
+    });
+}

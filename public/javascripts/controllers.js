@@ -769,6 +769,11 @@ function allMessagesCtrl($scope, $http, $rootScope) {
     }
 }
 
-function messageDetailCtrl($scope, $http, $state) {
-
+function messageDetailCtrl($scope, $http, $stateParams) {
+    var mid = $stateParams.mid;
+    $http.post("/getMessageDetail", {
+        mid: mid
+    }).success(function (res) {
+        $scope.message = res[0];
+    });
 }

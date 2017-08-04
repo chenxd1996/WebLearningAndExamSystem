@@ -67,6 +67,8 @@ router.post('/addMessage', api.addMessage);
 
 router.post('/getMessages', api.getMessages);
 
+router.post('/getMessageDetail', api.getMessageDetail);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');
