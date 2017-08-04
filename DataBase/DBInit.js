@@ -179,12 +179,14 @@ function DBInit() {
     con.query("create table if not exists Message(" +
         "mid varchar(32)," +
         "cid varchar(32)," +
+        "eid varchar(32)," +
         "link varchar(500)," +
         "title varchar(500)," +
         "content text," +
         "posterId varchar(10)," +
         "primary key(mid)," +
         "foreign key(cid) references Course(cid) on delete cascade on update cascade," +
+        "foreign key(eid) references ExerciseBank(eid) on delete cascade on update cascade," +
         "foreign key(posterId) references Teacher(tid) on delete set null on update cascade);", function (err, result) {
             if (err) {
                 console.log("Message: " + err);

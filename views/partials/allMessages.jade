@@ -22,3 +22,5 @@ div(class="content-container messages-list")
                         span 系统通知
             div(class="message-postTime col-xs-2")
                 span {{message.mid | date:'yyyy-MM-dd HH:mm'}}
+    div(ng-if="messages.length == 0" class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20")
+        div(class="fs-16") 暂无数据

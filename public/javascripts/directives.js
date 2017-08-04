@@ -34,12 +34,12 @@ directive('responsiveNavigation', function ($timeout) {
             element.on('mouseleave', function () {
                 $timeout(function () {
                     $scope.showDetail = false;
+                    $timeout(function () {
+                        element.removeClass('navWide');
+                        element.addClass('navNarrow');
+                        element.addClass('text-center');
+                    }, 50);
                 });
-                $timeout(function () {
-                    element.removeClass('navWide');
-                    element.addClass('navNarrow');
-                    element.addClass('text-center');
-                }, 10);
             });
         }
     }}).

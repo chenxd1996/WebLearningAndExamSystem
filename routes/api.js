@@ -202,7 +202,7 @@ exports.addCourse = function (req, res) {
                               } else {
                                   var mid = new Date().getTime();
                                   var link = "/homePage/learning-system/my-courses";
-                                  var title = "您有新的课程 '" + course.name + "' ";
+                                  var title = "您有新的课程 \"" + course.name + "\"";
                                   sysMessage(mid, link, title, cid, true);
                               }
                           });
@@ -322,6 +322,8 @@ exports.getCourseInfo = function (req, res) {
 
 exports.uploadCourseWares = function (req, res) {
     var cid = req.body.cid;
+    var filename = req.file.originalname.slice(0, req.file.originalname.lastIndexOf('.'));
+    console.log(filename);
     con.query("insert into CourseWare " +
         "value('" + req.file.filename + "', '" +
         req.file.originalname + "', '" +
@@ -329,6 +331,7 @@ exports.uploadCourseWares = function (req, res) {
         if (err) {
             console.log("Insert into CourseWare: " + err);
         } else {
+            console.log(req.file);
             con.query("insert into CourseWareCourse " +
                 "value('" + req.file.filename + "', '" +
                 cid + "');",function (err, result) {
@@ -345,7 +348,7 @@ exports.uploadCourseWares = function (req, res) {
                         } else {
                             var mid = new Date().getTime();
                             var link = "/homePage/learning-system/course-detail/" + cid + "/course-data";
-                            var title = "您所在的课程 '" + result[0]['cname'] + "' 有新的课件";
+                            var title = "您所在的课程 \"" + result[0]['cname'] + "\" 有新的课件 \"" + filename + "\"";
                             sysMessage(mid, link, title, cid, false);
                         }
                     });
@@ -414,7 +417,7 @@ exports.addExerciseBank = function (req, res) {
                         } else {
                             var mid = new Date().getTime();
                             var link = "/homePage/exercise-system/exercise-system/my-exercise-bank";
-                            var title = "您所在的课程 '" + result[0]['cname'] + "' 有新的题库 '" + req.body.name + "' ";
+                            var title = "您所在的课程 \"" + result[0]['cname'] + "\" 有新的题库 \"" + req.body.name + "\" ";
                             sysMessage(mid, link, title, req.body.id, false);
                         }
                     });
@@ -522,6 +525,34 @@ exports.addExercise = function (req, res) {
                         } else {
                             res.json({
                                 status: true
+                            });
+                            con.query("select c.cname, c.cid, eb.ename from Course c, ExerciseBankCourse ebc, ExerciseBank eb " +
+                                "where eb.eid = ? and eb.eid = ebc.eid and ebc.cid = c.cid;", ebid, function (err, result) {
+                                if (err) {
+                                    console.log("Get course name in addExercise: " + err);
+                                } else {
+                                    var cname = result[0]['cname'];
+                                    var ename = result[0]['ename'];
+                                    var cid = result[0]['cid'];
+                                    con.query("select count(*) from Message " +
+                                        "where eid = ?;", ebid, function (err, result) {
+                                        if (result[0]['count(*)'] == 0) {
+                                            var mid = new Date().getTime();
+                                            var link = "/homePage/exercise-system/exerciseBank-detail/" + ebid + "/exercise/uncompleted";
+                                            var title = "您所在的课程 \"" + cname + "\" 的题库 \"" + ename + "\" 有更新";
+                                            sysMessage(mid, link, title, cid, false, ebid);
+                                        } else {
+                                            var mid = new Date().getTime();
+                                            con.query("update Message " +
+                                                "set mid = ? " +
+                                                "where eid = ?;", [mid, ebid], function (err) {
+                                                if (err) {
+                                                    console.log("Update Message in addExercise: " + err);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             });
                         }
                     });
@@ -715,7 +746,7 @@ exports.addExam = function (req, res) {
                                                           } else {
                                                               var mid = new Date().getTime();
                                                               var link = "/homePage/exam-system/my-exams/notStarted";
-                                                              var title = "您所在的课程 '" + result[0]['cname'] + "' 有新的考试 '" + ename + "' ";
+                                                              var title = "您所在的课程 \"" + result[0]['cname'] + "\" 有新的考试 \"" + ename + "\" ";
                                                               sysMessage(mid, link, title, cid, false);
                                                           }
                                                       });
@@ -1005,11 +1036,18 @@ exports.getMessageDetail = function (req, res) {
     });
 };
 
-function sysMessage(mid, link, title, cid, includeTeacher) {
-    con.query("insert into Message(mid, link, title, cid) " +
-        "values(?, ?, ?, ?)", [mid, link, title, cid], function (err) {
+function sysMessage(mid, link, title, cid, includeTeacher, eid) {
+    var query = "";
+    if (!eid) {
+        query = "insert into Message(mid, link, title, cid) " +
+            "values(?, ?, ?, ?)";
+    } else {
+        query = "insert into Message(mid, link, title, cid, eid) " +
+            "values(?, ?, ?, ?, ?)"
+    }
+    con.query(query, [mid, link, title, cid, eid], function (err) {
         if (err) {
-            console.log("Insert into Message in addCourse: " + err);
+            console.log("Insert into Message in sysMessage: " + err);
         } else {
             if (includeTeacher) {
                 con.query("Insert into StudentMessage(sid, mid) " +
@@ -1037,3 +1075,40 @@ function sysMessage(mid, link, title, cid, includeTeacher) {
         }
     });
 }
+
+exports.deleteMessage = function (req, res) {
+    var mid = req.body.mid;
+    con.query("delete from Message " +
+        "where mid = ?;", mid, function (err, result) {
+        if (err) {
+            console.log("Delete from Message: " + err);
+        } else {
+            res.json({
+                status: true
+            });
+        }
+    });
+};
+
+exports.messagesNum = function (req, res) {
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 1) {
+        con.query("select count(*) as messagesNum from Message m, StudentMessage sm " +
+            "where m.mid = sm.mid and sm.sid = ?", userInfo.id, function (err, result) {
+            if (err) {
+                console.log("Get student's messages number: " + err);
+            } else {
+                res.json(result);
+            }
+        });
+    } else if (userInfo.level == 2) {
+        con.query("select count(*) as messagesNum from Message m, TeacherMessage tm " +
+            "where m.mid = tm.mid and tm.tid = ?", userInfo.id, function (err, result) {
+            if (err) {
+                console.log("Get teacher's messages number: " + err);
+            } else {
+                res.json(result);
+            }
+        });
+    }
+};

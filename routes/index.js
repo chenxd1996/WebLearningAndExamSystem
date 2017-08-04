@@ -69,6 +69,10 @@ router.post('/getMessages', api.getMessages);
 
 router.post('/getMessageDetail', api.getMessageDetail);
 
+router.post('/deleteMessage', api.deleteMessage);
+
+router.post('/messagesNum', api.messagesNum);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

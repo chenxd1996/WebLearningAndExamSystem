@@ -98,7 +98,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         templateUrl: "partials/myExams"
     }).state("logined.examDetail", {
         url: "/exam-system/exam-detail",
-        params: {examID: null},
+        params: {examID: null, status: null},
         controller: examDetailCtrl,
         templateUrl: "partials/examDetail"
     }).state("logined.examDetail.allQuestions", {

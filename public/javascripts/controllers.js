@@ -36,7 +36,7 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
 }
 
 //controller for homepage router
-function homeCtrl($scope, $location, $rootScope, $http, $state) {
+function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout) {
     $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
@@ -49,6 +49,12 @@ function homeCtrl($scope, $location, $rootScope, $http, $state) {
                         name: result.name,
                         level: result.level
                     };
+
+                    $http.post("/messagesNum", {
+                        userInfo: $rootScope.userInfo
+                    }).success(function (res) {
+                        $rootScope.messagesNum = res[0].messagesNum;
+                    });
                 }
             });
         }
@@ -64,6 +70,24 @@ function homeCtrl($scope, $location, $rootScope, $http, $state) {
     $scope.logout = function () {
         $http.get('/logout').success(function (res) {
             $state.go('login');
+        });
+    };
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        var path = $location.path();
+        for (var i = 0; i < options.length; i++) {
+            if (path.indexOf(options[i]) >= 0) {
+                $timeout(function() {
+                    $scope.checked = options[i];
+                });
+                break;
+            }
+        }
+    });
+
+
+    $scope.changeStatus = function (status) {
+        $timeout(function () {
+            $scope.checked = status;
         });
     }
 }
@@ -748,7 +772,7 @@ function postMessageCtrl($scope, $rootScope, $http, toaster) {
     }
 }
 
-function allMessagesCtrl($scope, $http, $rootScope) {
+function allMessagesCtrl($scope, $http, $rootScope, toaster) {
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post('/getMessages', {
@@ -765,7 +789,15 @@ function allMessagesCtrl($scope, $http, $rootScope) {
     });
 
     $scope.check = function (index) {
-        $scope.messages.splice(index, 1);
+        $http.post("/deleteMessage", {
+            mid: $scope.messages[index].mid
+        }).success(function (res) {
+            if (res.status) {
+                $scope.messages.splice(index, 1);
+                toaster.pop("success", "删除成功！", "", 2000);
+                $rootScope.messagesNum--;
+            }
+        });
     }
 }
 
@@ -776,4 +808,5 @@ function messageDetailCtrl($scope, $http, $stateParams) {
     }).success(function (res) {
         $scope.message = res[0];
     });
+
 }
