@@ -330,7 +330,7 @@ exports.uploadCourseWares = function (req, res) {
             console.log("Get course name in uploadCourseWares: " + err);
         } else {
             var cname = result[0]['cname'];
-            var p = "../public/CourseWare/" + cname + "/"  + req.file.filename;
+            var p = "../public/CourseWares/" + cname + "/"  + req.file.filename;
             exec('pdf2swf ' + p + ' -o ' + p + '.swf', {
                 cwd: __dirname
             }, function(error, stdout, stderr) {
