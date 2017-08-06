@@ -471,22 +471,29 @@ exports.getExerciseBanks = function (req, res) {
                     status: false
                 });
             } else {
-                var query = "";
-                for (var i = 0; i < result.length; i++) {
-                    query += "select Count(*) as exerciseNum from Exercise e, ExerciseBank eb " +
-                        "where e.ebid = eb.eid and eb.eid = '" + result[i].eid + "';";
-                }
-                con.query(query, function (err, rows) {
-                    if (err) {
-                        console.log("Get exercises count: " + err);
-                    } else {
-                        res.json({
-                            status: true,
-                            result: result,
-                            counts: rows
-                        });
+                if (result.length > 0) {
+                    var query = "";
+                    for (var i = 0; i < result.length; i++) {
+                        query += "select Count(*) as exerciseNum from Exercise e, ExerciseBank eb " +
+                            "where e.ebid = eb.eid and eb.eid = '" + result[i].eid + "';";
                     }
-                });
+                    con.query(query, function (err, rows) {
+                        if (err) {
+                            console.log("Get exercises count: " + err);
+                        } else {
+                            res.json({
+                                status: true,
+                                result: result,
+                                counts: rows
+                            });
+                        }
+                    });
+                } else {
+                    res.json({
+                        status: true,
+                        result: result
+                    });
+                }
             }
         });
     }
