@@ -94,7 +94,7 @@ directive('documentViewer', function () {
     return {
         restrict: 'AE',
         link: function ($scope, element, attrs) {
-            $('#documentViewer').FlexPaperViewer(
+            var flash = $('#documentViewer').FlexPaperViewer(
                 { config : {
                     SWFFile : '/CourseWares/Web2.0程序设计/' + $scope.cwid + '.swf',
                     Scale : 0.6,
@@ -120,6 +120,7 @@ directive('documentViewer', function () {
                     localeChain: 'en_US'
                 }}
             );
+            console.log(flash);
         }
     }
 });
