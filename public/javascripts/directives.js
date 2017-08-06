@@ -123,6 +123,7 @@ directive('documentViewer', function () {
             $('#documentViewer').bind('onCurrentPageChanged',function(e,pagenum){
                 console.log(pagenum);
             });
+            console.log($FlexPaper("documentViewer"))
         }
     }
 });
