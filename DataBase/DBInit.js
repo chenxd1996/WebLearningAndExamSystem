@@ -60,7 +60,7 @@ function DBInit() {
     });
 
     con.query("create table if not exists CourseWare(" +
-        "cid varchar(32)," +
+        "cid varchar(200)," +
         "cname varchar(100)," +
         "mimetype varchar(30)," +
         "primary key(cid))", function (err, result) {
@@ -251,7 +251,7 @@ function DBInit() {
     });
 
     con.query("create table if not exists CourseWareCourse(" +
-        "cwid varchar(32)," +
+        "cwid varchar(200)," +
         "cid varchar(32)," +
         "primary key(cwid, cid)," +
         "foreign key(cwid) references CourseWare(cid) on delete cascade on update cascade," +

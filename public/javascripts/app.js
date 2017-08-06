@@ -63,6 +63,10 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/:courseID/add-course-data",
         controller: addCourseDataCtrl,
         templateUrl: "partials/addCourseData"
+    }).state("logined.courseDetail.courseWareDetail", {
+        url: "/:courseID/course-data/:cwid",
+        controller: courseWareDetailCtrl,
+        templateUrl: "partials/courseWareDetail"
     }).state("logined.exerciseSystem.addExerciseBank", {
         url: "/exercise-system/add-exercise-bank",
         controller: addExerciseBankCtrl,

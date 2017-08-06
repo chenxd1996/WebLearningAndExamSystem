@@ -235,12 +235,18 @@ function courseHomeCtrl($scope, $stateParams, $http) {
 }
 
 function courseDataCtrl($scope, $stateParams, $http) {
-    var courseID = $stateParams.courseID;
+    var courseID = $scope.courseID = $stateParams.courseID;
     $http.post('/getCourseWares', {
         cid: courseID
     }).success(function (res) {
+        console.log(res);
         $scope.courseWares = res.result;
     });
+}
+
+function courseWareDetailCtrl($scope, $stateParams, $http) {
+    console.log($stateParams);
+    $scope.cwid = $stateParams.cwid;
 }
 
 function addCourseDataCtrl($scope, $stateParams, FileUploader) {

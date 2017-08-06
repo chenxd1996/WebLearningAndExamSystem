@@ -1,8 +1,9 @@
-//div(class="panel panel-info")
+div(class="panel panel-info")
     div(class="panel-heading")
         h3 所有课件
     div(class="panel-body panelBody")
         div(class="list-group")
-            a(target="_blank" ng-href="getCourseWare?cid={{courseWare.cwid}}&type={{courseWare.mimetype}}" class="list-group-item" ng-repeat="courseWare in courseWares") {{courseWare.cname}}
-div(id="documentViewer" document-viewer style="width:770px;height:500px")
+            a(ui-sref="logined.courseDetail.courseWareDetail({courseID: courseID, cwid: courseWare.cwid})" class="list-group-item" ng-repeat="courseWare in courseWares") {{courseWare.cname}}
+           //a(target="_blank" ng-href="getCourseWare?cid={{courseWare.cwid}}&type={{courseWare.mimetype}}" class="list-group-item" ng-repeat="courseWare in courseWares") {{courseWare.cname}}
+
 

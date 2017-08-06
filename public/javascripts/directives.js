@@ -96,7 +96,7 @@ directive('documentViewer', function () {
         link: function ($scope, element, attrs) {
             $('#documentViewer').FlexPaperViewer(
                 { config : {
-                    SWFFile : '../../CourseWares/Paper.pdf.swf',
+                    SWFFile : '/CourseWares/Web2.0程序设计/' + $scope.cwid + '.swf',
                     Scale : 0.6,
                     ZoomTransition : 'easeOut',
                     ZoomTime : 0.5,
