@@ -2,6 +2,7 @@ var DBConnect = require("../DataBase/DBConnect");
 var con = DBConnect.getCon();
 var fs = require("fs");
 var path = require("path");
+var exec = require("child_process").exec;
 
 exports.loginCheck = function (req, res) {
     var id = req.body.id;
@@ -323,33 +324,44 @@ exports.getCourseInfo = function (req, res) {
 exports.uploadCourseWares = function (req, res) {
     var cid = req.body.cid;
     var filename = req.file.originalname.slice(0, req.file.originalname.lastIndexOf('.'));
-    console.log(filename);
-    con.query("insert into CourseWare " +
-        "value('" + req.file.filename + "', '" +
-        req.file.originalname + "', '" +
-        req.file.mimetype + "');", function (err, result) {
+    con.query("select cname from Course " +
+        "where cid = ?", cid, function (err, result) {
         if (err) {
-            console.log("Insert into CourseWare: " + err);
+            console.log("Get course name in uploadCourseWares: " + err);
         } else {
-            console.log(req.file);
-            con.query("insert into CourseWareCourse " +
-                "value('" + req.file.filename + "', '" +
-                cid + "');",function (err, result) {
-                if (err) {
-                    console.log("Insert into CourseCourseWare: " + err);
+            var cname = result[0]['cname'];
+            var p = "../public/CourseWare/" + cname  + req.file.filename;
+            exec('pdf2swf ' + p + ' -o ' + p + '.swf', {
+                cwd: __dirname
+            }, function(error, stdout, stderr) {
+                if (error) {
+                    console.log('exec error: ' + error);
                 } else {
-                    res.json({
-                        status: true
-                    });
-                    con.query("select cname from Course " +
-                        "where cid = ?", cid, function (err, result) {
+                    console.log('stdout: ' + stdout);
+                    console.log('stderr: ' + stderr);
+                }
+            });
+            con.query("insert into CourseWare " +
+                "value('" + req.file.filename + "', '" +
+                req.file.originalname + "', '" +
+                req.file.mimetype + "');", function (err, result) {
+                if (err) {
+                    console.log("Insert into CourseWare: " + err);
+                } else {
+                    con.query("insert into CourseWareCourse " +
+                        "value('" + req.file.filename + "', '" +
+                        cid + "');",function (err, result) {
                         if (err) {
-                            console.log("Get course name in uploadCourseWares: " + err);
+                            console.log("Insert into CourseCourseWare: " + err);
                         } else {
+                            res.json({
+                                status: true
+                            });
                             var mid = new Date().getTime();
                             var link = "/homePage/learning-system/course-detail/" + cid + "/course-data";
-                            var title = "您所在的课程 \"" + result[0]['cname'] + "\" 有新的课件 \"" + filename + "\"";
+                            var title = "您所在的课程 \"" + cname + "\" 有新的课件 \"" + filename + "\"";
                             sysMessage(mid, link, title, cid, false);
+
                         }
                     });
                 }
