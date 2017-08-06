@@ -194,6 +194,7 @@ function addCourseCtrl($scope, $http, toaster) {
         }
 
         $scope.course.description = $scope.editorText;
+        $scope.course.name = $scope.course.name.trim().replace('/\s/g', "");
         $http.post('/addCourse', $scope.course).
             success(function (res) {
                 if (res.status) {
