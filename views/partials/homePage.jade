@@ -14,7 +14,15 @@ div(class="header")
                     a(ng-click="logout()" href="#" class="text-center")
                         i(class="fa fa-fw fa-sign-out")
                         span  退出登录
-
+ul(ng-if="userInfo.level == 3" class="nav nav-pills nav-stacked navbar-inverse navbar-fixed-top myNav navNarrow text-center" responsive-navigation)
+    li(role="presentation" ng-class="{'users-management': 'active'}[checked]" ng-click="changeStatus('users-management')")
+        a(ui-sref="logined.usersManagement.addUser")
+            span(class="glyphicon glyphicon-user" aria-hidden="true")
+                span(ng-if="showDetail")  用户管理
+    li(role="presentation" ng-class="{'my-information': 'active'}[checked]" ng-click="changeStatus('my-information')")
+        a(href="#")
+            span(class="glyphicon glyphicon-info-sign" aria-hidden="true")
+                span(ng-if="showDetail")  个人资料
 ul(ng-if="userInfo.level == 2" class="nav nav-pills nav-stacked navbar-inverse navbar-fixed-top myNav navNarrow text-center" responsive-navigation)
     li(role="presentation" ng-class="{'learning-system': 'active'}[checked]" ng-click="changeStatus('learning-system')")
         a(ui-sref="logined.learningSystem.myCourses")
