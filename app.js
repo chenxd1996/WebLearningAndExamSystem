@@ -26,8 +26,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 var options = {
     host: 'localhost',
     port: 3306,
-    user: 'root',
-    password: 'root',
+    user: 'LearningAndExamSystem',
+    password: 'qweasd123',
     database: 'session',
     checkExpirationInterval: 6 * 60 * 60 * 1000
 };
