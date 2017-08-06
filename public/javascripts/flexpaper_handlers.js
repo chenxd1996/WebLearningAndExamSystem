@@ -66,7 +66,6 @@ jQuery(function() {
      * @param int pagenum
      */
     jQuery('#documentViewer').bind('onCurrentPageChanged',function(e,pagenum){
-        console.log(pagenum);
         // if GANumber is supplied then lets track this as a Google Analytics event.
         if(jQuery(this).data('TrackingNumber')){
             var _gaq = window._gaq || [];window._gaq=_gaq;

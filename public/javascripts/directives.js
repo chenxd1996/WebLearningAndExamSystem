@@ -120,7 +120,9 @@ directive('documentViewer', function () {
                     localeChain: 'en_US'
                 }}
             );
-            console.log($('#documentViewer').FlexPaperViewer);
+            $('#documentViewer').bind('onCurrentPageChanged',function(e,pagenum){
+                console.log(pagenum);
+            });
         }
     }
 });
