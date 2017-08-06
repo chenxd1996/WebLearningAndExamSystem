@@ -120,7 +120,7 @@ directive('documentViewer', function () {
                     localeChain: 'en_US'
                 }}
             );
-            console.log($('#documentViewer'));
+            console.log($('#documentViewer').getCurrPage());
         }
     }
 });
