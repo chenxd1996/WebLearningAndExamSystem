@@ -2,7 +2,7 @@ var DBConnect = require("./DBConnect");
 function DBInit() {
     var con = DBConnect.getCon();
 
-    con.query("ALTER DATABASE ExamSystem DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci", function (err, result) {
+    con.query("ALTER DATABASE LearningAndExamSystem DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci", function (err, result) {
         if (err) {
             console.log("Set utf8: " + err);
         }
