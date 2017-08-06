@@ -2,8 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3216e0a6-c310-4b3b-97cb-4af60415d0dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fileUploader/fileReciever.js" afterPath="$PROJECT_DIR$/fileUploader/fileReciever.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api.js" afterPath="$PROJECT_DIR$/routes/api.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/1501815120855" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/1502007657787" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/1502007887013" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/1502007915621" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/1502007918426" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/1502007928924" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/1502008402988" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/1502008600873" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/1502008638924" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/1502008702308" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Paper.pdf.swf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Paper.pdf_.swf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Paper.pdf__.swf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Paper.pdf___.swf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Web 2.0程序设计/1502008925884" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Web 2.0程序设计/1502009436384-用例文档示例.pdf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Web 2.0程序设计/1502009789733-用例文档示例" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Web 2.0程序设计/1502010855108-用例文档示例" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Web 2.0程序设计/1502010934024-用例文档示例" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Web 2.0程序设计/1502011120111-用例文档示例" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/Web 2.0程序设计/1502011175176-用例文档示例" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/public/CourseWares/example.swf" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -286,19 +307,6 @@
               <item name="WebLearningAndExamSystem" type="b2602c69:ProjectViewProjectNode" />
               <item name="WebLearningAndExamSystem" type="462c0819:PsiDirectoryNode" />
               <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="CourseWares" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebLearningAndExamSystem" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebLearningAndExamSystem" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="CourseWares" type="462c0819:PsiDirectoryNode" />
-              <item name="Web 2.0程序设计" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebLearningAndExamSystem" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebLearningAndExamSystem" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
               <item name="javascripts" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -491,12 +499,12 @@
       <workItem from="1501937843467" duration="15000" />
       <workItem from="1501937878213" duration="11000" />
       <workItem from="1501938123418" duration="6000" />
-      <workItem from="1501938142907" duration="8287000" />
+      <workItem from="1501938142907" duration="8352000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="640295000" />
+    <option name="totallyTimeSpent" value="640360000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -509,12 +517,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="768" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2591508" sideWeight="0.6056911" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2591508" sideWeight="0.6056911" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28705147" sideWeight="0.5058565" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2506964" sideWeight="0.4941435" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2506964" sideWeight="0.4941435" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24963397" sideWeight="0.19970194" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
