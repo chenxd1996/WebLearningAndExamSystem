@@ -179,7 +179,6 @@ function myCoursesCtrl($scope, $rootScope, $http) {
 
 function addCourseCtrl($scope, $http, toaster) {
     $scope.course = {};
-
     $scope.addCourse = function () {
         $scope.course.gradesAndClasses = [];
 
@@ -194,7 +193,7 @@ function addCourseCtrl($scope, $http, toaster) {
         }
 
         $scope.course.description = $scope.editorText;
-        $scope.course.name = $scope.course.name.trim().replace('/\s/g', "");
+        $scope.course.name = $scope.course.name.trim().replace(/\s/g, "");
         $http.post('/addCourse', $scope.course).
             success(function (res) {
                 if (res.status) {
@@ -569,8 +568,8 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                     if ($scope.status == "ended") {
                         $scope.questions[i].isShow = true;
                         if ($scope.questions[i].stuAnswer) {
-                            var stuAnswer = $scope.questions[i].stuAnswer.trim().replace('/\s/g', "");
-                            var answer = $scope.questions[i].answer.trim().replace('/\s/g', "");
+                            var stuAnswer = $scope.questions[i].stuAnswer.trim().replace(/\s/g, "");
+                            var answer = $scope.questions[i].answer.trim().replace(/\s/g, "");
                             if (stuAnswer == answer) {
                                 $scope.questions[i].isTrue = true;
                                 $scope.correctNum++;
