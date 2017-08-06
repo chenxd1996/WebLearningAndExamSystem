@@ -103,7 +103,7 @@ directive('documentViewer', function () {
                     ZoomInterval : 0.2,
                     FitPageOnLoad : true,
                     FitWidthOnLoad : false,
-                    FullScreenAsMaxWindow : false,
+                    FullScreenAsMaxWindow : true,
                     ProgressiveLoading : false,
                     MinZoomSize : 0.2,
                     MaxZoomSize : 5,
