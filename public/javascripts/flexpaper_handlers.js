@@ -56,7 +56,7 @@ jQuery(function() {
      *
      */
     jQuery('#documentViewer').bind('onPageLoading',function(e,pageNumber){
-
+        console.log(pageNumber); 
     });
 
     /**
