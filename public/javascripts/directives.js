@@ -115,7 +115,7 @@ directive('documentViewer', function () {
                     ZoomToolsVisible : true,
                     NavToolsVisible : true,
                     CursorToolsVisible : true,
-                    SearchToolsVisible : true,
+                    SearchToolsVisible : false,
                     WMode : 'window',
                     localeChain: 'en_US'
                 }}

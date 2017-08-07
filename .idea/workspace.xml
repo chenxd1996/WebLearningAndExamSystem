@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3216e0a6-c310-4b3b-97cb-4af60415d0dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/app.js" afterPath="$PROJECT_DIR$/public/javascripts/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/controllers.js" afterPath="$PROJECT_DIR$/public/javascripts/controllers.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/directives.js" afterPath="$PROJECT_DIR$/public/javascripts/directives.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/courseData.jade" afterPath="$PROJECT_DIR$/views/partials/courseData.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/courseDetail.jade" afterPath="$PROJECT_DIR$/views/partials/courseDetail.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/myCourses.jade" afterPath="$PROJECT_DIR$/views/partials/myCourses.jade" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -27,8 +23,8 @@
       <file leaf-file-name="directives.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/directives.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="98" column="65" lean-forward="false" selection-start-line="98" selection-start-column="65" selection-end-line="98" selection-end-column="65" />
+            <state relative-caret-position="398">
+              <caret line="117" column="46" lean-forward="false" selection-start-line="117" selection-start-column="46" selection-end-line="117" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -491,12 +487,12 @@
       <workItem from="1501937843467" duration="15000" />
       <workItem from="1501937878213" duration="11000" />
       <workItem from="1501938123418" duration="6000" />
-      <workItem from="1501938142907" duration="18067000" />
+      <workItem from="1501938142907" duration="18446000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="650075000" />
+    <option name="totallyTimeSpent" value="650454000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -934,8 +930,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/directives.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="98" column="65" lean-forward="false" selection-start-line="98" selection-start-column="65" selection-end-line="98" selection-end-column="65" />
+        <state relative-caret-position="398">
+          <caret line="117" column="46" lean-forward="false" selection-start-line="117" selection-start-column="46" selection-end-line="117" selection-end-column="46" />
           <folding />
         </state>
       </provider>
