@@ -8,7 +8,7 @@ div(class="content-container courseWare-list")
         li(ng-repeat="courseWare in courseWares")
             div(class="learning-status col-xs-1")
                 span(ng-if="!courseWare.progress") 未学习
-                span(ng-if="courseWare.progress && courseWare.progress > 0 and courseWare.progress < 0") 学习中
+                span(ng-if="courseWare.progress && courseWare.progress > 0 && courseWare.progress < 0") 学习中
                 span(ng-if="courseWare.progress == 1") 已完成
             div(class="message-info col-xs-8")
                 div

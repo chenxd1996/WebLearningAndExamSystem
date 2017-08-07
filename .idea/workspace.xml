@@ -52,8 +52,8 @@
       <file leaf-file-name="courseData.jade" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/partials/courseData.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="21" lean-forward="false" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
+            <state relative-caret-position="150">
+              <caret line="10" column="77" lean-forward="false" selection-start-line="10" selection-start-column="77" selection-end-line="10" selection-end-column="77" />
               <folding />
             </state>
           </provider>
@@ -488,12 +488,12 @@
       <workItem from="1501937843467" duration="15000" />
       <workItem from="1501937878213" duration="11000" />
       <workItem from="1501938123418" duration="6000" />
-      <workItem from="1501938142907" duration="38914000" />
+      <workItem from="1501938142907" duration="38961000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="670922000" />
+    <option name="totallyTimeSpent" value="670969000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -936,8 +936,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/partials/courseData.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="21" lean-forward="false" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
+        <state relative-caret-position="150">
+          <caret line="10" column="77" lean-forward="false" selection-start-line="10" selection-start-column="77" selection-end-line="10" selection-end-column="77" />
           <folding />
         </state>
       </provider>
