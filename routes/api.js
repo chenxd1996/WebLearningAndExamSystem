@@ -391,14 +391,13 @@ exports.getCourseWares = function (req, res) {
 
 exports.updateLearningStatus = function (req, res) {
     var userInfo = req.body.userInfo;
-    var pages = res.body.pages;
+    var pages = req.body.pages;
     var cwid = req.body.cwid;
     con.query("select learningTime, learningPages from StudentCourseWare " +
         "where sid = ? and cid = ?", [userInfo.id, cwid], function (err, result) {
         if (err) {
             console.log("Get learningTime, learningPages from StudentCourseWare in updateLearningStatus: " + err);
         } else {
-            console.log(result);
             if (result.length == 0) {
                 var pagesStr = "";
                 if (pages.length > 0) {
@@ -407,7 +406,6 @@ exports.updateLearningStatus = function (req, res) {
                         pagesStr += " " + pages[i];
                     }
                 }
-                console.log("a");
                 con.query("insert into StudentCourseWare " +
                     "value(?, ?, ?, ?);", [userInfo.id, cwid, pagesStr, 1], function (err) {
                     if (err) {
@@ -416,7 +414,6 @@ exports.updateLearningStatus = function (req, res) {
                         res.json({});
                     }
                 });
-                console.log("b");
             } else {
                 var pagesStr = result[0]['learningPages'];
                 var learningTime = result[0]['learningTime'] + 1;
