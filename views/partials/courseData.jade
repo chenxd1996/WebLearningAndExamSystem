@@ -13,9 +13,11 @@ div(class="content-container courseWare-list")
                     a(ui-sref="logined.courseDetail.courseWareDetail({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})")
                         span {{courseWare.cname}}
             div(class="message-type col-xs-1")
-                span 10 / 20
+                span(ng-if="courseWare.progress") {{courseWare.progress * 100}}%
+                span(ng-if="!courseWare.progress") 0%
             div(class="message-postTime col-xs-2")
-                span 20分钟
+                span(ng-if="courseWare.learningTime") {{courseWare.learningTime}}分钟
+                span(ng-if="!courseWare.learningTime") 0分钟
     div(ng-if="courseWares.length == 0" class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20")
         div(class="fs-16") 暂无数据
 //div(class="panel panel-info")
