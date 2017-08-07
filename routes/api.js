@@ -189,6 +189,11 @@ exports.addCourse = function (req, res) {
                       if (err) {
                           console.log("Get sid in addCourse: " + err);
                       } else {
+                          if(result.length == 1) {
+                              var tmp = [];
+                              tmp.push(result);
+                              result = tmp;
+                          }
                           var query = "";
                           for (var i = 0; i < result.length; i++) {
                               for (var j = 0; j < result[i].length; j++) {
