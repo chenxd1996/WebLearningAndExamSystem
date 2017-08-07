@@ -111,11 +111,11 @@ directive('documentViewer', function () {
                     InitViewMode : 'Portrait',
                     RenderingOrder : 'flash',
                     StartAtPage : '',
-                    ViewModeToolsVisible : true,
-                    ZoomToolsVisible : true,
-                    NavToolsVisible : true,
-                    CursorToolsVisible : true,
-                    SearchToolsVisible : true,
+                    ViewModeToolsVisible : false,
+                    ZoomToolsVisible : false,
+                    NavToolsVisible : false,
+                    CursorToolsVisible : false,
+                    SearchToolsVisible : false,
                     WMode : 'window',
                     localeChain: 'zh_CN'
                 }}
