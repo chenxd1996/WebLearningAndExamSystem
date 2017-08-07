@@ -128,6 +128,11 @@ directive('documentViewer', function () {
                 console.log($scope.pages);
                 $scope.pageChageCount++;
             });
+
+            $('#documentViewer').bind('onDocumentLoaded',function(e,totalPages){
+                console.log(totalPages);
+                $scope.totalPages = totalPages;
+            });
         }
     }
 });
