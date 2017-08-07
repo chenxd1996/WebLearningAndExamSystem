@@ -158,7 +158,7 @@ function DBInit() {
         "sid varchar(10)," +
         "cid varchar(200)," +
         "learningTime int default 0," +
-        "learngingPages varchar(3000)," +
+        "learningPages varchar(3000)," +
         "primary key(sid, cid)," +
         "foreign key(sid) references Student(sid) on delete cascade on update cascade," +
         "foreign key(cid) references CourseWare(cid) on delete cascade on update cascade)", function (err, result) {
