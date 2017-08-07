@@ -417,7 +417,7 @@ exports.updateLearningStatus = function (req, res) {
             } else {
                 var pagesStr = result[0]['learningPages'];
                 var learningTime = result[0]['learningTime'] + 1;
-                var tmpPages = pagesStr.splice(" ");
+                var tmpPages = pagesStr.split(" ");
                 for (var i = 0; i < pages.length; i++) {
                     if (tmpPages.indexOf(pages[i]) < 0) {
                         pagesStr += " " + pages[i];
