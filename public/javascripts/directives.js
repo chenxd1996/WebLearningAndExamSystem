@@ -132,6 +132,7 @@ directive('documentViewer', function () {
             $('#documentViewer').bind('onDocumentLoaded',function(e,totalPages){
                 console.log(totalPages);
                 $scope.totalPages = totalPages;
+                console.log($FlexPaper('documentViewer').getTotalPages());
             });
         }
     }
