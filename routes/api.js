@@ -393,11 +393,13 @@ exports.updateLearningStatus = function (req, res) {
     var userInfo = req.body.userInfo;
     var pages = req.body.pages;
     var cwid = req.body.cwid;
+    var totalPages = req.body.totalPages;
     con.query("select learningTime, learningPages from StudentCourseWare " +
         "where sid = ? and cid = ?", [userInfo.id, cwid], function (err, result) {
         if (err) {
             console.log("Get learningTime, learningPages from StudentCourseWare in updateLearningStatus: " + err);
         } else {
+            var progress = 0;
             if (result.length == 0) {
                 var pagesStr = "";
                 if (pages.length > 0) {
@@ -405,9 +407,10 @@ exports.updateLearningStatus = function (req, res) {
                     for (var i = 1; i < pages.length; i++) {
                         pagesStr += " " + pages[i];
                     }
+                    progress = (parseFloat(pages.length) / totalPages).toFixed(2);
                 }
                 con.query("insert into StudentCourseWare " +
-                    "value(?, ?, ?, ?);", [userInfo.id, cwid, pagesStr, 1], function (err) {
+                    "value(?, ?, ?, ?, ?);", [userInfo.id, cwid, pagesStr, 1, progress], function (err) {
                     if (err) {
                         console.log("Insert into StudentCourseWare in updateLearningStatus: " + err);
                     } else {
@@ -421,11 +424,13 @@ exports.updateLearningStatus = function (req, res) {
                 for (var i = 0; i < pages.length; i++) {
                     if (tmpPages.indexOf(pages[i]) < 0) {
                         pagesStr += " " + pages[i];
+                        tmpPages.push(pages[i]);
                     }
                 }
+                progress = (parseFloat(tmpPages.length) / totalPages).toFixed(2);
                 con.query("update StudentCourseWare " +
-                    "set learningTime = ?, learningPages = ? " +
-                    "where sid = ? and cid = ?;", [learningTime, pagesStr, userInfo.id, cwid], function (err) {
+                    "set learningTime = ?, learningPages = ?, progress = ? " +
+                    "where sid = ? and cid = ?;", [learningTime, pagesStr, progress, userInfo.id, cwid], function (err) {
                     if (err) {
                         console.log("Update StudentCourseWare in updateLearningStatus: " + err);
                     } else {

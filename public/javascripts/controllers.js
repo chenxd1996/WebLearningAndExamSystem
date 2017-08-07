@@ -262,11 +262,12 @@ function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
                 $scope.pageChageCount = 0;
             }, 5 * 60 * 1000);
             var add = setInterval(function () {
-                if ($scope.canAdd) {
+                if ($scope.canAdd && $scope.totalPages) {
                     $http.post('/updateLearningStatus', {
                         userInfo: $rootScope.userInfo,
                         pages: $scope.pages,
-                        cwid: $scope.cwid
+                        cwid: $scope.cwid,
+                        totalPages: $scope.totalPages
                     });
                 }
             }, 60 * 1000);

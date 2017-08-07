@@ -120,12 +120,11 @@ directive('documentViewer', function () {
                     localeChain: 'zh_CN'
                 }}
             );
-            /*$('#documentViewer').bind('onDocumentLoaded',function(e, totalPages){
-                console.log($FlexPaper('documentViewer').getTotalPages());
-            });*/
-            $('#documentViewer').bind('onProgress',function(e,loadedBytes,totalBytes){
-                console.log($FlexPaper('documentViewer').getTotalPages());
+
+            $('#documentViewer').bind('onDocumentLoaded',function(e, totalPages){
+                $scope.totalPages = totalPages;
             });
+
             $('#documentViewer').bind('onCurrentPageChanged',function(e,pagenum){
                 if ($scope.pages.indexOf(pagenum) < 0) {
                     $scope.pages.push(pagenum);
