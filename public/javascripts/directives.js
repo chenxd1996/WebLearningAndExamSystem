@@ -120,6 +120,7 @@ directive('documentViewer', function () {
                     localeChain: 'zh_CN'
                 }}
             );
+            console.log($FlexPaper('documentViewer').getTotalPages());
             $('#documentViewer').bind('onCurrentPageChanged',function(e,pagenum){
                 if ($scope.pages.indexOf(pagenum) < 0) {
                     $scope.pages.push(pagenum);
@@ -127,12 +128,6 @@ directive('documentViewer', function () {
                 $scope.canAdd = true;
                 console.log($scope.pages);
                 $scope.pageChageCount++;
-            });
-
-            $('#documentViewer').bind('onDocumentLoaded',function(e,totalPages){
-                console.log(totalPages);
-                $scope.totalPages = totalPages;
-                console.log($FlexPaper('documentViewer').getTotalPages());
             });
         }
     }

@@ -22,8 +22,8 @@
       <file leaf-file-name="directives.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/directives.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="134" column="74" lean-forward="false" selection-start-line="134" selection-start-column="74" selection-end-line="134" selection-end-column="74" />
+            <state relative-caret-position="393">
+              <caret line="122" column="70" lean-forward="false" selection-start-line="122" selection-start-column="70" selection-end-line="122" selection-end-column="70" />
               <folding />
             </state>
           </provider>
@@ -488,12 +488,12 @@
       <workItem from="1501937843467" duration="15000" />
       <workItem from="1501937878213" duration="11000" />
       <workItem from="1501938123418" duration="6000" />
-      <workItem from="1501938142907" duration="35896000" />
+      <workItem from="1501938142907" duration="36041000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="667904000" />
+    <option name="totallyTimeSpent" value="668049000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -915,14 +915,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/controllers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="268" column="41" lean-forward="false" selection-start-line="268" selection-start-column="41" selection-end-line="268" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/flexpaper.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3335">
@@ -934,10 +926,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="268" column="41" lean-forward="false" selection-start-line="268" selection-start-column="41" selection-end-line="268" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/directives.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="134" column="74" lean-forward="false" selection-start-line="134" selection-start-column="74" selection-end-line="134" selection-end-column="74" />
+        <state relative-caret-position="393">
+          <caret line="122" column="70" lean-forward="false" selection-start-line="122" selection-start-column="70" selection-end-line="122" selection-end-column="70" />
           <folding />
         </state>
       </provider>
