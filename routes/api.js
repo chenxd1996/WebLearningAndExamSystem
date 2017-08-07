@@ -379,7 +379,7 @@ exports.getCourseWares = function (req, res) {
     var cid = req.body.cid;
     var userInfo = req.body.userInfo;
     if (userInfo.level == 1) {
-        con.query("select * from CourseWare cw, CourseWareCourse cwc left join StudentCourseWare scw on cwc.cid = scw.cid and scw.sid = ? " +
+        con.query("select * from CourseWare cw, CourseWareCourse cwc left join StudentCourseWare scw on cwc.cwid = scw.cid and scw.sid = ? " +
             "where cwc.cid = ? and cwc.cwid = cw.cid order by cw.cid DESC;", [userInfo.id, cid], function (err, result) {
             if (err) {
                 console.log("getCourseWares: " + err);
