@@ -236,14 +236,19 @@ function courseHomeCtrl($scope, $stateParams, $http) {
    });
 }
 
-function courseDataCtrl($scope, $stateParams, $http) {
+function courseDataCtrl($scope, $stateParams, $http, $rootScope) {
     var courseID = $scope.courseID = $stateParams.courseID;
     $scope.courseName = $stateParams.courseName;
-    $http.post('/getCourseWares', {
-        cid: courseID
-    }).success(function (res) {
-        console.log(res);
-        $scope.courseWares = res.result;
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post('/getCourseWares', {
+                cid: courseID,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                console.log(res);
+                $scope.courseWares = res.result;
+            });
+        }
     });
 }
 

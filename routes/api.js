@@ -377,16 +377,30 @@ exports.uploadCourseWares = function (req, res) {
 
 exports.getCourseWares = function (req, res) {
     var cid = req.body.cid;
-    con.query("select * from CourseWare cw, CourseWareCourse cwc " +
-        "where cwc.cid = ? and cwc.cwid = cw.cid order by cw.cid DESC;", cid, function (err, result) {
-        if (err) {
-            console.log("getCourseWares: " + err);
-        } else {
-            res.json({
-                result: result
-            });
-        }
-    });
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 1) {
+        con.query("select * from CourseWare, CourseWareCourse cwc cw left join StudentCourseWare scw on cw.cid = scw.cid and scw.sid = ? " +
+            "where cwc.cid = ? and cwc.cwid = cw.cid order by cw.cid DESC;", [userInfo.id, cid], function (err, result) {
+            if (err) {
+                console.log("getCourseWares: " + err);
+            } else {
+                res.json({
+                    result: result
+                });
+            }
+        });
+    } else if (userInfo.level == 2) {
+        con.query("select * from CourseWare cw, CourseWareCourse cwc " +
+            "where cwc.cid = ? and cwc.cwid = cw.cid order by cw.cid DESC;", cid, function (err, result) {
+            if (err) {
+                console.log("getCourseWares: " + err);
+            } else {
+                res.json({
+                    result: result
+                });
+            }
+        });
+    }
 };
 
 exports.updateLearningStatus = function (req, res) {
