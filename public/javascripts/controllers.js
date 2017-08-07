@@ -207,6 +207,7 @@ function addCourseCtrl($scope, $http, toaster) {
 
 function courseDetailCtrl($scope, $location,  $stateParams, $rootScope) {
     $scope.courseID = $stateParams.courseID;
+    $scope.courseName = $stateParams.courseName;
     $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
@@ -223,6 +224,7 @@ function courseDetailCtrl($scope, $location,  $stateParams, $rootScope) {
 
 function courseHomeCtrl($scope, $stateParams, $http) {
    var courseID = $stateParams.courseID;
+   $scope.courseName = $stateParams.courseName;
    $http.post('/getCourseInfo', {
        cid: courseID
    }).success(function (res) {
@@ -236,6 +238,7 @@ function courseHomeCtrl($scope, $stateParams, $http) {
 
 function courseDataCtrl($scope, $stateParams, $http) {
     var courseID = $scope.courseID = $stateParams.courseID;
+    $scope.courseName = $stateParams.courseName;
     $http.post('/getCourseWares', {
         cid: courseID
     }).success(function (res) {
@@ -245,11 +248,12 @@ function courseDataCtrl($scope, $stateParams, $http) {
 }
 
 function courseWareDetailCtrl($scope, $stateParams, $http) {
-    console.log($stateParams);
+    $scope.courseName = $stateParams.courseName;
     $scope.cwid = $stateParams.cwid;
 }
 
 function addCourseDataCtrl($scope, $stateParams, FileUploader) {
+    $scope.courseName = $stateParams.courseName;
     var courseID = $stateParams.courseID;
     $scope.uploader = new FileUploader({
         url: '/uploadCourseWares',

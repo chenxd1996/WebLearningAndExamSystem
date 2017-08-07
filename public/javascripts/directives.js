@@ -96,7 +96,7 @@ directive('documentViewer', function () {
         link: function ($scope, element, attrs) {
             $('#documentViewer').FlexPaperViewer(
                 { config : {
-                    SWFFile : '/CourseWares/Web2.0程序设计/' + $scope.cwid + '.swf',
+                    SWFFile : '/CourseWares/' + $scope.courseName + '/' + $scope.cwid + '.swf',
                     Scale : 0.6,
                     ZoomTransition : 'easeOut',
                     ZoomTime : 0.5,
@@ -123,7 +123,6 @@ directive('documentViewer', function () {
             $('#documentViewer').bind('onCurrentPageChanged',function(e,pagenum){
                 console.log(pagenum);
             });
-            console.log($FlexPaper("documentViewer"))
         }
     }
 });

@@ -48,23 +48,23 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         templateUrl: "partials/addCourse"
     }).state("logined.courseDetail", {
         url: "/learning-system/course-detail",
-        params: {courseID: null},
+        params: {courseID: null, courseName: null},
         controller: courseDetailCtrl,
         templateUrl: "partials/courseDetail"
     }).state("logined.courseDetail.courseHome", {
-        url: "/:courseID/course-home",
+        url: "/:courseID/:courseName/course-home",
         controller: courseHomeCtrl,
         templateUrl: "partials/courseHome"
     }).state("logined.courseDetail.courseData", {
-        url: "/:courseID/course-data",
+        url: "/:courseID/:courseName/course-data",
         controller: courseDataCtrl,
         templateUrl: "partials/courseData"
     }).state("logined.courseDetail.addCourseData", {
-        url: "/:courseID/add-course-data",
+        url: "/:courseID/:courseName/add-course-data",
         controller: addCourseDataCtrl,
         templateUrl: "partials/addCourseData"
     }).state("logined.courseDetail.courseWareDetail", {
-        url: "/:courseID/course-data/:cwid",
+        url: "/:courseID/:courseName/course-data/:cwid",
         controller: courseWareDetailCtrl,
         templateUrl: "partials/courseWareDetail"
     }).state("logined.exerciseSystem.addExerciseBank", {
