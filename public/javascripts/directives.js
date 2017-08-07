@@ -120,7 +120,10 @@ directive('documentViewer', function () {
                     localeChain: 'zh_CN'
                 }}
             );
-            $('#documentViewer').bind('onDocumentLoaded',function(e, totalPages){
+            /*$('#documentViewer').bind('onDocumentLoaded',function(e, totalPages){
+                console.log($FlexPaper('documentViewer').getTotalPages());
+            });*/
+            $('#documentViewer').bind('onProgress',function(e,loadedBytes,totalBytes){
                 console.log($FlexPaper('documentViewer').getTotalPages());
             });
             $('#documentViewer').bind('onCurrentPageChanged',function(e,pagenum){
