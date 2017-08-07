@@ -269,7 +269,7 @@ function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
                         cwid: $scope.cwid
                     });
                 }
-            }, 1000);
+            }, 60 * 1000);
 
             $scope.$on("$destroy", function() {
                 clearInterval(check);
