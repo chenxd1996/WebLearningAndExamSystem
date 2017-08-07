@@ -253,24 +253,29 @@ function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
     $scope.canAdd = true;
     $scope.pages = [];
     $scope.pageChageCount = 0;
-    var check = setInterval(function () {
-        if ($scope.pageChageCount == 0) {
-            $scope.canAdd = false;
-        }
-        $scope.pageChageCount = 0;
-    }, 5 * 60 * 1000);
-    var add = setInterval(function () {
-        /*if ($scope.canAdd) {
-            $http.post('/setLearningStatus', {
-                userInfo: $rootScope.userInfo,
-                pages: $scope.pages
-            });
-        }*/
-    },1000);
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo && $rootScope.userInfo.level == 1) {
+            var check = setInterval(function () {
+                if ($scope.pageChageCount == 0) {
+                    $scope.canAdd = false;
+                }
+                $scope.pageChageCount = 0;
+            }, 5 * 60 * 1000);
+            var add = setInterval(function () {
+                if ($scope.canAdd) {
+                    $http.post('/updateLearningStatus', {
+                        userInfo: $rootScope.userInfo,
+                        pages: $scope.pages,
+                        cwid: $scope.cwid
+                    });
+                }
+            }, 1000);
 
-    $scope.$on("$destroy", function() {
-        clearInterval(check);
-        clearInterval(add);
+            $scope.$on("$destroy", function() {
+                clearInterval(check);
+                clearInterval(add);
+            });
+        }
     });
 }
 

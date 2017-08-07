@@ -389,6 +389,50 @@ exports.getCourseWares = function (req, res) {
     });
 };
 
+exports.updateLearningStatus = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var pages = res.body.pages;
+    var cwid = req.body.cwid;
+    con.query("select learningTime, learningPages from StudentCourseWare " +
+        "where sid = ? and cid = ?", [userInfo.id, cwid], function (err, result) {
+        if (err) {
+            console.log("Get learningTime, learningPages from StudentCourseWare in updateLearningStatus: " + err);
+        } else {
+            if (result.length == 0) {
+                var pagesStr = "";
+                if (pages.length > 0) {
+                    pagesStr = pages[0];
+                    for (var i = 1; i < pages.length; i++) {
+                        pagesStr += " " + pages[i];
+                    }
+                }
+                con.query("insert into StudentCourseWare " +
+                    "value(?, ?, ?, ?);", [userInfo.id, cwid, pagesStr, 1], function (err) {
+                    if (err) {
+                        console.log("Insert into StudentCourseWare in updateLearningStatus: " + err);
+                    }
+                });
+            } else {
+                var pagesStr = result[0]['learningPages'];
+                var learningTime = result[0]['learningTime'] + 1;
+                var tmpPages = pagesStr.splice(" ");
+                for (var i = 0; i < pages.length; i++) {
+                    if (tmpPages.indexOf(pages[i]) < 0) {
+                        pagesStr += " " + pages[i];
+                    }
+                }
+                con.query("update StudentCourseWare " +
+                    "set learningTime = ?, learningPages = ? " +
+                    "where sid = ? and cid = ?;", [learningTime, pagesStr, userInfo.id, cwid], function (err) {
+                    if (err) {
+                        console.log("Update StudentCourseWare in updateLearningStatus: " + err);
+                    }
+                });
+            }
+        }
+    });
+};
+
 exports.getCourseWare = function (req, res) {
     var cid = req.query.cid;
     var type = req.query.type;

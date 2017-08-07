@@ -73,6 +73,8 @@ router.post('/deleteMessage', api.deleteMessage);
 
 router.post('/messagesNum', api.messagesNum);
 
+router.post('/updateLearningStatus', api.updateLearningStatus);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');
