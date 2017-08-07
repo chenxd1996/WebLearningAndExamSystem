@@ -120,7 +120,9 @@ directive('documentViewer', function () {
                     localeChain: 'zh_CN'
                 }}
             );
-            console.log($FlexPaper('documentViewer').getTotalPages());
+            $('#documentViewer').bind('onDocumentLoading',function(e){
+                console.log($FlexPaper('documentViewer').getTotalPages());
+            });
             $('#documentViewer').bind('onCurrentPageChanged',function(e,pagenum){
                 if ($scope.pages.indexOf(pagenum) < 0) {
                     $scope.pages.push(pagenum);
