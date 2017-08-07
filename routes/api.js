@@ -411,6 +411,8 @@ exports.updateLearningStatus = function (req, res) {
                     "value(?, ?, ?, ?);", [userInfo.id, cwid, pagesStr, 1], function (err) {
                     if (err) {
                         console.log("Insert into StudentCourseWare in updateLearningStatus: " + err);
+                    } else {
+                        res.json({});
                     }
                 });
             } else {
@@ -427,6 +429,8 @@ exports.updateLearningStatus = function (req, res) {
                     "where sid = ? and cid = ?;", [learningTime, pagesStr, userInfo.id, cwid], function (err) {
                     if (err) {
                         console.log("Update StudentCourseWare in updateLearningStatus: " + err);
+                    } else {
+                        res.json({});
                     }
                 });
             }
