@@ -1,4 +1,24 @@
-div(class="panel panel-info")
+div(class="content-container courseWare-list")
+    ul(ng-if="courseWares.length > 0")
+        li
+            span(class="col-xs-1 text-center") 状态
+            span(class="col-xs-8") 课件名称
+            span(class="col-xs-1 text-center") 进度
+            span(class="col-xs-2 text-center") 已学时长
+        li(ng-repeat="courseWare in courseWares")
+            div(class="learning-status col-xs-1")
+                span 学习中
+            div(class="message-info col-xs-8")
+                div
+                    a(ui-sref="logined.courseDetail.courseWareDetail({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})")
+                        span {{courseWare.cname}}
+            div(class="message-type col-xs-1")
+                span 10 / 20
+            div(class="message-postTime col-xs-2")
+                span 20分钟
+    div(ng-if="courseWares.length == 0" class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20")
+        div(class="fs-16") 暂无数据
+//div(class="panel panel-info")
     div(class="panel-heading")
         h3 所有课件
     div(class="panel-body panelBody")

@@ -154,16 +154,18 @@ function DBInit() {
             }
     });*/
 
-    /*con.query("create table if not exists StudentCourseWare(" +
+    con.query("create table if not exists StudentCourseWare(" +
         "sid varchar(10)," +
-        "cid varchar(32)," +
+        "cid varchar(200)," +
+        "learningTime int default 0," +
+        "learngingPages varchar(3000)," +
         "primary key(sid, cid)," +
         "foreign key(sid) references Student(sid) on delete cascade on update cascade," +
         "foreign key(cid) references CourseWare(cid) on delete cascade on update cascade)", function (err, result) {
             if (err) {
                 console.log("StudentCourceWare: " + err);
             }
-    });*/
+    });
 
     /*con.query("create table if not exists TeacherExercise(" +
         "tid varchar(10)," +

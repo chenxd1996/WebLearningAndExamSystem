@@ -247,9 +247,31 @@ function courseDataCtrl($scope, $stateParams, $http) {
     });
 }
 
-function courseWareDetailCtrl($scope, $stateParams, $http) {
+function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
     $scope.courseName = $stateParams.courseName;
     $scope.cwid = $stateParams.cwid;
+    $scope.canAdd = true;
+    $scope.pages = [];
+    $scope.pageChageCount = 0;
+    var check = setInterval(function () {
+        if ($scope.pageChageCount == 0) {
+            $scope.canAdd = false;
+        }
+        $scope.pageChageCount = 0;
+    }, 5 * 60 * 1000);
+    var add = setInterval(function () {
+        /*if ($scope.canAdd) {
+            $http.post('/setLearningStatus', {
+                userInfo: $rootScope.userInfo,
+                pages: $scope.pages
+            });
+        }*/
+    },1000);
+
+    $scope.$on("$destroy", function() {
+        clearInterval(check);
+        clearInterval(add);
+    });
 }
 
 function addCourseDataCtrl($scope, $stateParams, FileUploader) {

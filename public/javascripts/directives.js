@@ -121,7 +121,12 @@ directive('documentViewer', function () {
                 }}
             );
             $('#documentViewer').bind('onCurrentPageChanged',function(e,pagenum){
-                console.log(pagenum);
+                if ($scope.pages.indexOf(pagenum) < 0) {
+                    $scope.pages.push(pagenum);
+                }
+                $scope.canAdd = true;
+                console.log($scope.pages);
+                $scope.pageChageCount++;
             });
         }
     }
