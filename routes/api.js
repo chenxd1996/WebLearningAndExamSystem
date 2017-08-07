@@ -390,6 +390,7 @@ exports.getCourseWares = function (req, res) {
 };
 
 exports.updateLearningStatus = function (req, res) {
+    console.log(req.body);
     var userInfo = req.body.userInfo;
     var pages = res.body.pages;
     var cwid = req.body.cwid;
