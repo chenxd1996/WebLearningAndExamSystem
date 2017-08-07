@@ -7,7 +7,9 @@ div(class="content-container courseWare-list")
             span(class="col-xs-2 text-center") 已学时长
         li(ng-repeat="courseWare in courseWares")
             div(class="learning-status col-xs-1")
-                span 学习中
+                span(ng-if="!courseWare.progress") 未学习
+                span(ng-if="courseWare.progress && courseWare.progress > 0 and courseWare.progress < 0") 学习中
+                span(ng-if="courseWare.progress == 1") 已完成
             div(class="message-info col-xs-8")
                 div
                     a(ui-sref="logined.courseDetail.courseWareDetail({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})")
