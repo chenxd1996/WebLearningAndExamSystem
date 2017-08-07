@@ -1,0 +1,81 @@
+
+> examsystem@0.0.0 start /home/ubuntu/ExamSystem
+> node ./bin/www
+
+Port 3000 is already in use
+
+npm ERR! Linux 4.4.0-53-generic
+npm ERR! argv "/usr/bin/nodejs" "/usr/bin/npm" "start"
+npm ERR! node v4.2.6
+npm ERR! npm  v3.5.2
+npm ERR! code ELIFECYCLE
+npm ERR! examsystem@0.0.0 start: `node ./bin/www`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the examsystem@0.0.0 start script 'node ./bin/www'.
+npm ERR! Make sure you have the latest version of node.js and npm installed.
+npm ERR! If you do, this is most likely a problem with the examsystem package,
+npm ERR! not with npm itself.
+npm ERR! Tell the author that this fails on your system:
+npm ERR!     node ./bin/www
+npm ERR! You can get information on how to open an issue for this project with:
+npm ERR!     npm bugs examsystem
+npm ERR! Or if that isn't available, you can get their info via:
+npm ERR!     npm owner ls examsystem
+npm ERR! There is likely additional logging output above.
+
+npm ERR! Please include the following file with any support request:
+npm ERR!     /home/ubuntu/ExamSystem/npm-debug.log
+
+> examsystem@0.0.0 start /home/ubuntu/ExamSystem
+> node ./bin/www
+
+Connected to the database!
+[0mGET /homePage/exam-system/my-exams/progressing [32m200 [0m678.067 ms - 2605[0m
+[0mGET /javascripts/jquery.hotkeys.js [32m200 [0m4.996 ms - 5970[0m
+[0mGET /stylesheets/toaster.min.css [32m200 [0m3.540 ms - 10975[0m
+[0mGET /stylesheets/style.css [32m200 [0m3.022 ms - 5352[0m
+[0mGET /javascripts/toaster.min.js [32m200 [0m1.017 ms - 9080[0m
+[0mGET /javascripts/bootstrap-wysiwyg.min.js [32m200 [0m2.124 ms - 6256[0m
+[0mGET /javascripts/flexpaper/js/flexpaper.js [32m200 [0m1.971 ms - 20287[0m
+[0mGET /javascripts/flexpaper/js/flexpaper_handlers.js [32m200 [0m1.750 ms - 4116[0m
+[0mGET /javascripts/documentViewer.js [32m200 [0m0.983 ms - 802[0m
+[0mGET /javascripts/controllers.js [32m200 [0m1.501 ms - 28285[0m
+[0mGET /javascripts/app.js [32m200 [0m1.857 ms - 5458[0m
+[0mGET /javascripts/directives.js [32m200 [0m3.898 ms - 4208[0m
+[0mGET /javascripts/filters.js [32m200 [0m0.839 ms - 339[0m
+[0mGET /javascripts/services.js [32m200 [0m1.097 ms - 497[0m
+[0mGET /partials/homePage [36m304 [0m200.518 ms - -[0m
+[0mGET /favicon.ico [32m200 [0m88.452 ms - 2605[0m
+[0mGET /partials/examSystem [36m304 [0m18.276 ms - -[0m
+[0mGET /partials/myExams [36m304 [0m42.397 ms - -[0m
+[0mGET /getUserInfo [36m304 [0m2.486 ms - -[0m
+[0mGET /images/logo.png [36m304 [0m1.250 ms - -[0m
+[0mPOST /messagesNum [32m200 [0m26.999 ms - 19[0m
+[0mPOST /getMyExams [32m200 [0m8.355 ms - 2[0m
+[0mGET /partials/learningSystem [36m304 [0m23.500 ms - -[0m
+[0mGET /partials/myCourses [36m304 [0m19.208 ms - -[0m
+[0mPOST /getMyCourses [32m200 [0m9.255 ms - 845[0m
+[0mGET /favicon.ico [36m304 [0m68.329 ms - -[0m
+[0mGET /homePage/learning-system/my-courses [36m304 [0m38.273 ms - -[0m
+[0mGET /stylesheets/style.css [36m304 [0m0.500 ms - -[0m
+[0mGET /stylesheets/toaster.min.css [36m304 [0m0.339 ms - -[0m
+[0mGET /javascripts/jquery.hotkeys.js [36m304 [0m3.752 ms - -[0m
+[0mGET /javascripts/bootstrap-wysiwyg.min.js [36m304 [0m1.901 ms - -[0m
+[0mGET /javascripts/toaster.min.js [36m304 [0m1.316 ms - -[0m
+[0mGET /javascripts/flexpaper/js/flexpaper.js [36m304 [0m1.297 ms - -[0m
+[0mGET /javascripts/flexpaper/js/flexpaper_handlers.js [36m304 [0m0.607 ms - -[0m
+[0mGET /javascripts/documentViewer.js [36m304 [0m1.084 ms - -[0m
+[0mGET /javascripts/app.js [36m304 [0m0.518 ms - -[0m
+[0mGET /javascripts/controllers.js [36m304 [0m0.550 ms - -[0m
+[0mGET /javascripts/directives.js [36m304 [0m0.495 ms - -[0m
+[0mGET /javascripts/filters.js [36m304 [0m0.232 ms - -[0m
+[0mGET /javascripts/services.js [36m304 [0m0.562 ms - -[0m
+[0mGET /partials/homePage [36m304 [0m82.062 ms - -[0m
+[0mGET /favicon.ico [32m200 [0m55.284 ms - 2605[0m
+[0mGET /partials/learningSystem [36m304 [0m24.771 ms - -[0m
+[0mGET /partials/myCourses [36m304 [0m20.131 ms - -[0m
+[0mGET /images/logo.png [36m304 [0m1.376 ms - -[0m
+[0mGET /getUserInfo [36m304 [0m2.195 ms - -[0m
+[0mPOST /messagesNum [32m200 [0m3.489 ms - 19[0m
+[0mPOST /getMyCourses [32m200 [0m5.695 ms - 845[0m

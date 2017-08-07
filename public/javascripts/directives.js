@@ -104,10 +104,10 @@ directive('documentViewer', function () {
                     FitPageOnLoad : true,
                     FitWidthOnLoad : false,
                     FullScreenAsMaxWindow : false,
-                    ProgressiveLoading : true,
+                    ProgressiveLoading : false,
                     MinZoomSize : 0.2,
                     MaxZoomSize : 5,
-                    SearchMatchAll : false,
+                    SearchMatchAll : true,
                     InitViewMode : 'Portrait',
                     RenderingOrder : 'flash',
                     StartAtPage : '',
@@ -115,9 +115,9 @@ directive('documentViewer', function () {
                     ZoomToolsVisible : true,
                     NavToolsVisible : true,
                     CursorToolsVisible : true,
-                    SearchToolsVisible : false,
+                    SearchToolsVisible : true,
                     WMode : 'window',
-                    localeChain: 'en_US'
+                    localeChain: 'zh_CN'
                 }}
             );
             $('#documentViewer').bind('onCurrentPageChanged',function(e,pagenum){
