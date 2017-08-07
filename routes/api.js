@@ -410,7 +410,7 @@ exports.updateLearningStatus = function (req, res) {
                     progress = (parseFloat(pages.length) / totalPages).toFixed(2);
                 }
                 con.query("insert into StudentCourseWare " +
-                    "value(?, ?, ?, ?, ?);", [userInfo.id, cwid, pagesStr, 1, progress], function (err) {
+                    "value(?, ?, ?, ?, ?);", [userInfo.id, cwid, 1, pagesStr, progress], function (err) {
                     if (err) {
                         console.log("Insert into StudentCourseWare in updateLearningStatus: " + err);
                     } else {
