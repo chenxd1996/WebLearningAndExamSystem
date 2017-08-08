@@ -262,7 +262,7 @@ function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
         if ($rootScope.userInfo && $rootScope.userInfo.level == 1) {
             var check = setInterval(function () {
                 $scope.canAdd = false;
-            }, 3 * 60 * 1000);
+            }, 3 * 61 * 1000);
             var add = setInterval(function () {
                 if ($scope.canAdd && $scope.totalPages) {
                     $http.post('/updateLearningStatus', {
