@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3216e0a6-c310-4b3b-97cb-4af60415d0dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api.js" afterPath="$PROJECT_DIR$/routes/api.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/controllers.js" afterPath="$PROJECT_DIR$/public/javascripts/controllers.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/learningSituation.jade" afterPath="$PROJECT_DIR$/views/partials/learningSituation.jade" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -29,7 +30,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="api.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="api.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/api.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="324">
@@ -59,19 +60,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="learningSituation.jade" pinned="false" current-in-tab="false">
+      <file leaf-file-name="learningSituation.jade" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/partials/learningSituation.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-              <folding>
-                <marker date="1502158792000" expanded="true" signature="3:502" ph="..." />
-                <marker date="1502158792000" expanded="true" signature="38:502" ph="..." />
-                <marker date="1502158792000" expanded="true" signature="91:502" ph="..." />
-                <marker date="1502158792000" expanded="true" signature="217:502" ph="..." />
-                <marker date="1502158792000" expanded="true" signature="269:502" ph="..." />
-                <marker date="1502158792000" expanded="true" signature="501:502" ph="..." />
-              </folding>
+            <state relative-caret-position="270">
+              <caret line="18" column="56" lean-forward="false" selection-start-line="18" selection-start-column="56" selection-end-line="18" selection-end-column="56" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -110,7 +104,7 @@
         <entry file="file://$PROJECT_DIR$/public/javascripts/controllers.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="338">
-              <caret line="294" column="25" lean-forward="false" selection-start-line="294" selection-start-column="25" selection-end-line="294" selection-end-column="25" />
+              <caret line="294" column="29" lean-forward="false" selection-start-line="294" selection-start-column="29" selection-end-line="294" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -216,10 +210,10 @@
         <option value="$PROJECT_DIR$/views/partials/allMessages.jade" />
         <option value="$PROJECT_DIR$/public/javascripts/app.js" />
         <option value="$PROJECT_DIR$/views/partials/courseData.jade" />
-        <option value="$PROJECT_DIR$/views/partials/learningSituation.jade" />
         <option value="$PROJECT_DIR$/routes/index.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/controllers.js" />
         <option value="$PROJECT_DIR$/routes/api.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/controllers.js" />
+        <option value="$PROJECT_DIR$/views/partials/learningSituation.jade" />
       </list>
     </option>
   </component>
@@ -492,12 +486,12 @@
       <workItem from="1501937843467" duration="15000" />
       <workItem from="1501937878213" duration="11000" />
       <workItem from="1501938123418" duration="6000" />
-      <workItem from="1501938142907" duration="45050000" />
+      <workItem from="1501938142907" duration="45246000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="677058000" />
+    <option name="totallyTimeSpent" value="677254000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -905,21 +899,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/partials/learningSituation.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding>
-            <marker date="1502158792000" expanded="true" signature="3:502" ph="..." />
-            <marker date="1502158792000" expanded="true" signature="38:502" ph="..." />
-            <marker date="1502158792000" expanded="true" signature="91:502" ph="..." />
-            <marker date="1502158792000" expanded="true" signature="217:502" ph="..." />
-            <marker date="1502158792000" expanded="true" signature="269:502" ph="..." />
-            <marker date="1502158792000" expanded="true" signature="501:502" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/partials/courseData.jade">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
@@ -936,14 +915,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/controllers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="294" column="25" lean-forward="false" selection-start-line="294" selection-start-column="25" selection-end-line="294" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="321">
@@ -956,6 +927,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
           <caret line="462" column="47" lean-forward="true" selection-start-line="462" selection-start-column="47" selection-end-line="462" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="294" column="29" lean-forward="false" selection-start-line="294" selection-start-column="29" selection-end-line="294" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/partials/learningSituation.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="56" lean-forward="false" selection-start-line="18" selection-start-column="56" selection-end-line="18" selection-end-column="56" />
           <folding />
         </state>
       </provider>

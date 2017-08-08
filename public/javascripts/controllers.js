@@ -292,7 +292,7 @@ function learningSituationCtrl($scope, $stateParams, $http) {
         cwid: cwid,
         cid: cid
     }).success(function (res) {
-        console.log(res);
+        $scope.results = res;
     });
 }
 

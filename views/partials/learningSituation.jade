@@ -12,5 +12,10 @@ div(class="container-content")
                             th 进度
                             th 已学时长
                     tbody
+                        tr(ng-repeat="result in results")
+                            td {{result.sid}}
+                            td {{result.sname}}
+                            td {{result.progress * 100}}%
+                            td {{result.learningTime}}分钟
 
 
