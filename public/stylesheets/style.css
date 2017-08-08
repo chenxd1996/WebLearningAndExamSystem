@@ -347,7 +347,7 @@ a {
   cursor: pointer;
 }
 
-.message-info {
+.message-info, .courseWare-name {
   display: flex;
   height: 80px;
   flex-direction: column;
@@ -359,7 +359,7 @@ a {
   color: #31708f;
 }
 
-.message-type {
+.message-type, .learning-progress {
   display: flex;
   height: 80px;
   flex-direction: column;
@@ -368,7 +368,7 @@ a {
   color: #aaa;
 }
 
-.message-postTime {
+.message-postTime, .learning-time {
   display: flex;
   height: 80px;
   flex-direction: column;

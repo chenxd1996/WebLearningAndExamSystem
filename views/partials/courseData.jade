@@ -1,5 +1,5 @@
 div(class="content-container courseWare-list")
-    ul(ng-if="courseWares.length > 0")
+    ul(ng-if="courseWares.length > 0 && userInfo.level == 1")
         li
             span(class="col-xs-1 text-center") 状态
             span(class="col-xs-8") 课件名称
@@ -10,14 +10,30 @@ div(class="content-container courseWare-list")
                 span(ng-if="!courseWare.progress") 未学习
                 span(ng-if="courseWare.progress && courseWare.progress > 0 && courseWare.progress < 1") 学习中
                 span(ng-if="courseWare.progress == 1") 已完成
-            div(class="message-info col-xs-8")
+            div(class="courseWare-name col-xs-8")
                 div
                     a(ui-sref="logined.courseDetail.courseWareDetail({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})")
                         span {{courseWare.cname}}
-            div(class="message-type col-xs-1")
+            div(class="learning-progress col-xs-1")
                 span(ng-if="courseWare.progress") {{courseWare.progress * 100}}%
                 span(ng-if="!courseWare.progress") 0%
-            div(class="message-postTime col-xs-2")
+            div(class="learning-time col-xs-2")
+                span(ng-if="courseWare.learningTime") {{courseWare.learningTime}}分钟
+                span(ng-if="!courseWare.learningTime") 0分钟
+    ul(ng-if="courseWares.length > 0 && userInfo.level == 2")
+        li(ng-repeat="courseWare in courseWares")
+            div(class="learning-status col-xs-1")
+                span(ng-if="!courseWare.progress") 未学习
+                span(ng-if="courseWare.progress && courseWare.progress > 0 && courseWare.progress < 1") 学习中
+                span(ng-if="courseWare.progress == 1") 已完成
+            div(class="courseWare-name col-xs-8")
+                div
+                    a(ui-sref="logined.courseDetail.courseWareDetail({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})")
+                        span {{courseWare.cname}}
+            div(class="learning-progress col-xs-1")
+                span(ng-if="courseWare.progress") {{courseWare.progress * 100}}%
+                span(ng-if="!courseWare.progress") 0%
+            div(class="learning-time col-xs-2")
                 span(ng-if="courseWare.learningTime") {{courseWare.learningTime}}分钟
                 span(ng-if="!courseWare.learningTime") 0分钟
     div(ng-if="courseWares.length == 0" class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20")
