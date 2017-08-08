@@ -261,10 +261,7 @@ function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && $rootScope.userInfo.level == 1) {
             var check = setInterval(function () {
-                if ($scope.pageChageCount == 0) {
-                    $scope.canAdd = false;
-                }
-                $scope.pageChageCount = 0;
+                $scope.canAdd = false;
             }, 3 * 60 * 1000);
             var add = setInterval(function () {
                 if ($scope.canAdd && $scope.totalPages) {
