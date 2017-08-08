@@ -17,6 +17,6 @@ div(class="container-content")
                             td {{result.sname}}
                             td {{result.progress * 100}}%
                             td
-                                span {{result.learningTime}}分钟
-                                span
+                                span(ng-if="result.learningTime") {{result.learningTime}}分钟
+                                span(ng-if="!result.learningTime") 0分钟
 
