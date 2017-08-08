@@ -459,7 +459,7 @@ exports.updateLearningStatus = function (req, res) {
 exports.getStuLearningSituation = function (req, res) {
     var cwid = req.body.cwid;
     var cid = req.body.cid;
-    con.query("select s.sid, s.sname, scw.learningTime, scw.learningPages from Student s left join StudentCourseWare scw " +
+    con.query("select s.sid, s.sname, scw.learningTime, scw.progress from Student s left join StudentCourseWare scw " +
         "on s.sid = scw.sid and scw.cid = ?," +
         "StudentCourse sc " +
         "where sc.cid = ? and sc.sid = s.sid;", [cwid, cid], function (err, result) {

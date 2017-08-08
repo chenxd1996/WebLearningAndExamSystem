@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3216e0a6-c310-4b3b-97cb-4af60415d0dc" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/views/partials/learningSituation.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/app.js" afterPath="$PROJECT_DIR$/public/javascripts/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/controllers.js" afterPath="$PROJECT_DIR$/public/javascripts/controllers.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api.js" afterPath="$PROJECT_DIR$/routes/api.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/courseData.jade" afterPath="$PROJECT_DIR$/views/partials/courseData.jade" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -38,8 +32,8 @@
       <file leaf-file-name="api.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/api.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="459" column="18" lean-forward="false" selection-start-line="459" selection-start-column="18" selection-end-line="459" selection-end-column="18" />
+            <state relative-caret-position="324">
+              <caret line="462" column="47" lean-forward="true" selection-start-line="462" selection-start-column="47" selection-end-line="462" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -498,12 +492,12 @@
       <workItem from="1501937843467" duration="15000" />
       <workItem from="1501937878213" duration="11000" />
       <workItem from="1501938123418" duration="6000" />
-      <workItem from="1501938142907" duration="44951000" />
+      <workItem from="1501938142907" duration="45050000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="676959000" />
+    <option name="totallyTimeSpent" value="677058000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -960,8 +954,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="459" column="18" lean-forward="false" selection-start-line="459" selection-start-column="18" selection-end-line="459" selection-end-column="18" />
+        <state relative-caret-position="324">
+          <caret line="462" column="47" lean-forward="true" selection-start-line="462" selection-start-column="47" selection-end-line="462" selection-end-column="47" />
           <folding />
         </state>
       </provider>
