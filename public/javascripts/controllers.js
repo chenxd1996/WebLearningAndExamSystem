@@ -265,7 +265,7 @@ function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
                     $scope.canAdd = false;
                 }
                 $scope.pageChageCount = 0;
-            }, 5 * 60 * 1000);
+            }, 3 * 60 * 1000);
             var add = setInterval(function () {
                 if ($scope.canAdd && $scope.totalPages) {
                     $http.post('/updateLearningStatus', {
