@@ -21,21 +21,16 @@ div(class="content-container courseWare-list")
                 span(ng-if="courseWare.learningTime") {{courseWare.learningTime}}分钟
                 span(ng-if="!courseWare.learningTime") 0分钟
     ul(ng-if="courseWares.length > 0 && userInfo.level == 2")
+        li
+            span(class="col-xs-10") 课件名称
+            span(class="col-xs-2 text-center") 学习情况
         li(ng-repeat="courseWare in courseWares")
-            div(class="learning-status col-xs-1")
-                span(ng-if="!courseWare.progress") 未学习
-                span(ng-if="courseWare.progress && courseWare.progress > 0 && courseWare.progress < 1") 学习中
-                span(ng-if="courseWare.progress == 1") 已完成
-            div(class="courseWare-name col-xs-8")
+            div(class="courseWare-name col-xs-10")
                 div
                     a(ui-sref="logined.courseDetail.courseWareDetail({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})")
                         span {{courseWare.cname}}
-            div(class="learning-progress col-xs-1")
-                span(ng-if="courseWare.progress") {{courseWare.progress * 100}}%
-                span(ng-if="!courseWare.progress") 0%
-            div(class="learning-time col-xs-2")
-                span(ng-if="courseWare.learningTime") {{courseWare.learningTime}}分钟
-                span(ng-if="!courseWare.learningTime") 0分钟
+            div(class="learning-progress col-xs-2")
+                a(class="fa fa-lg fa-fw fa-bar-chart-o" ui-sref="logined.courseDetail.learningSituation({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})")
     div(ng-if="courseWares.length == 0" class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20")
         div(class="fs-16") 暂无数据
 //div(class="panel panel-info")

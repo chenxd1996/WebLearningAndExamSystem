@@ -285,6 +285,17 @@ function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
     });
 }
 
+function learningSituationCtrl($scope, $stateParams, $http) {
+    var cwid = $stateParams.cwid;
+    var cid = $stateParams.courseID;
+    $http.post('/getStuLearningSituation', {
+        cwid: cwid,
+        cid: cid
+    }).success(function (res) {
+        console.log(res);
+    });
+}
+
 function addCourseDataCtrl($scope, $stateParams, FileUploader) {
     $scope.courseName = $stateParams.courseName;
     var courseID = $stateParams.courseID;

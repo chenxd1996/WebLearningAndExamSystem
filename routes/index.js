@@ -75,6 +75,8 @@ router.post('/messagesNum', api.messagesNum);
 
 router.post('/updateLearningStatus', api.updateLearningStatus);
 
+router.post('/getStuLearningSituation', api.getStuLearningSituation);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');
