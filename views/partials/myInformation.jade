@@ -1,0 +1,61 @@
+div(class="content-container")
+    div(class="col-xs-8 col-xs-offset-2 bg-white pt-10 pl-10 pr-10 pb-20" ng-if="userInfo.level == 1")
+        div
+            span(class="fs-16") 学号
+            input(class="form-control mt-5" disabled ng-model="user.id")
+        div(class="fs-16 mt-10")
+            span 姓名
+            input(class="form-control mt-5" disabled ng-model="user.name")
+        div(class="fs-16 mt-10")
+            span 学院
+            input(class="form-control mt-5" disabled ng-model="user.college")
+        div(class="fs-16 mt-10")
+            span 专业
+            input(class="form-control mt-5" disabled ng-model="user.major")
+        div(class="fs-16 mt-10")
+            span 班级
+            input(class="form-control mt-5" disabled ng-model="user.class")
+        div(class="fs-16 mt-10")
+            span 原密码
+            input(class="form-control mt-5" ng-model="user.originalPassword")
+        div(class="fs-16 mt-10")
+            span 新密码
+            input(class="form-control mt-5" ng-model="user.newPassword")
+        div(class="fs-16 mt-10")
+            span 确认密码
+            input(class="form-control mt-5" ng-model="user.confirmPassword")
+        button(class="pull-right mt-10 btn btn-primary") 保存
+    div(class="col-xs-8 col-xs-offset-2 bg-white pt-10 pl-10 pr-10 pb-20" ng-if="userInfo.level == 2")
+        div
+            span(class="fs-16") 工号
+            input(class="form-control mt-5" disabled ng-model="user.id")
+        div(class="fs-16 mt-10")
+            span 姓名
+            input(class="form-control mt-5" disabled ng-model="user.name")
+        div(class="fs-16 mt-10")
+            span 原密码
+            input(class="form-control mt-5" ng-model="user.originalPassword")
+        div(class="fs-16 mt-10")
+            span 新密码
+            input(class="form-control mt-5" ng-model="user.newPassword")
+        div(class="fs-16 mt-10")
+            span 确认密码
+            input(class="form-control mt-5" ng-model="user.confirmPassword")
+        button(class="pull-right mt-10 btn btn-primary") 保存
+    div(class="col-xs-8 col-xs-offset-2 bg-white pt-10 pl-10 pr-10 pb-20" ng-if="userInfo.level == 3")
+        div
+            span(class="fs-16") 账号
+            input(class="form-control mt-5" disabled ng-model="user.id")
+        div(class="fs-16 mt-10")
+            span 昵称
+            input(class="form-control mt-5" ng-model="user.name")
+        div(class="fs-16 mt-10")
+            span 原密码
+            input(class="form-control mt-5" ng-model="user.originalPassword")
+        div(class="fs-16 mt-10")
+            span 新密码
+            input(class="form-control mt-5" ng-model="user.newPassword")
+        div(class="fs-16 mt-10")
+            span 确认密码
+            input(class="form-control mt-5" ng-model="user.confirmPassword")
+        button(class="pull-right mt-10 btn btn-primary") 保存

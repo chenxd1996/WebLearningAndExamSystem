@@ -10,7 +10,10 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
                         name: result.name,
                         level: result.level
                     };
-                    $state.go('logined.learningSystem.myCourses');
+                    if ($rootScope.userInfo.level == 3)
+                        $state.go('logined.usersManagement.addUser');
+                    else
+                        $state.go('logined.learningSystem.myCourses');
                 }
             });
     }
@@ -26,8 +29,10 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
                     name: data.name,
                     level: data.level
                 };
-
-                $state.go('logined.learningSystem.myCourses');
+                if ($rootScope.userInfo.level == 3)
+                    $state.go('logined.usersManagement.addUser');
+                else
+                    $state.go('logined.learningSystem.myCourses');
             } else {
                 toaster.pop('error', "登录失败！", '账号或密码错误', 2000);
             }
@@ -49,17 +54,17 @@ function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout) {
                         name: result.name,
                         level: result.level
                     };
-
-                    $http.post("/messagesNum", {
-                        userInfo: $rootScope.userInfo
-                    }).success(function (res) {
-                        $rootScope.messagesNum = res[0].messagesNum;
-                    });
                 }
+            });
+        } else {
+            $http.post("/messagesNum", {
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                $rootScope.messagesNum = res[0].messagesNum;
             });
         }
     });
-    var options = ['learning-system', 'exam-system', 'exercise-system', 'my-infomation', 'users-management', 'message-center'];
+    var options = ['learning-system', 'exam-system', 'exercise-system', 'my-information', 'users-management', 'message-center'];
     var path = $location.path();
     for (var i = 0; i < options.length; i++) {
         if (path.indexOf(options[i]) >= 0) {
@@ -262,7 +267,6 @@ function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
         if ($rootScope.userInfo && $rootScope.userInfo.level == 1) {
             var check = setInterval(function () {
                 $scope.canAdd = false;
-                console.log("check");
             }, 3 * 60 * 1001);
             var add = setInterval(function () {
                 if ($scope.canAdd && $scope.totalPages) {
@@ -862,4 +866,14 @@ function messageDetailCtrl($scope, $http, $stateParams) {
         $scope.message = res[0];
     });
 
+}
+
+function myInformationCtrl($scope, $rootScope, $http) {
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo && $rootScope.userInfo.level == 1) {
+            $http.get('/getUserInfo').success(function (res) {
+                $scope.user = res;
+            });
+        }
+    });
 }

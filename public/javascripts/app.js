@@ -133,6 +133,10 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/message-center/messageDetail/:mid",
         controller: messageDetailCtrl,
         templateUrl: "partials/messageDetail"
+    }).state("logined.myInformation", {
+        url: "/my-information",
+        controller: myInformationCtrl,
+        templateUrl: "partials/myInformation"
     });
     $locationProvider.html5Mode(true);
 }]);

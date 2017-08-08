@@ -283,12 +283,33 @@ exports.getMyCourses = function (req, res) {
 
 exports.getUserInfo = function (req, res) {
     if (req.session.userInfo) {
-        res.json({
-            status: true,
-            id: req.session.userInfo.id,
-            level: req.session.userInfo.level,
-            name: req.session.userInfo.name
-        });
+        var query = "";
+        if (req.session.userInfo.level == 1) {
+            query = "select major, college, class from Student " +
+                "where sid = ?;";
+            con.query(query, req.session.userInfo.id, function (err, result) {
+                if (err) {
+                    console.log("Get student information in getUserInfo: " + err);
+                } else {
+                    res.json({
+                        status: true,
+                        id: req.session.userInfo.id,
+                        level: req.session.userInfo.level,
+                        name: req.session.userInfo.name,
+                        major: result[0]['major'],
+                        college: result[0]['college'],
+                        class: result[0]['class']
+                    });
+                }
+            });
+        } else {
+            res.json({
+                status: true,
+                id: req.session.userInfo.id,
+                level: req.session.userInfo.level,
+                name: req.session.userInfo.name
+            });
+        }
     } else {
         res.json({
             status: false
