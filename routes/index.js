@@ -33,7 +33,7 @@ router.post('/getMyCourses', api.getMyCourses);
 
 router.post('/getCourseInfo', api.getCourseInfo);
 
-router.post('/uploadCourseWares', fileUploader.upload.single('file'), api.uploadCourseWares);
+router.post('/uploadCourseWares', fileUploader.courseWareUpload.single('file'), api.uploadCourseWares);
 
 router.post('/getCourseWares', api.getCourseWares);
 
@@ -76,6 +76,12 @@ router.post('/messagesNum', api.messagesNum);
 router.post('/updateLearningStatus', api.updateLearningStatus);
 
 router.post('/getStuLearningSituation', api.getStuLearningSituation);
+
+router.post('/checkPassword', api.checkPassword);
+
+router.post('/editPassword', api.editPassword);
+
+router.post('/importUsers', fileUploader.excelUpload.single('file'), api.importUsers);
 
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {

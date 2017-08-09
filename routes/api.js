@@ -3,6 +3,8 @@ var con = DBConnect.getCon();
 var fs = require("fs");
 var path = require("path");
 var exec = require("child_process").exec;
+var excelParser = require('excel-parser');
+var crypto = require('crypto');
 
 exports.loginCheck = function (req, res) {
     var id = req.body.id;
@@ -1230,4 +1232,135 @@ exports.messagesNum = function (req, res) {
             }
         });
     }
+};
+
+exports.checkPassword = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var password = req.body.password;
+    var query = "";
+    if (userInfo.level == 1) {
+        query = "select * from Student " +
+            "where sid = ? and password = ?;";
+    } else if (userInfo.level == 2) {
+        query = "select * from Teacher " +
+            "where tid = ? and password = ?;";
+    } else if (userInfo.level == 3) {
+        query = "select * from Admin " +
+            "where aid = ? and password = ?;";
+    } else {
+        res.json({
+            status: false
+        });
+        return;
+    }
+    con.query(query, [userInfo.id, password], function (err, result) {
+        if (err) {
+            console.log("Check password: " + err);
+        } else {
+            if (result.length > 0) {
+                res.json({
+                   status: true
+                });
+            } else {
+                res.json({
+                    status: false
+                });
+            }
+        }
+    });
+};
+
+exports.editPassword = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var password = req.body.password;
+    var query = "";
+    if (userInfo.level == 1) {
+        query = "update Student " +
+            "set password = ? " +
+            "where sid = ?;";
+    } else if (userInfo.level == 2) {
+        query = "update Teacher " +
+            "set password = ? " +
+            "where tid = ?;";
+    } else if (userInfo.level == 3) {
+        query = "update Admin " +
+            "set password = ?, name " +
+            "where aid = ?;";
+    }
+    con.query(query, [password, userInfo.id], function (err) {
+        if (err) {
+            console.log("Check password: " + err);
+        } else {
+            res.json({});
+        }
+    });
+};
+
+exports.importUsers = function (req, res) {
+    var userInfo = req.body;
+    excelParser.parse({
+        inFile: 'public/Excels/' + req.file.filename,
+        worksheet: 1,
+        skipEmpty: false
+    },function(err, records){
+        if(err) console.error(err);
+        console.log(records);
+        if (records.length < 1) {
+            res.json({
+                status: false
+            });
+            return;
+        }
+        var statusIndex = records[0].indexOf("身份");
+        var idIndex = records[0].indexOf("ID");
+        var nameIndex = records[0].indexOf("姓名");
+        if (statusIndex < 0 || idIndex < 0 || nameIndex < 0) {
+            res.json({
+                status: false
+            });
+            return;
+        }
+        for (var i = 1; i < records.length; i++) {
+            if (records[i][statusIndex] && records[i][statusIndex] == "学生" && records[i][idIndex] && userInfo.level == 2) {
+                var collegeIndex = records[0].indexOf("学院");
+                var majorIndex = records[0].indexOf("专业");
+                var gradeIndex = records[0].indexOf("年级");
+                var classIndex = records[0].indexOf("班级");
+                if (collegeIndex < 0 || majorIndex < 0 || gradeIndex < 0 || classIndex < 0) {
+                    res.json({
+                        status: false
+                    });
+                    return;
+                }
+                var id = records[i][idIndex];
+                var name = records[i][nameIndex]? records[i][nameIndex] : "";
+                var college = records[i][collegeIndex]? records[i][collegeIndex] : "";
+                var major = records[i][majorIndex]? records[i][majorIndex] : "";
+                var grade = records[i][gradeIndex]? records[i][gradeIndex] : "";
+                var Class = records[i][classIndex]? records[i][classIndex] : "";
+                var password = crypto.createHash('md5').update(id).digest('hex').toLowerCase();
+                con.query("replace into Student " +
+                    "value(?, ?, ?, ?, ?, ?, ?);", [id, name, college, major, grade, Class, password], function (err, result) {
+                    if (err) {
+                        console.log("Add students in importUsers: " + err);
+                    }
+                } );
+            } else if (records[i][statusIndex] && records[i][statusIndex] == "教师" && records[i][idIndex] && userInfo.level == 3) {
+                var id = records[i][idIndex];
+                var name = records[i][nameIndex]? records[i][nameIndex] : "";
+                var password = crypto.createHash('md5').update(id).digest('hex').toLowerCase();
+                con.query("replace into Teacher " +
+                    "value(?, ?, ?);", [id, name, password], function (err, result) {
+                    if (err) {
+                        console.log("Add teachers in importUsers: " + err);
+                    }
+                });
+            } else {
+                res.json({
+                    status: false
+                });
+                return;
+            }
+        }
+    });
 };

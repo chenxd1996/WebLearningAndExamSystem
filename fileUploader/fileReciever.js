@@ -4,7 +4,7 @@ var DBConnect = require("../DataBase/DBConnect");
 var con = DBConnect.getCon();
 var fs = require("fs");
 
-var storage = multer.diskStorage({
+var courseWareStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         con.query("select cname from Course " +
             "where cid = ?", req.body.cid, function(err, result) {
@@ -26,5 +26,16 @@ var storage = multer.diskStorage({
     }
 });
 
-var upload = multer({ storage: storage });
-exports.upload = upload;
+var excelStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/Excels/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now().toString() + '.xlsx');
+    }
+});
+
+var courseWareUpload = multer({ storage: courseWareStorage });
+var excelUpload = multer({storage: excelStorage});
+exports.courseWareUpload = courseWareUpload;
+exports.excelUpload = excelUpload;

@@ -57,11 +57,13 @@ function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout) {
                 }
             });
         } else {
-            $http.post("/messagesNum", {
-                userInfo: $rootScope.userInfo
-            }).success(function (res) {
-                $rootScope.messagesNum = res[0].messagesNum;
-            });
+            if ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2) {
+                $http.post("/messagesNum", {
+                    userInfo: $rootScope.userInfo
+                }).success(function (res) {
+                    $rootScope.messagesNum = res[0].messagesNum;
+                });
+            }
         }
     });
     var options = ['learning-system', 'exam-system', 'exercise-system', 'my-information', 'users-management', 'message-center'];
@@ -123,7 +125,7 @@ function usersManagementCtrl($scope, $location) {
     }
 }
 
-function addUserCtrl($scope, $http, md5, toaster) {
+function addUserCtrl($scope, $http, md5, toaster, FileUploader, $rootScope) {
     $scope.user = {};
     var levels = {
         "学生": 1,
@@ -142,7 +144,18 @@ function addUserCtrl($scope, $http, md5, toaster) {
                     toaster.pop('error', "添加失败！", '', 2000);
                 }
         });
-    }
+    };
+
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $scope.uploader = new FileUploader({
+                url: '/importUsers',
+                formData: [{
+                    userInfo: $rootScope.userInfo
+                }]
+            });
+        }
+    });
 }
 
 function editUserCtrl($scope) {
@@ -868,12 +881,55 @@ function messageDetailCtrl($scope, $http, $stateParams) {
 
 }
 
-function myInformationCtrl($scope, $rootScope, $http) {
+function myInformationCtrl($scope, $rootScope, $http, toaster, md5, $state) {
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && $rootScope.userInfo.level == 1) {
             $http.get('/getUserInfo').success(function (res) {
                 $scope.user = res;
             });
+        } else {
+            $scope.user = $rootScope.userInfo;
         }
     });
+    $scope.submit = function () {
+        if (!$scope.user.originalPassword) {
+            if ($scope.user.newPassword || $scope.user.confirmPassword) {
+                toaster.pop("warning", "保存失败", "密码修改未完成", 2000);
+            }
+        } else {
+            $http.post("/checkPassword", {
+                userInfo: $rootScope.userInfo,
+                password: md5.createHash($scope.user.originalPassword)
+            }).success(function (res) {
+                if (!res.status) {
+                    toaster.pop("warning", "保存失败", "原密码错误", 2000);
+                }  else if (!$scope.user.newPassword || !$scope.user.confirmPassword) {
+                    toaster.pop("warning", "保存失败", "密码修改未完成", 2000);
+                } else if (!isValidPassword($scope.user.originalPassword)) {
+                    toaster.pop("warning", "保存失败", "原密码错误", 2000);
+                } else if (!isValidPassword($scope.user.newPassword)) {
+                    toaster.pop("warning", "保存失败", "新密码格式错误", 2000);
+                } else if ($scope.user.newPassword == $scope.user.originalPassword) {
+                    toaster.pop("warning", "保存失败", "新密码不能与原密码相同", 2000);
+                } else if ($scope.user.newPassword != $scope.user.confirmPassword) {
+                    toaster.pop("warning", "保存失败", "两次输入密码不一致", 2000);
+                } else {
+                    $http.post('/editPassword', {
+                        userInfo: $rootScope.userInfo,
+                        password: md5.createHash($scope.user.newPassword)
+                    }).success(function (res) {
+                        toaster.pop("success", "保存成功!", "", 2000);
+                    });
+                }
+            });
+        }
+    }
+}
+
+function isValidPassword(password) {
+    var pattern = /^((\w)|(\.)){8,20}$/;
+    if (!pattern.exec(password)) {
+        return false;
+    }
+    return true;
 }
