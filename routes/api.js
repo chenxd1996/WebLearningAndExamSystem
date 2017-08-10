@@ -1267,6 +1267,7 @@ exports.importUsers = function (req, res) {
         return;
     }
     var userInfo = req.session.userInfo;
+    var cid = req.body.cid;
     excelParser.parse({
         inFile: 'public/Excels/' + req.file.filename,
         worksheet: 1,
@@ -1289,7 +1290,7 @@ exports.importUsers = function (req, res) {
             return;
         }
         for (var i = 1; i < records.length; i++) {
-            if (records[i][statusIndex] && records[i][statusIndex] == "学生" && records[i][idIndex] && (userInfo.level == 2 || userInfo.level == 3)) {
+            if (records[i][statusIndex] && records[i][statusIndex] == "学生" && records[i][idIndex]) {
                 var collegeIndex = records[0].indexOf("学院");
                 var majorIndex = records[0].indexOf("专业");
                 var gradeIndex = records[0].indexOf("年级");
@@ -1307,31 +1308,25 @@ exports.importUsers = function (req, res) {
                 student.major = records[i][majorIndex]? records[i][majorIndex] : "";
                 student.grade = records[i][gradeIndex]? records[i][gradeIndex] : "";
                 student.class = records[i][classIndex]? records[i][classIndex] : "";
-                student.password = crypto.createHash('md5').update(id).digest('hex').toLowerCase();
-                /*con.query("replace into Student " +
-                    "value(?, ?, ?, ?, ?, ?, ?);", [id, name, college, major, grade, Class, password], function (err, result) {
-                    if (err) {
-                        console.log("Add students in importUsers: " + err);
-                    }
-                } );*/
-            } else if (records[i][statusIndex] && records[i][statusIndex] == "教师" && records[i][idIndex] && userInfo.level == 3) {
+                student.password = crypto.createHash('md5').update(student.id).digest('hex').toLowerCase();
+                student.level = 1;
+                addUser(student, userInfo, cid);
+            } else if (records[i][statusIndex] && records[i][statusIndex] == "教师" && records[i][idIndex]) {
                 var teacher = {};
-                teacher.id = records[i][idIndex];
+                student.id = records[i][idIndex];
                 teacher.name = records[i][nameIndex]? records[i][nameIndex] : "";
-                teacher.password = crypto.createHash('md5').update(id).digest('hex').toLowerCase();
-                con.query("replace into Teacher " +
-                    "value(?, ?, ?);", [id, name, password], function (err, result) {
-                    if (err) {
-                        console.log("Add teachers in importUsers: " + err);
-                    }
-                });
+                teacher.password = crypto.createHash('md5').update(student.id).digest('hex').toLowerCase();
+                teacher.level = 2;
+                addUser(teacher, userInfo, cid);
             } else {
                 res.json({
                     status: false
                 });
-                return;
             }
         }
+        res.json({
+            status: true
+        });
     });
 };
 
@@ -1449,9 +1444,11 @@ function addUser(user, userInfo, cid, res) {
                             }
                         });
                 } else {
-                    res.json({
-                        status: true
-                    });
+                    if (res) {
+                        res.json({
+                            status: true
+                        });
+                    }
                     if (userInfo.level == 2) {
                         con.query("insert into StudentCourse " +
                             "value(?, ?);", [user.id, cid], function (err) {
@@ -1482,13 +1479,17 @@ function addUser(user, userInfo, cid, res) {
                 function (err, result) {
                     if (err) {
                         console.log("Insert into Teacher in addUser: " + err);
-                        res.json({
-                            status: false
-                        });
+                        if (res) {
+                            res.json({
+                                status: false
+                            });
+                        }
                     } else {
-                        res.json({
-                            status: true
-                        });
+                        if (res) {
+                            res.json({
+                                status: true
+                            });
+                        }
                     }
                 });
         } else if (userInfo.level == 2) {
@@ -1499,19 +1500,23 @@ function addUser(user, userInfo, cid, res) {
                 } else {
                     var count = result[0]['count(*)'];
                     if (count == 0) {
-                        res.json({
-                            status: false,
-                            des: "该教师不存在，需要管理员添加"
-                        });
+                        if (res) {
+                            res.json({
+                                status: false,
+                                des: "该教师不存在，需要管理员添加"
+                            });
+                        }
                     } else {
                         con.query("insert into TeacherCourse " +
                             "value(?, ?);", [user.id, cid], function (err) {
                             if (err) {
                                 console.log("Insert into TeacherCourse in addUser: " + err);
                             } else {
-                                res.json({
-                                    status: true
-                                });
+                                if (res) {
+                                    res.json({
+                                        status: true
+                                    });
+                                }
                                 con.query("select cname from Course " +
                                     "where cid = ?", cid, function (err, result) {
                                     if (err) {
