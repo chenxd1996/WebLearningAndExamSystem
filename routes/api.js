@@ -1313,7 +1313,7 @@ exports.importUsers = function (req, res) {
                 addUser(student, userInfo, cid);
             } else if (records[i][statusIndex] && records[i][statusIndex] == "教师" && records[i][idIndex]) {
                 var teacher = {};
-                student.id = records[i][idIndex];
+                teacher.id = records[i][idIndex];
                 teacher.name = records[i][nameIndex]? records[i][nameIndex] : "";
                 teacher.password = crypto.createHash('md5').update(student.id).digest('hex').toLowerCase();
                 teacher.level = 2;
