@@ -1,0 +1,53 @@
+div(class="panel-body panelBody")
+    div(class="col-xs-10 col-xs-offset-1")
+        table(class="table")
+            thead
+                tr
+                    th(width="50%") 文件名
+                    th 大小
+                    th 进度
+                    th 状态
+                    th 操作
+            tbody
+                tr(ng-repeat="item in uploader.queue")
+                    td
+                        strong {{item.file.name}}
+                    td(nowrap)  {{ item.file.size/1024/1024|number:2 }}MB
+                    td
+                        div(class="progress" style="margin-bottom: 0;")
+                            div(class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }")
+                    td(class="text-center")
+                        span(ng-if="item.isSuccess")
+                            i(class="glyphicon glyphicon-ok")
+                        span(ng-if="item.isCancel")
+                            i(class="glyphicon glyphicon-ban-circle")
+                        span(ng-if="item.isError")
+                            i(class="glyphicon glyphicon-remove")
+                    td(nowrap)
+                        button(type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess")
+                            i(class="glyphicon glyphicon-upload")
+                            span 上传
+                        button(type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading" disabled="disabled")
+                            i(class="glyphicon glyphicon-ban-circle")
+                            span 取消
+                        button(type="button" class="btn btn-danger btn-xs" ng-click="item.remove()")
+                            i(class="glyphicon glyphicon-trash")
+                            span 移除
+        div
+            div
+                label 队列进度:
+            div(class="progress" style="")
+                div(class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }" style="width: 0%;")
+            button(type="button" class="btn btn-success mr-10" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length")
+                i(class="glyphicon glyphicon-upload")
+                span 全部上传
+            button(type="button" class="btn btn-warning mr-10" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading" disabled="disabled")
+                i(class="glyphicon glyphicon-ban-circle")
+                span 全部取消
+            button(type="button" class="btn btn-danger" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length")
+                i(class="glyphicon glyphicon-trash")
+                span 全部移除
+            button(class="btn btn-primary upload-btn pull-right")
+                i(class="fa fa-fw fa-file")
+                span 选择文件
+                input(type="file" class="file" nv-file-select uploader="uploader")

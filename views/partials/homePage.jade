@@ -41,7 +41,7 @@ ul(ng-if="userInfo.level == 2" class="nav nav-pills nav-stacked navbar-inverse n
             span(class="glyphicon glyphicon-info-sign" aria-hidden="true")
                 span(ng-if="showDetail")  个人资料
     li(role="presentation" ng-class="{'users-management': 'active'}[checked]" ng-click="changeStatus('users-management')")
-        a(ui-sref="logined.usersManagement.addUser")
+        a(ui-sref="logined.usersManagement.addUser.multiple")
             span(class="glyphicon glyphicon-user" aria-hidden="true")
                 span(ng-if="showDetail")  用户管理
     li(role="presentation" ng-class="{'message-center': 'active'}[checked]" ng-click="changeStatus('message-center')")

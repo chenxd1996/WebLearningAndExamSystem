@@ -26,6 +26,14 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/add-user",
         controller:addUserCtrl,
         templateUrl: "partials/addUser"
+    }).state("logined.usersManagement.addUser.single", {
+        url: "/single",
+        controller:singleAddCtrl,
+        templateUrl: "partials/singleAdd"
+    }).state("logined.usersManagement.addUser.multiple", {
+        url: "/multiple",
+        controller:multiAddCtrl,
+        templateUrl: "partials/multiAdd"
     }).state("logined.usersManagement.editUser", {
         url: "/edit-user",
         controller: editUserCtrl,
@@ -59,6 +67,18 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
         url: "/:courseID/:courseName/course-data",
         controller: courseDataCtrl,
         templateUrl: "partials/courseData"
+    }).state("logined.courseDetail.addMembers", {
+        url: "/:courseID/:courseName/add-members",
+        controller: addUserCtrl,
+        templateUrl: "partials/addUser"
+    }).state("logined.courseDetail.addMembers.single", {
+        url: "/single",
+        controller: singleAddCtrl,
+        templateUrl: "partials/singleAdd"
+    }).state("logined.courseDetail.addMembers.multiple", {
+        url: "/multiple",
+        controller: multiAddCtrl,
+        templateUrl: "partials/multiAdd"
     }).state("logined.courseDetail.addCourseData", {
         url: "/:courseID/:courseName/add-course-data",
         controller: addCourseDataCtrl,

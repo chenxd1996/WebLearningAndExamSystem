@@ -180,43 +180,40 @@ function DBInit() {
             }
     });*/
 
-    con.query("create table if not exists Message(" +
+    con.query("create table if not exists StudentMessage(" +
         "mid varchar(32)," +
         "cid varchar(32)," +
         "eid varchar(32)," +
+        "sid varchar(10)," +
         "link varchar(500)," +
         "title varchar(500)," +
         "content text," +
         "posterId varchar(10)," +
-        "primary key(mid)," +
+        "primary key(mid, sid)," +
         "foreign key(cid) references Course(cid) on delete cascade on update cascade," +
         "foreign key(eid) references ExerciseBank(eid) on delete cascade on update cascade," +
-        "foreign key(posterId) references Teacher(tid) on delete set null on update cascade);", function (err, result) {
+        "foreign key(posterId) references Teacher(tid) on delete cascade on update cascade," +
+        "foreign key(sid) references Student(sid) on delete cascade on update cascade);", function (err, result) {
             if (err) {
-                console.log("Message: " + err);
-            }
-    });
-
-    con.query("create table if not exists StudentMessage(" +
-        "sid varchar(10)," +
-        "mid varchar(32)," +
-        "primary key(sid, mid)," +
-        "foreign key(sid) references Student(sid) on delete cascade on update cascade," +
-        "foreign key(mid) references Message(mid) on delete cascade on update cascade);", function (err, result) {
-            if (err) {
-                console.log(err);
+                console.log("StudentMessage: " + err);
             }
     });
 
     con.query("create table if not exists TeacherMessage(" +
-        "tid varchar(10)," +
         "mid varchar(32)," +
-        "primary key(tid, mid)," +
-        "foreign key(tid) references Teacher(tid) on delete cascade on update cascade," +
-        "foreign key(mid) references Message(mid) on delete cascade on update cascade);", function (err, result) {
-            if (err) {
-                console.log(err);
-            }
+        "cid varchar(32)," +
+        "link varchar(500)," +
+        "title varchar(500)," +
+        "tid varchar(10)," +
+        "content text," +
+        "posterId varchar(10)," +
+        "primary key(mid, tid)," +
+        "foreign key(cid) references Course(cid) on delete cascade on update cascade," +
+        "foreign key(posterId) references Teacher(tid) on delete cascade on update cascade," +
+        "foreign key(tid) references Teacher(tid) on delete cascade on update cascade);", function (err, result) {
+        if (err) {
+            console.log("TeacherMessage: " + err);
+        }
     });
 
     con.query("create table if not exists StudentExercise(" +

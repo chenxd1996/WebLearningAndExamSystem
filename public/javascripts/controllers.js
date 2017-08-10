@@ -125,36 +125,57 @@ function usersManagementCtrl($scope, $location) {
     }
 }
 
-function addUserCtrl($scope, $http, md5, toaster, FileUploader, $rootScope) {
+function addUserCtrl($scope, $location, $rootScope) {
+    if ($location.path().indexOf("single") >= 0) {
+        $scope.status = "single";
+    } else if ($location.path().indexOf("multiple") >= 0) {
+        $scope.status = "multiple";
+    }
+    $scope.changeStatus = function (status) {
+        $scope.status = status;
+    };
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        if ($location.path().indexOf("single") >= 0) {
+            $scope.status = "single";
+        } else if ($location.path().indexOf("multiple") >= 0) {
+            $scope.status = "multiple";
+        }
+    });
+}
+
+function singleAddCtrl($scope, $rootScope, $http, md5, toaster, $stateParams) {
     $scope.user = {};
     var levels = {
         "学生": 1,
         "教师": 2
-    }
+    };
+    var cid = $stateParams.courseID;
     $scope.options = ["学生", "教师"];
     $scope.levelSelected = "学生";
     $scope.submit = function () {
         $scope.user.level = levels[$scope.levelSelected];
         $scope.user.password = md5.createHash($scope.user.id);
-        $http.post('/addUser', $scope.user).
-            success(function (res) {
-                if (res.status) {
-                    toaster.pop('success', "添加成功！", '', 2000);
-                } else {
-                    toaster.pop('error', "添加失败！", '', 2000);
-                }
+        $http.post('/addUser', {
+            user: $scope.user,
+            userInfo: $rootScope.userInfo,
+            cid: cid
+        }).success(function (res) {
+            if (res.status) {
+                toaster.pop('success', "添加成功！", '', 2000);
+            } else {
+                toaster.pop('error', "添加失败！", '', 2000);
+            }
         });
     };
+}
 
-    $rootScope.$watch('userInfo', function () {
-        if ($rootScope.userInfo) {
-            $scope.uploader = new FileUploader({
-                url: '/importUsers',
-                formData: [{
-                    userInfo: $rootScope.userInfo
-                }]
-            });
-        }
+function multiAddCtrl($scope, FileUploader, $stateParams) {
+    var cid = $stateParams.courseID;
+    $scope.uploader = new FileUploader({
+        url: '/importUsers',
+        formData: [{
+            cid: cid
+        }]
     });
 }
 
@@ -231,11 +252,12 @@ function courseDetailCtrl($scope, $location,  $stateParams, $rootScope) {
     }, function () {
         $scope.userInfo = $rootScope.userInfo;
     });
-    var options = ['course-home', 'course-data', 'course-members', 'course-exams'];
+    var options = ['add-members', 'course-data', 'course-members'];
     var path = $location.path();
     for (var i = 0; i < options.length; i++) {
         if (path.indexOf(options[i]) >= 0) {
             $scope.checked = options[i];
+            break;
         }
     }
 }
@@ -263,7 +285,6 @@ function courseDataCtrl($scope, $stateParams, $http, $rootScope) {
                 cid: courseID,
                 userInfo: $rootScope.userInfo
             }).success(function (res) {
-                console.log(res);
                 $scope.courseWares = res.result;
             });
         }
@@ -871,14 +892,18 @@ function allMessagesCtrl($scope, $http, $rootScope, toaster) {
     }
 }
 
-function messageDetailCtrl($scope, $http, $stateParams) {
+function messageDetailCtrl($scope, $http, $stateParams, $rootScope) {
     var mid = $stateParams.mid;
-    $http.post("/getMessageDetail", {
-        mid: mid
-    }).success(function (res) {
-        $scope.message = res[0];
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post("/getMessageDetail", {
+                mid: mid,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                $scope.message = res[0];
+            });
+        }
     });
-
 }
 
 function myInformationCtrl($scope, $rootScope, $http, toaster, md5, $state) {

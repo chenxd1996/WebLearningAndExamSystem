@@ -84,38 +84,10 @@ exports.logout = function (req, res) {
 };
 
 exports.addUser = function (req, res) {
-    var user = req.body;
-    if (user.level == 1) {
-        con.query("insert into Student" +
-            " value(?, ?, ?, ?, ?, ?, ?)", [user.id, user.name, user.college, user.major, user.grade, user.class, user.password],
-            function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.json({
-                        status: false
-                    });
-                } else {
-                    res.json({
-                       status: true
-                    });
-                }
-            });
-    } else if (user.level == 2) {
-        con.query("insert into Teacher" +
-            " value(?, ?, ?)", [user.id, user.name, user.password],
-            function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.json({
-                        status: false
-                    });
-                } else {
-                    res.json({
-                       status: true
-                    });
-                }
-        });
-    }
+    var user = req.body.user;
+    var userInfo = req.body.userInfo;
+    var cid = req.body.cid;
+    addUser(user, userInfo, cid, res);
 };
 
 exports.getMajorGradesAndClasses = function (req, res) {
@@ -203,7 +175,7 @@ exports.addCourse = function (req, res) {
                                   var mid = new Date().getTime();
                                   var link = "/homePage/learning-system/my-courses";
                                   var title = "您有新的课程 \"" + course.name + "\"";
-                                  sysMessage(mid, link, title, cid, true);
+                                  sysMessageAll(mid, link, title, cid, true);
                               }
                           });
                       }
@@ -380,7 +352,7 @@ exports.uploadCourseWares = function (req, res) {
                             var mid = new Date().getTime();
                             var link = "/homePage/learning-system/course-detail/" + cid + "/course-data";
                             var title = "您所在的课程 \"" + cname + "\" 有新的课件 \"" + filename + "\"";
-                            sysMessage(mid, link, title, cid, false);
+                            sysMessageAll(mid, link, title, cid, false);
 
                         }
                     });
@@ -532,7 +504,7 @@ exports.addExerciseBank = function (req, res) {
                             var mid = new Date().getTime();
                             var link = "/homePage/exercise-system/exercise-system/my-exercise-bank";
                             var title = "您所在的课程 \"" + result[0]['cname'] + "\" 有新的题库 \"" + req.body.name + "\" ";
-                            sysMessage(mid, link, title, req.body.id, false);
+                            sysMessageAll(mid, link, title, req.body.id, false);
                         }
                     });
                 }
@@ -655,16 +627,16 @@ exports.addExercise = function (req, res) {
                                     var cname = result[0]['cname'];
                                     var ename = result[0]['ename'];
                                     var cid = result[0]['cid'];
-                                    con.query("select count(*) from Message " +
+                                    con.query("select count(*) from StudentMessage " +
                                         "where eid = ?;", ebid, function (err, result) {
                                         if (result[0]['count(*)'] == 0) {
                                             var mid = new Date().getTime();
                                             var link = "/homePage/exercise-system/exerciseBank-detail/" + ebid + "/exercise/uncompleted";
                                             var title = "您所在的课程 \"" + cname + "\" 的题库 \"" + ename + "\" 有更新";
-                                            sysMessage(mid, link, title, cid, false, ebid);
+                                            sysMessageAll(mid, link, title, cid, false, ebid);
                                         } else {
                                             var mid = new Date().getTime();
-                                            con.query("update Message " +
+                                            con.query("update StudentMessage " +
                                                 "set mid = ? " +
                                                 "where eid = ?;", [mid, ebid], function (err) {
                                                 if (err) {
@@ -689,17 +661,21 @@ exports.getExercise = function (req, res) {
     var userInfo = req.body.userInfo;
     if (userInfo) {
         var query = "";
+        var params = [];
         if (userInfo.level == 1) {
-            query = "select *, e.eid as eid from Exercise e left join StudentExercise se on e.eid = se.eid " +
+            query = "select *, e.eid as eid from Exercise e left join StudentExercise se on e.eid = se.eid and se.sid = ? " +
                 "left join Answer a on se.eid = a.eid " +
                 "where " +
                 "e.ebid = ? order by e.eid;"
+            params.push(userInfo.id);
+            params.push(ebid);
         } else if (userInfo.level == 2) {
             query = "select * from Exercise e left join Answer a on e.eid = a.eid " +
                 "where " +
                 "e.ebid = ? order by e.eid;"
+            params.push(ebid);
         }
-        con.query(query, [ebid, userInfo.id], function (err, result1) {
+        con.query(query, params, function (err, result1) {
             if (err) {
                 console.log("get exercise: " + err);
             } else {
@@ -868,7 +844,7 @@ exports.addExam = function (req, res) {
                                                               var mid = new Date().getTime();
                                                               var link = "/homePage/exam-system/my-exams/notStarted";
                                                               var title = "您所在的课程 \"" + result[0]['cname'] + "\" 有新的考试 \"" + ename + "\" ";
-                                                              sysMessage(mid, link, title, cid, false);
+                                                              sysMessageAll(mid, link, title, cid, false);
                                                           }
                                                       });
                                                   }
@@ -1093,37 +1069,50 @@ exports.addMessage = function (req, res) {
     var message = req.body.message;
     var tid = req.body.tid;
     var mid = new Date().getTime();
-    con.query("insert into Message(mid, cid, title, content, posterId) " +
-        "values(?, ?, ?, ?, ?);", [mid, message.courseSelected.id, message.title, message.text, tid], function (err, result) {
+    con.query("select sid from StudentCourse " +
+        "where cid=?;", message.courseSelected.id, function (err, result) {
         if (err) {
-            console.log("Insert into Message in addMessage: " + err);
+            console.log("Select sid from StudentCourse in addMessage: " + err);
         } else {
-            var query = "";
-            if (message.includeTeacher) {
-                query = "insert into StudentMessage(sid, mid) " +
-                    "select sid, mid from (" +
-                    "select sc.sid, m.mid from StudentCourse sc, Message m where " +
-                    "sc.cid = ? and m.mid = ?) as tb;" +
-                    "insert into TeacherMessage(tid, mid) " +
-                    "select tid, mid from (" +
-                    "select tc.tid, m.mid from TeacherCourse tc, Message m where " +
-                    "tc.cid = ? and m.mid = ? and tc.tid <> ?) as tb";
-            } else {
-                query = "insert into StudentMessage(sid, mid) " +
-                    "select sid, mid from (" +
-                    "select sc.sid, m.mid from StudentCourse sc, Message m where " +
-                    "sc.cid = ? and m.mid = ?) as tb;";
+            if (result.length > 0) {
+                var query = "";
+                for (var i = 0; i < result.length; i++) {
+                    query += "insert into StudentMessage(sid, mid, cid, title, content, posterId) " +
+                        "values('" + result[i]['sid'] + "', '" + mid + "', '" + message.courseSelected.id + "', '" +
+                        message.title + "', '" + message.text + "', '" + tid + "');";
+                }
+                con.query(query, function (err) {
+                    if (err) {
+                        console.log("Insert into StudentMessage in addMessage: " + err);
+                    }
+                });
             }
-            con.query(query, [message.courseSelected.id, mid, message.courseSelected.id, mid, tid], function (err, result) {
-                if (err) {
-                    console.log("Insert into StudentMessage or TeacherMessage: " + err);
-                } else {
-                    res.json({
-                        status: true
+        }
+    });
+    if (message.includeTeacher) {
+        var query = "";
+        con.query("select tid from TeacherCourse " +
+            "where cid=?;", [message.courseSelected.id], function (err, result) {
+            if (err) {
+                console.log("Select tid from TeacherCourse in addMessage: " + err);
+            } else {
+                if (result.length > 0) {
+                    for (var i = 0; i < result.length; i++) {
+                        query += "insert into TeacherMessage(tid, mid, cid, title, content, posterId) " +
+                            "values('" + result[i]['tid'] + "', '" + mid + "', '" + message.courseSelected.id + "', '" +
+                            message.title + "', '" + message.text + "', '" + tid + "');";
+                    }
+                    con.query(query, function (err) {
+                        if (err) {
+                            console.log("Insert into TeacherMessage in addMessage: " + err);
+                        }
                     });
                 }
-            });
-        }
+            }
+        });
+    }
+    res.json({
+        status: true
     });
 };
 
@@ -1131,11 +1120,11 @@ exports.getMessages = function (req, res) {
     var userInfo = req.body.userInfo;
     var query = "";
     if (userInfo.level == 1) {
-        query = "select m.mid, m.cid, m.link, m.title, t.tname from Message m left join Teacher t on m.posterId = t.tid, StudentMessage sm " +
-            "where sm.sid = ? and sm.mid = m.mid order by m.mid desc;";
+        query = "select sm.mid, sm.cid, sm.link, sm.title, t.tname from StudentMessage sm left join Teacher t on sm.posterId = t.tid " +
+            "where sm.sid = ? order by sm.mid desc;";
     } else if (userInfo.level == 2) {
-        query = "select m.mid, m.cid, m.link, m.title, t.tname from Message m left join Teacher t on m.posterId = t.tid, TeacherMessage tm " +
-            "where tm.tid = ? and tm.mid = m.mid order by m.mid desc;";
+        query = "select tm.mid, tm.cid, tm.link, tm.title, t.tname from TeacherMessage tm left join Teacher t on tm.posterId = t.tid " +
+            "where tm.tid = ? order by tm.mid desc;";
     }
     con.query(query, userInfo.id, function (err, result) {
         if (err) {
@@ -1147,55 +1136,29 @@ exports.getMessages = function (req, res) {
 };
 
 exports.getMessageDetail = function (req, res) {
-    con.query("select m.mid, m.title, m.content, t.tname, c.cname from Message m left join Teacher t on m.posterId = t.tid, Course c " +
-        "where mid = ? and m.cid = c.cid;", req.body.mid, function (err, result) {
-        if (err) {
-            console.log("Get message detail: " + err);
-        } else {
-            res.json(result);
-        }
-    });
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 1) {
+        con.query("select sm.mid, sm.title, sm.content, t.tname, c.cname from StudentMessage sm left join Teacher t on sm.posterId = t.tid, Course c " +
+            "where sm.mid = ? and sm.sid = ? and c.cid = sm.cid;", [req.body.mid, userInfo.id], function (err, result) {
+            if (err) {
+                console.log("Get student's message detail: " + err);
+            } else {
+                res.json(result);
+            }
+        });
+    } else if (userInfo.level == 2) {
+        con.query("select tm.mid, tm.title, tm.content, t.tname, c.cname from TeacherMessage tm left join Teacher t on tm.posterId = t.tid, Course c " +
+            "where tm.mid = ? and tm.tid = ? and c.cid = tm.cid;", [req.body.mid, userInfo.id], function (err, result) {
+            if (err) {
+                console.log("Get student's message detail: " + err);
+            } else {
+                res.json(result);
+            }
+        });
+    }
 };
 
-function sysMessage(mid, link, title, cid, includeTeacher, eid) {
-    var query = "";
-    if (!eid) {
-        query = "insert into Message(mid, link, title, cid) " +
-            "values(?, ?, ?, ?)";
-    } else {
-        query = "insert into Message(mid, link, title, cid, eid) " +
-            "values(?, ?, ?, ?, ?)"
-    }
-    con.query(query, [mid, link, title, cid, eid], function (err) {
-        if (err) {
-            console.log("Insert into Message in sysMessage: " + err);
-        } else {
-            if (includeTeacher) {
-                con.query("Insert into StudentMessage(sid, mid) " +
-                    "select sid, mid from(" +
-                    "select sc.sid, m.mid from StudentCourse sc, Message m " +
-                    "where sc.cid = m.cid and m.mid = ?) as tb;" +
-                    "Insert into TeacherMessage(tid, mid) " +
-                    "select tid, mid from(" +
-                    "select tc.tid, m.mid from TeacherCourse tc, Message m " +
-                    "where tc.cid = m.cid and m.mid = ?) as tb;", [mid, mid], function (err) {
-                    if (err) {
-                        console.log("Insert into StudentCourse and TeacherCourse " + err);
-                    }
-                });
-            } else {
-                con.query("Insert into StudentMessage(sid, mid) " +
-                    "select sid, mid from(" +
-                    "select sc.sid, m.mid from StudentCourse sc, Message m " +
-                    "where sc.cid = m.cid and m.mid = ?) as tb;", mid, function (err) {
-                    if (err) {
-                        console.log("Insert into StudentCourse " + err);
-                    }
-                });
-            }
-        }
-    });
-}
+
 
 exports.deleteMessage = function (req, res) {
     var mid = req.body.mid;
@@ -1214,8 +1177,8 @@ exports.deleteMessage = function (req, res) {
 exports.messagesNum = function (req, res) {
     var userInfo = req.body.userInfo;
     if (userInfo.level == 1) {
-        con.query("select count(*) as messagesNum from Message m, StudentMessage sm " +
-            "where m.mid = sm.mid and sm.sid = ?", userInfo.id, function (err, result) {
+        con.query("select count(*) as messagesNum from StudentMessage sm " +
+            "where sm.sid = ?", userInfo.id, function (err, result) {
             if (err) {
                 console.log("Get student's messages number: " + err);
             } else {
@@ -1223,8 +1186,8 @@ exports.messagesNum = function (req, res) {
             }
         });
     } else if (userInfo.level == 2) {
-        con.query("select count(*) as messagesNum from Message m, TeacherMessage tm " +
-            "where m.mid = tm.mid and tm.tid = ?", userInfo.id, function (err, result) {
+        con.query("select count(*) as messagesNum from TeacherMessage tm " +
+            "where tm.tid = ?", userInfo.id, function (err, result) {
             if (err) {
                 console.log("Get teacher's messages number: " + err);
             } else {
@@ -1297,14 +1260,19 @@ exports.editPassword = function (req, res) {
 };
 
 exports.importUsers = function (req, res) {
-    var userInfo = req.body;
+    if (!req.session.userInfo) {
+        res.json({
+            status: false
+        });
+        return;
+    }
+    var userInfo = req.session.userInfo;
     excelParser.parse({
         inFile: 'public/Excels/' + req.file.filename,
         worksheet: 1,
         skipEmpty: false
     },function(err, records){
         if(err) console.error(err);
-        console.log(records);
         if (records.length < 1) {
             res.json({
                 status: false
@@ -1321,7 +1289,7 @@ exports.importUsers = function (req, res) {
             return;
         }
         for (var i = 1; i < records.length; i++) {
-            if (records[i][statusIndex] && records[i][statusIndex] == "学生" && records[i][idIndex] && userInfo.level == 2) {
+            if (records[i][statusIndex] && records[i][statusIndex] == "学生" && records[i][idIndex] && (userInfo.level == 2 || userInfo.level == 3)) {
                 var collegeIndex = records[0].indexOf("学院");
                 var majorIndex = records[0].indexOf("专业");
                 var gradeIndex = records[0].indexOf("年级");
@@ -1332,23 +1300,25 @@ exports.importUsers = function (req, res) {
                     });
                     return;
                 }
-                var id = records[i][idIndex];
-                var name = records[i][nameIndex]? records[i][nameIndex] : "";
-                var college = records[i][collegeIndex]? records[i][collegeIndex] : "";
-                var major = records[i][majorIndex]? records[i][majorIndex] : "";
-                var grade = records[i][gradeIndex]? records[i][gradeIndex] : "";
-                var Class = records[i][classIndex]? records[i][classIndex] : "";
-                var password = crypto.createHash('md5').update(id).digest('hex').toLowerCase();
-                con.query("replace into Student " +
+                var student = {};
+                student.id = records[i][idIndex];
+                student.name = records[i][nameIndex]? records[i][nameIndex] : "";
+                student.college = records[i][collegeIndex]? records[i][collegeIndex] : "";
+                student.major = records[i][majorIndex]? records[i][majorIndex] : "";
+                student.grade = records[i][gradeIndex]? records[i][gradeIndex] : "";
+                student.class = records[i][classIndex]? records[i][classIndex] : "";
+                student.password = crypto.createHash('md5').update(id).digest('hex').toLowerCase();
+                /*con.query("replace into Student " +
                     "value(?, ?, ?, ?, ?, ?, ?);", [id, name, college, major, grade, Class, password], function (err, result) {
                     if (err) {
                         console.log("Add students in importUsers: " + err);
                     }
-                } );
+                } );*/
             } else if (records[i][statusIndex] && records[i][statusIndex] == "教师" && records[i][idIndex] && userInfo.level == 3) {
-                var id = records[i][idIndex];
-                var name = records[i][nameIndex]? records[i][nameIndex] : "";
-                var password = crypto.createHash('md5').update(id).digest('hex').toLowerCase();
+                var teacher = {};
+                teacher.id = records[i][idIndex];
+                teacher.name = records[i][nameIndex]? records[i][nameIndex] : "";
+                teacher.password = crypto.createHash('md5').update(id).digest('hex').toLowerCase();
                 con.query("replace into Teacher " +
                     "value(?, ?, ?);", [id, name, password], function (err, result) {
                     if (err) {
@@ -1364,3 +1334,200 @@ exports.importUsers = function (req, res) {
         }
     });
 };
+
+function sysMessageAll(mid, link, title, cid, includeTeacher, eid) {
+    con.query("select sid from StudentCourse " +
+        "where cid=?;", cid, function (err, result) {
+        if (err) {
+            console.log("Select sid from StudentCourse in sysMessageAll: " + err);
+        } else {
+            if (result.length > 0) {
+                var query = "";
+                for (var i = 0; i < result.length; i++) {
+                    if (!eid) {
+                        query += "insert into StudentMessage(sid, mid, link, cid, title) " +
+                            "values('" + result[i]['sid'] + "', '" + mid + "', '" + link + "', '" + cid + "', '" +  title + "');";
+                    } else {
+                        query += "insert into StudentMessage(sid, mid, link, cid, title, eid) " +
+                            "values('" + result[i]['sid'] + "', '" + mid + "', '" + link + "', '" + cid + "', '" + title + "', '" + eid + "');";
+                    }
+                }
+                con.query(query, function (err) {
+                    if (err) {
+                        console.log("Insert into StudentMessage in sysMessageAll: " + err);
+                    }
+                });
+            }
+        }
+    });
+    if (includeTeacher) {
+        con.query("select tid from TeacherCourse " +
+            "where cid=?;", [cid], function (err, result) {
+            if (err) {
+                console.log("Select tid from TeacherCourse in sysMessageAll: " + err);
+            } else {
+                if (result.length > 0) {
+                    var query = "";
+                    for (var i = 0; i < result.length; i++) {
+                        query += "insert into TeacherMessage(tid, mid, link, cid, title) " +
+                            "values('" + result[i]['tid'] + "', '" + mid + "', '" + link + "', '" + cid + "', '" +
+                            title  + "');";
+                    }
+                    con.query(query, function (err) {
+                        if (err) {
+                            console.log("Insert into TeacherMessage in sysMessageAll: " + err);
+                        }
+                    });
+                }
+            }
+        });
+    }
+};
+
+function sysMessageSingle(id, mid, link, title, isTeacher) {
+    if (isTeacher) {
+        con.query("Insert into TeacherMessage(tid, mid, link, title) " +
+            "values(?, ?, ?, ?);", [id, mid, link, title], function (err) {
+            if (err) {
+                console.log("Insert into TeacherMessage systemMessageSingle: " + err);
+            }
+        });
+    } else {
+        con.query("Insert into StudentMessage(sid, mid, link, title) " +
+            "values(?, ?, ?, ?);", [id, mid, link, title], function (err) {
+            if (err) {
+                console.log("Insert into StudentMessage systemMessageSingle: " + err);
+            }
+        });
+    }
+}
+
+function addUser(user, userInfo, cid, res) {
+    if (user.level == 1) {
+        con.query("select count(*) from Student " +
+            "where sid = ?;", user.id, function (err, result) {
+            if (err) {
+                console.log("Select count(*) from Student in addUser: " + err);
+            } else {
+                if (result[0]['count(*)'] == 0) {
+                    con.query("insert into Student" +
+                        " value(?, ?, ?, ?, ?, ?, ?);", [user.id, user.name, user.college, user.major, user.grade, user.class, user.password],
+                        function (err, result) {
+                            if (err) {
+                                console.log("Insert into Student in addUser: " + err);
+                                if (res) {
+                                    res.json({
+                                        status: false
+                                    });
+                                }
+                            } else {
+                                if (res) {
+                                    res.json({
+                                        status: true
+                                    });
+                                }
+                                if (userInfo.level == 2) {
+                                    con.query("insert into StudentCourse " +
+                                        "value(?, ?);", [user.id, cid], function (err) {
+                                        if (err) {
+                                            console.log("Insert into StudentCourse in addUser: " + err);
+                                        } else {
+                                            con.query("select cname from Course " +
+                                                "where cid = ?", cid, function (err, result) {
+                                                if (err) {
+                                                    console.log("Get course name in addUser: " + err);
+                                                } else {
+                                                    var mid = new Date().getTime();
+                                                    var link = "/homePage/learning-system/my-courses";
+                                                    var title = "您有新的课程 \"" + result[0]['cname'] + "\"";
+                                                    sysMessageSingle(user.id, mid, link, title, false);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                } else {
+                    res.json({
+                        status: true
+                    });
+                    if (userInfo.level == 2) {
+                        con.query("insert into StudentCourse " +
+                            "value(?, ?);", [user.id, cid], function (err) {
+                            if (err) {
+                                console.log("Insert into StudentCourse in addUser: " + err);
+                            } else {
+                                con.query("select cname from Course " +
+                                    "where cid = ?", cid, function (err, result) {
+                                    if (err) {
+                                        console.log("Get course name in addUser: " + err);
+                                    } else {
+                                        var mid = new Date().getTime();
+                                        var link = "/homePage/learning-system/my-courses";
+                                        var title = "您有新的课程 \"" + result[0]['cname'] + "\"";
+                                        sysMessageSingle(user.id, mid, link, title, false);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    } else if (user.level == 2) {
+        if (userInfo.level == 3) {
+            con.query("insert into Teacher" +
+                " value(?, ?, ?);", [user.id, user.name, user.password],
+                function (err, result) {
+                    if (err) {
+                        console.log("Insert into Teacher in addUser: " + err);
+                        res.json({
+                            status: false
+                        });
+                    } else {
+                        res.json({
+                            status: true
+                        });
+                    }
+                });
+        } else if (userInfo.level == 2) {
+            con.query("select count(*) from Teacher " +
+                "where tid = ?;", user.id, function (err, result) {
+                if (err) {
+                    console.log("Select count(*) from Teacher in addUser: " + err);
+                } else {
+                    var count = result[0]['count(*)'];
+                    if (count == 0) {
+                        res.json({
+                            status: false,
+                            des: "该教师不存在，需要管理员添加"
+                        });
+                    } else {
+                        con.query("insert into TeacherCourse " +
+                            "value(?, ?);", [user.id, cid], function (err) {
+                            if (err) {
+                                console.log("Insert into TeacherCourse in addUser: " + err);
+                            } else {
+                                res.json({
+                                    status: true
+                                });
+                                con.query("select cname from Course " +
+                                    "where cid = ?", cid, function (err, result) {
+                                    if (err) {
+                                        console.log("Get course name in addUser: " + err);
+                                    } else {
+                                        var mid = new Date().getTime();
+                                        var link = "/homePage/learning-system/my-courses";
+                                        var title = "您有新的课程 \"" + result[0]['cname'] + "\"";
+                                        sysMessageSingle(user.id, mid, link, title, true);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+}

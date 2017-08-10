@@ -410,6 +410,14 @@ a {
   height: 100%
 }
 
+.dropdown-toggle {
+  cursor: pointer;
+}
+
+.dropdown-toggle:hover {
+  opacity: 0.7;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 4px;

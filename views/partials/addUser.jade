@@ -1,86 +1,14 @@
 div(class="panel panel-info")
     div(class="panel-heading")
-        h3 上传课件
+        h4(uib-dropdown)
+            span(uib-dropdown-toggle class="dropdown-toggle")
+                span(ng-if="status == 'single'") 单个添加
+                span(ng-if="status == 'multiple'") 批量添加
+                i(class="fa fa-fw fa-caret-down")
+            ul(class="dropdown-menu" uib-dropdown-menu role="menu")
+                li(class="menuitem")
+                    a(ui-sref=".multiple" ng-click="changeStatus('multiple')") 批量添加
+                li(class="menuitem")
+                    a(ui-sref=".single" ng-click="changeStatus('single')") 单个添加
     div(class="panel-body panelBody")
-        div(class="col-xs-10 col-xs-offset-1")
-            table(class="table")
-                thead
-                    tr
-                        th(width="50%") 文件名
-                        th 大小
-                        th 进度
-                        th 状态
-                        th 操作
-                tbody
-                    tr(ng-repeat="item in uploader.queue")
-                        td
-                            strong {{item.file.name}}
-                        td(nowrap)  {{ item.file.size/1024/1024|number:2 }}MB
-                        td
-                            div(class="progress" style="margin-bottom: 0;")
-                                div(class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }")
-                        td(class="text-center")
-                            span(ng-if="item.isSuccess")
-                                i(class="glyphicon glyphicon-ok")
-                            span(ng-if="item.isCancel")
-                                i(class="glyphicon glyphicon-ban-circle")
-                            span(ng-if="item.isError")
-                                i(class="glyphicon glyphicon-remove")
-                        td(nowrap)
-                            button(type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess")
-                                i(class="glyphicon glyphicon-upload")
-                                span 上传
-                            button(type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading" disabled="disabled")
-                                i(class="glyphicon glyphicon-ban-circle")
-                                span 取消
-                            button(type="button" class="btn btn-danger btn-xs" ng-click="item.remove()")
-                                i(class="glyphicon glyphicon-trash")
-                                span 移除
-            div
-                div
-                    label 队列进度:
-                div(class="progress" style="")
-                    div(class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }" style="width: 0%;")
-                button(type="button" class="btn btn-success mr-10" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length")
-                    i(class="glyphicon glyphicon-upload")
-                    span 全部上传
-                button(type="button" class="btn btn-warning mr-10" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading" disabled="disabled")
-                    i(class="glyphicon glyphicon-ban-circle")
-                    span 全部取消
-                button(type="button" class="btn btn-danger" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length")
-                    i(class="glyphicon glyphicon-trash")
-                    span 全部移除
-                button(class="btn btn-primary upload-btn pull-right")
-                    i(class="fa fa-fw fa-file")
-                    span 选择文件
-                    input(type="file" class="file" nv-file-select uploader="uploader")
-//div(class="panel panel-info")
-    div(class="panel-heading")
-        h3 添加用户
-    div(class="panel-body panelBody")
-        div(class="col-xs-6 col-xs-offset-3")
-            div(class="input-group formInterval")
-                span(class="input-group-addon") 身份
-                select(class="form-control" ng-model="levelSelected" ng-options="option for option in options" required)
-            div(class="input-group formInterval" ng-if="levelSelected == '学生'")
-                span(class="input-group-addon") 学号
-                input(type="text" class="form-control" ng-model="user.id" placeholder="学号" required)
-            div(class="input-group formInterval" ng-if="levelSelected == '教师'")
-                span(class="input-group-addon") 工号
-                input(type="text" class="form-control" ng-model="user.id" placeholder="工号" required)
-            div(class="input-group formInterval")
-                span(class="input-group-addon") 姓名
-                input(type="text" class="form-control" ng-model="user.name" placeholder="姓名" required)
-            div(class="input-group formInterval" ng-if="levelSelected == '学生'")
-                span(class="input-group-addon") 学院
-                input(type="text" class="form-control" ng-model="user.college" placeholder="学院, 例如：数据科学与计算机学院" required)
-            div(class="input-group formInterval" ng-if="levelSelected == '学生'")
-                span(class="input-group-addon") 专业
-                input(type="text" class="form-control" ng-model="user.major" placeholder="专业, 例如：软件工程" required)
-            div(class="input-group formInterval" ng-if="levelSelected == '学生'")
-                span(class="input-group-addon") 年级
-                input(type="number" min="2000" class="form-control" ng-model="user.grade" placeholder="年级, 例如：2015" required)
-            div(class="input-group formInterval" ng-if="levelSelected == '学生'")
-                span(class="input-group-addon") 班级
-                input(type="number" min="1" class="form-control" ng-model="user.class" placeholder="班级, 例如：1" required)
-            button(class="btn btn-primary pull-right" ng-click="submit()") 添加
+        div(ui-view="")
