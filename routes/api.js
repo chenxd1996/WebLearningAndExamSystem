@@ -1162,16 +1162,30 @@ exports.getMessageDetail = function (req, res) {
 
 exports.deleteMessage = function (req, res) {
     var mid = req.body.mid;
-    con.query("delete from Message " +
-        "where mid = ?;", mid, function (err, result) {
-        if (err) {
-            console.log("Delete from Message: " + err);
-        } else {
-            res.json({
-                status: true
-            });
-        }
-    });
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 1) {
+        con.query("delete from StudentMessage " +
+            "where mid = ? and sid = ?;", [mid, userInfo.id], function (err, result) {
+            if (err) {
+                console.log("Delete from StudentMessage: " + err);
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    } else if (userInfo.level == 2) {
+        con.query("delete from TeacherMessage " +
+            "where mid = ? and tid = ?;", [mid, userInfo.id], function (err, result) {
+            if (err) {
+                console.log("Delete from TeacherMessage: " + err);
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    }
 };
 
 exports.messagesNum = function (req, res) {

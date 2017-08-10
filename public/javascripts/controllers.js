@@ -1,6 +1,5 @@
 //controller for login router
 function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
-    $scope.user = {};
     if (!$rootScope.userInfo) {
         $http.get('/getUserInfo').
             success(function (result) {
@@ -11,9 +10,10 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
                         level: result.level
                     };
                     if ($rootScope.userInfo.level == 3)
-                        $state.go('logined.usersManagement.addUser');
-                    else
+                        $state.go('logined.usersManagement.addUser.multiple');
+                    else if ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2) {
                         $state.go('logined.learningSystem.myCourses');
+                    }
                 }
             });
     }
@@ -29,10 +29,12 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
                     name: data.name,
                     level: data.level
                 };
-                if ($rootScope.userInfo.level == 3)
-                    $state.go('logined.usersManagement.addUser');
-                else
+                if ($rootScope.userInfo.level == 3) {
+                    $state.go('logined.usersManagement.addUser.multiple');
+                }
+                else if ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2) {
                     $state.go('logined.learningSystem.myCourses');
+                }
             } else {
                 toaster.pop('error', "登录失败！", '账号或密码错误', 2000);
             }
@@ -169,7 +171,7 @@ function singleAddCtrl($scope, $rootScope, $http, md5, toaster, $stateParams) {
     };
 }
 
-function multiAddCtrl($scope, FileUploader, $stateParams) {
+function multiAddCtrl($scope, FileUploader, $stateParams, toaster) {
     var cid = $stateParams.courseID;
     $scope.uploader = new FileUploader({
         url: '/importUsers',
@@ -177,6 +179,15 @@ function multiAddCtrl($scope, FileUploader, $stateParams) {
             cid: cid
         }]
     });
+
+    $scope.uploader.onCompleteItem = function(item, res, status, headers) {
+        if (res.status) {
+            toaster.pop("success", "导入成功！", "", 2000);
+        } else {
+            toaster.pop("warning", "导入失败！", "", 2000);
+        }
+    };
+
 }
 
 function editUserCtrl($scope) {
@@ -201,7 +212,7 @@ function myCoursesCtrl($scope, $rootScope, $http) {
     $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
-        if ($rootScope.userInfo) {
+        if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $scope.userInfo = $rootScope.userInfo;
             $scope.radioModel = 'underway';
             $http.post('/getMyCourses', {
@@ -357,7 +368,7 @@ function exerciseSystemCtrl($scope, $location) {
 function addExerciseBankCtrl($scope, $rootScope, $http, toaster) {
     $scope.exerciseBank = {};
     $rootScope.$watch('userInfo', function () {
-        if ($rootScope.userInfo) {
+        if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $http.post('/getMyCourses', $rootScope.userInfo).
                 success(function (res) {
                     var courses = res.result.courses;
@@ -535,7 +546,7 @@ function examSystemCtrl($scope, $rootScope, $location, $state) {
 
 function addExamCtrl($scope, $rootScope, $http, toaster) {
     $rootScope.$watch('userInfo', function () {
-        if ($rootScope.userInfo) {
+        if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $http.post('/getMyCourses', $rootScope.userInfo).
             success(function (res) {
                 var courses = res.result.courses;
@@ -833,7 +844,7 @@ function messageCenterCtrl($scope, $location) {
 function postMessageCtrl($scope, $rootScope, $http, toaster) {
     $scope.message = {};
     $rootScope.$watch('userInfo', function () {
-        if ($rootScope.userInfo) {
+        if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $http.post('/getMyCourses', $rootScope.userInfo).
             success(function (res) {
                 var courses = res.result.courses;
@@ -881,7 +892,8 @@ function allMessagesCtrl($scope, $http, $rootScope, toaster) {
 
     $scope.check = function (index) {
         $http.post("/deleteMessage", {
-            mid: $scope.messages[index].mid
+            mid: $scope.messages[index].mid,
+            userInfo: $rootScope.userInfo
         }).success(function (res) {
             if (res.status) {
                 $scope.messages.splice(index, 1);

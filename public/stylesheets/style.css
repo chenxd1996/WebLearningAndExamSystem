@@ -410,12 +410,12 @@ a {
   height: 100%
 }
 
-.dropdown-toggle {
+.panel-dropdown-toggle {
   cursor: pointer;
 }
 
-.dropdown-toggle:hover {
-  opacity: 0.7;
+.panel-dropdown-toggle:hover {
+  opacity: 0.8;
 }
 
 ::-webkit-scrollbar {
