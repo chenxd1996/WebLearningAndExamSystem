@@ -1329,7 +1329,7 @@ exports.importUsers = function (req, res) {
                 var teacher = {};
                 teacher.id = records[i][idIndex];
                 teacher.name = records[i][nameIndex]? records[i][nameIndex] : "";
-                teacher.password = crypto.createHash('md5').update(student.id).digest('hex').toLowerCase();
+                teacher.password = crypto.createHash('md5').update(teacher.id).digest('hex').toLowerCase();
                 teacher.level = 2;
                 addUser(teacher, userInfo, cid);
             } else {
@@ -1551,28 +1551,48 @@ function addUser(user, userInfo, cid, res) {
     }
 }
 
-exports.getCourseStudent = function (req, res) {
+exports.getStudents = function (req, res) {
     var cid = req.body.cid;
-    con.query("select s.sid, s.sname, s.college, s.major, s.grade, s.class from Student s, StudentCourse sc " +
-        "where s.sid = sc.sid and sc.cid = ? order by s.sid;", cid, function (err, result) {
-        if (err) {
-            console.log("Get course's students: " + err);
-        } else {
-            res.json(result);
-        }
-    });
+    if (cid) {
+        con.query("select s.sid, s.sname, s.college, s.major, s.grade, s.class from Student s, StudentCourse sc " +
+            "where s.sid = sc.sid and sc.cid = ? order by s.sid;", cid, function (err, result) {
+            if (err) {
+                console.log("Get course's students: " + err);
+            } else {
+                res.json(result);
+            }
+        });
+    } else {
+        con.query("select s.sid, s.sname, s.college, s.major, s.grade, s.class from Student s;", function (err, result) {
+            if (err) {
+                console.log("Get all students: " + err);
+            } else {
+                res.json(result);
+            }
+        });
+    }
 };
 
-exports.getCourseTeacher = function (req, res) {
+exports.getTeachers = function (req, res) {
     var cid = req.body.cid;
-    con.query("select t.tid, t.tname from Teacher t, TeacherCourse tc " +
-        "where t.tid = tc.tid and tc.cid = ? order by t.tid;", cid, function (err, result) {
-        if (err) {
-            console.log("Get course's teachers: " + err);
-        } else {
-            res.json(result);
-        }
-    })
+    if (cid) {
+        con.query("select t.tid, t.tname from Teacher t, TeacherCourse tc " +
+            "where t.tid = tc.tid and tc.cid = ? order by t.tid;", cid, function (err, result) {
+            if (err) {
+                console.log("Get course's teachers: " + err);
+            } else {
+                res.json(result);
+            }
+        });
+    } else {
+        con.query("select t.tid, t.tname from Teacher t;", function (err, result) {
+            if (err) {
+                console.log("Get all teachers: " + err);
+            } else {
+                res.json(result);
+            }
+        });
+    }
 };
 
 exports.editStudent = function (req, res) {
@@ -1619,7 +1639,7 @@ exports.deleteStudent = function (req, res) {
         con.query("delete from Student where " +
             "sid = ?;", sid, function (err, result) {
             if (err) {
-                console.log("Delete fron Student in deleteStudent: " + err);
+                console.log("Delete from Student in deleteStudent: " + err);
                 res.json({
                     status: false
                 });
@@ -1647,6 +1667,84 @@ exports.resetStudent = function (req, res) {
                 } else {
                     res.json({
                        status: true
+                    });
+                }
+            });
+    }
+};
+
+exports.editTeacher = function (req, res) {
+    var teacher = req.body.teacher;
+    var tid = req.body.tid;
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 3) {
+        con.query("update Teacher " +
+            "set tid=?, tname=? " +
+            "where tid=?;", [teacher.tid, teacher.tname, tid],  function (err, result) {
+                if (err) {
+                    console.log("Update teacher in editTeacher: " + err);
+                    res.json({
+                        status: false
+                    });
+                } else {
+                    res.json({
+                        status: true
+                    });
+                }
+            });
+    }
+};
+
+exports.deleteTeacher = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var cid = req.body.cid;
+    var tid = req.body.tid;
+    if (userInfo.level == 2) {
+        con.query("delete from TeacherCourse where " +
+            "tid = ? and cid = ?;", [tid, cid], function (err, result) {
+            if (err) {
+                console.log("Delete from TeacherCourse in deleteTeacher: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    } else if (userInfo.level == 3) {
+        con.query("delete from Teacher where " +
+            "tid = ?;", tid, function (err, result) {
+            if (err) {
+                console.log("Delete from Teacher in deleteTeacher: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    }
+};
+
+exports.resetTeacher = function (req, res) {
+    var tid = req.body.tid;
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 3) {
+        con.query("update Teacher " +
+            "set password=? where tid = ?;", [crypto.createHash('md5').update(tid).digest('hex').toLowerCase(), tid],
+            function (err, result) {
+                if (err) {
+                    console.log("Update teacher's password in resetTeacher: " + err);
+                    res.json({
+                        status: false
+                    });
+                } else {
+                    res.json({
+                        status: true
                     });
                 }
             });

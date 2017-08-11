@@ -34,18 +34,18 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
             url: "/multiple",
             controller:multiAddCtrl,
             templateUrl: "partials/multiAdd"
-        }).state("logined.usersManagement.editUser", {
-            url: "/edit-user",
-            controller: editUserCtrl,
-            templateUrl: "partials/editUser"
-        }).state("logined.usersManagement.deleteUser", {
-            url: "/delete-user",
-            controller: deleteUserCtrl,
-            templateUrl: "partials/deleteUser"
         }).state("logined.usersManagement.usersList", {
             url: "/users-list",
-            controller: usersListCtrl,
-            templateUrl: "partials/usersList"
+            controller: courseMembersCtrl,
+            templateUrl: "partials/courseMembers"
+        }).state("logined.usersManagement.usersList.student", {
+            url: "/student",
+            controller: courseMembersStudentCtrl,
+            templateUrl: "partials/courseMembersStudent"
+        }).state("logined.usersManagement.usersList.teacher", {
+            url: "/teacher",
+            controller: courseMembersTeacherCtrl,
+            templateUrl: "partials/courseMembersTeacher"
         }).state("logined.learningSystem.myCourses", {
             url: "/my-courses",
             controller: myCoursesCtrl,

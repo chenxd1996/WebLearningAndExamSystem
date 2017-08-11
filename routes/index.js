@@ -83,9 +83,9 @@ router.post('/editPassword', api.editPassword);
 
 router.post('/importUsers', fileUploader.excelUpload.single('file'), api.importUsers);
 
-router.post('/getCourseStudent', api.getCourseStudent);
+router.post('/getStudents', api.getStudents);
 
-router.post('/getCourseTeacher', api.getCourseTeacher);
+router.post('/getTeachers', api.getTeachers);
 
 router.post('/editStudent', api.editStudent);
 

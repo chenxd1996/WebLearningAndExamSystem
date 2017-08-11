@@ -17,6 +17,7 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
                 }
             });
     }
+
     $scope.login = function () {
         $http.post('/login', {
             id: $scope.user.id,
@@ -242,7 +243,7 @@ function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootS
         {key: 'major', value: '专业'}, {key: 'grade', value: '年级'}];
     $scope.filterCondition = $scope.options[0];
 
-    $http.post('/getCourseStudent', {
+    $http.post('/getStudents', {
         cid: $stateParams.courseID
     }).success(function (res) {
         $scope.students = res;
@@ -337,11 +338,20 @@ function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootS
 }
 
 function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootScope, toaster) {
-    $http.post('getCourseTeacher', {
+    $scope.teachers = [];
+    $scope.options = [{value: '工号', key: 'tid'}, {key: 'tname', value:'姓名'}];
+    $scope.filterCondition = $scope.options[0];
+
+    $http.post('getTeachers', {
         cid: $stateParams.courseID
     }).success(function (res) {
         $scope.teachers = res;
     });
+
+    $scope.changeFileterCondition = function (condition) {
+        $scope.filterCondition = condition;
+    };
+
 
     $scope.open = function (user) {
         var modalInstance = $uibModal.open({
@@ -356,8 +366,8 @@ function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootS
         });
         modalInstance.result.then(function (newUser) {
             $http.post('/editTeacher', {
-                sid: user.tid,
-                student: newUser,
+                tid: user.tid,
+                teacher: newUser,
                 userInfo: $rootScope.userInfo
             }).success(function (res) {
                 if (res.status) {
@@ -386,13 +396,13 @@ function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootS
         });
         modalInstance.result.then(function () {
             $http.post('/deleteTeacher', {
-                sid: user.sid,
+                tid: user.tid,
                 userInfo: $rootScope.userInfo,
                 cid: $stateParams.courseID
             }).success(function (res) {
                 if (res.status) {
                     toaster.pop("success", "删除成功！", "", 2000);
-                    $scope.students.splice($scope.teachers.indexOf(user), 1);
+                    $scope.teachers.splice($scope.teachers.indexOf(user), 1);
                 } else {
                     toaster.pop("warning", "删除失败", "", 2000);
                 }
@@ -414,8 +424,8 @@ function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootS
         });
         modalInstance.result.then(function () {
             $http.post('/resetTeacher', {
-                sid: user.sid,
-                userInfo: $rootScope.userInfo,
+                tid: user.tid,
+                userInfo: $rootScope.userInfo
             }).success(function (res) {
                 if (res.status) {
                     toaster.pop("success", "重置成功！", "", 2000);
@@ -425,14 +435,6 @@ function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootS
             });
         });
     }
-}
-
-function deleteUserCtrl($scope) {
-
-}
-
-function usersListCtrl($scope) {
-
 }
 
 function myCoursesCtrl($scope, $rootScope, $http) {
