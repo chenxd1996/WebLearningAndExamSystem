@@ -83,6 +83,10 @@ router.post('/editPassword', api.editPassword);
 
 router.post('/importUsers', fileUploader.excelUpload.single('file'), api.importUsers);
 
+router.post('/getCourseStudent', api.getCourseStudent);
+
+router.post('/getCourseTeacher', api.getCourseTeacher);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

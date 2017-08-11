@@ -83,6 +83,18 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
             url: "/:courseID/:courseName/add-course-data",
             controller: addCourseDataCtrl,
             templateUrl: "partials/addCourseData"
+        }).state("logined.courseDetail.courseMembers", {
+            url: "/:courseID/:courseName/course-members",
+            controller: courseMembersCtrl,
+            templateUrl: "partials/courseMembers"
+        }).state("logined.courseDetail.courseMembers.student", {
+            url: "/student",
+            controller: courseMembersStudentCtrl,
+            templateUrl: "partials/courseMembersStudent"
+        }).state("logined.courseDetail.courseMembers.teacher", {
+            url: "/teacher",
+            controller: courseMembersTeacherCtrl,
+            templateUrl: "partials/courseMembersTeacher"
         }).state("logined.courseDetail.courseWareDetail", {
             url: "/:courseID/:courseName/course-data/:cwid",
             controller: courseWareDetailCtrl,

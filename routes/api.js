@@ -1550,3 +1550,27 @@ function addUser(user, userInfo, cid, res) {
         }
     }
 }
+
+exports.getCourseStudent = function (req, res) {
+    var cid = req.body.cid;
+    con.query("select s.sid, s.sname, s.college, s.major, s.grade, s.class from Student s, StudentCourse sc " +
+        "where s.sid = sc.sid and sc.cid = ? order by s.sid;", cid, function (err, result) {
+        if (err) {
+            console.log("Get course's students: " + err);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+exports.getCourseTeacher = function (req, res) {
+    var cid = req.body.cid;
+    con.query("select t.tid, s.tname from Teacher t, TeacherCourse tc " +
+        "where t.tid = tc.tid and tc.cid = ? order by t.tid;", cid, function (err, result) {
+        if (err) {
+            console.log("Get course's teachers: " + err);
+        } else {
+            res.json(result);
+        }
+    })
+};

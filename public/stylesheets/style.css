@@ -87,7 +87,11 @@ a {
 }
 
 .inbl {
-  display: inline-block;
+  display: inline-block !important;
+}
+
+.inline {
+  display: inline !important;
 }
 
 .mb-5 {
@@ -416,6 +420,14 @@ a {
 
 .panel-dropdown-toggle:hover {
   opacity: 0.8;
+}
+
+.courseMembersFilter {
+  width: 317px;
+}
+
+.courseMembersFilter a {
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar {

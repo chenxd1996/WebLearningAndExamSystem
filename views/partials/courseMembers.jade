@@ -1,0 +1,14 @@
+div(class="panel panel-info")
+    div(class="panel-heading")
+        h4(uib-dropdown)
+            span(uib-dropdown-toggle class="panel-dropdown-toggle")
+                span(ng-if="status == 'student'") 学生
+                span(ng-if="status == 'teacher'") 教师
+                i(class="fa fa-fw fa-caret-down")
+            ul(class="dropdown-menu" uib-dropdown-menu role="menu")
+                li(class="menuitem")
+                    a(ui-sref=".student" ng-click="changeStatus('student')") 学生
+                li(class="menuitem")
+                    a(ui-sref=".teacher" ng-click="changeStatus('teacher')") 教师
+    div(class="panel-body panelBody")
+        div(ui-view="")

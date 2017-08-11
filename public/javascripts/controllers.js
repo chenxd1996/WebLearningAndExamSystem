@@ -200,6 +200,40 @@ function editUserCtrl($scope) {
     $scope.levelSelected = "学生";
 }
 
+function courseMembersCtrl($scope, $stateParams, $location) {
+    if ($location.path().indexOf('student') >= 0) {
+        $scope.status = 'student';
+    } else if ($location.path().indexOf('teacher') >= 0) {
+        $scope.status = 'teacher';
+    }
+    $scope.changeStatus = function (status) {
+        $scope.status = status;
+    };
+}
+
+function courseMembersStudentCtrl($scope, $stateParams, $http) {
+    $scope.options = [{value: '学号', key: 'sid'}, {key: 'sname', value:'姓名'}, {key: 'college', value: '学院'},
+        {key: 'major', value: '专业'}, {key: 'grade', value: '年级'}];
+    $scope.filterCondition = $scope.options[0].key;
+    
+    $http.post('/getCourseStudent', {
+        cid: $stateParams.courseID
+    }).success(function (res) {
+        $scope.students = res;
+    });
+    $scope.changeFileterCondition = function (condition) {
+        $scope.filterCondition = condition;
+    }
+}
+
+function courseMembersTeacherCtrl($scope, $stateParams, $http) {
+    $http.post('getCourseTeacher', {
+        cid: $stateParams.courseID
+    }).success(function (res) {
+        $scope.teachers = res;
+    });
+}
+
 function deleteUserCtrl($scope) {
 
 }
