@@ -87,6 +87,19 @@ router.post('/getCourseStudent', api.getCourseStudent);
 
 router.post('/getCourseTeacher', api.getCourseTeacher);
 
+router.post('/editStudent', api.editStudent);
+
+router.post('/deleteStudent', api.deleteStudent);
+
+router.post('/resetStudent', api.resetStudent);
+
+router.post('/editTeacher', api.editTeacher);
+
+router.post('/deleteTeacher', api.deleteTeacher);
+
+router.post('/resetTeacher', api.resetTeacher);
+
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

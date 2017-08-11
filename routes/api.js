@@ -1565,7 +1565,7 @@ exports.getCourseStudent = function (req, res) {
 
 exports.getCourseTeacher = function (req, res) {
     var cid = req.body.cid;
-    con.query("select t.tid, s.tname from Teacher t, TeacherCourse tc " +
+    con.query("select t.tid, t.tname from Teacher t, TeacherCourse tc " +
         "where t.tid = tc.tid and tc.cid = ? order by t.tid;", cid, function (err, result) {
         if (err) {
             console.log("Get course's teachers: " + err);
@@ -1573,4 +1573,82 @@ exports.getCourseTeacher = function (req, res) {
             res.json(result);
         }
     })
+};
+
+exports.editStudent = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var student = req.body.student;
+    var sid = req.body.sid;
+    if (userInfo.level == 2 || userInfo.level == 3) {
+        con.query("update Student " +
+            "set sid=?, sname=?, college=?, major=?, grade=?, class=? " +
+            "where sid=?;", [student.sid, student.sname, student.college, student.major, student.grade, student.class, sid],
+            function (err, result) {
+                if (err) {
+                    console.log("Update student in editStudent: " + err);
+                    res.json({
+                        status: false
+                    });
+                } else {
+                    res.json({
+                        status: true
+                    });
+                }
+            });
+    }
+};
+
+exports.deleteStudent = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var sid = req.body.sid;
+    if (userInfo.level == 2) {
+        con.query("delete from StudentCourse where " +
+            "sid = ? and cid = ?;", [sid, req.body.cid], function (err, result) {
+            if (err) {
+                console.log("Delete from StudentCourse in deleteStudent: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    } else if (userInfo.level == 3) {
+        con.query("delete from Student where " +
+            "sid = ?;", sid, function (err, result) {
+            if (err) {
+                console.log("Delete fron Student in deleteStudent: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    }
+};
+
+exports.resetStudent = function (req, res) {
+    var sid = req.body.sid;
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 2 || userInfo.level == 3) {
+        con.query("update Student " +
+            "set password=? where sid = ?;", [crypto.createHash('md5').update(sid).digest('hex').toLowerCase(), sid],
+            function (err, result) {
+                if (err) {
+                    console.log("Update student's password in resetStudent: " + err);
+                    res.json({
+                        status: false
+                    });
+                } else {
+                    res.json({
+                       status: true
+                    });
+                }
+            });
+    }
 };

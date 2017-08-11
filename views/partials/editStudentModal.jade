@@ -1,0 +1,25 @@
+div(modal-center)
+    div(class="modal-header")
+        h3(class="modal-title" id="modal-title") 编辑学生
+    div(class="modal-body" id="modal-body")
+        div(class="input-group formInterval")
+            span(class="input-group-addon") 学号
+            input(type="text" class="form-control" ng-model="user.sid" placeholder="学号")
+        div(class="input-group formInterval")
+            span(class="input-group-addon") 姓名
+            input(type="text" class="form-control" ng-model="user.sname" placeholder="姓名")
+        div(class="input-group formInterval")
+            span(class="input-group-addon") 学院
+            input(type="text" class="form-control" ng-model="user.college" placeholder="学院, 例如：数据科学与计算机学院")
+        div(class="input-group formInterval")
+            span(class="input-group-addon") 专业
+            input(type="text" class="form-control" ng-model="user.major" placeholder="专业, 例如：软件工程" required)
+        div(class="input-group formInterval")
+            span(class="input-group-addon") 年级
+            input(type="number" min="2000" class="form-control" ng-model="user.grade" placeholder="年级, 例如：2015" required)
+        div(class="input-group formInterval")
+            span(class="input-group-addon") 班级
+            input(type="number" min="1" class="form-control" ng-model="user.class" placeholder="班级, 例如：1" required)
+    div(class="modal-footer")
+        button(class="btn btn-primary" type="button" ng-click="ok()") 确定
+        button(class="btn btn-warning" type="button" ng-click="cancel()") 取消

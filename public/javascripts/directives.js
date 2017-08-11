@@ -135,4 +135,18 @@ directive('documentViewer', function () {
             });
         }
     }
+})
+.directive('modalCenter', function () {
+    return {
+        restrict: 'AE',
+        link: function ($scope, element, attrs) {
+            $(".modal").css('display', 'block');
+            $('.modal-dialog').css({
+                'margin-top': function () {
+                    var modalHeight = $('.modal').find('.modal-dialog').height();
+                    return ($(window).height() / 2 - (modalHeight / 2));
+                }
+            });
+        }
+    }
 });

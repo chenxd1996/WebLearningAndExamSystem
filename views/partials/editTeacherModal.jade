@@ -1,0 +1,13 @@
+div(modal-center)
+    div(class="modal-header")
+        h3(class="modal-title" id="modal-title") 编辑教师
+    div(class="modal-body" id="modal-body")
+        div(class="input-group formInterval")
+            span(class="input-group-addon") 工号
+            input(type="text" class="form-control" ng-model="user.tid" placeholder="学号")
+        div(class="input-group formInterval")
+            span(class="input-group-addon") 姓名
+            input(type="text" class="form-control" ng-model="user.tname" placeholder="姓名")
+    div(class="modal-footer")
+        button(class="btn btn-primary" type="button" ng-click="ok()") 确定
+        button(class="btn btn-warning" type="button" ng-click="cancel()") 取消

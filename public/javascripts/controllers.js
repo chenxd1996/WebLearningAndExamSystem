@@ -200,7 +200,7 @@ function editUserCtrl($scope) {
     $scope.levelSelected = "学生";
 }
 
-function courseMembersCtrl($scope, $stateParams, $location) {
+function courseMembersCtrl($scope, $location) {
     if ($location.path().indexOf('student') >= 0) {
         $scope.status = 'student';
     } else if ($location.path().indexOf('teacher') >= 0) {
@@ -211,27 +211,220 @@ function courseMembersCtrl($scope, $stateParams, $location) {
     };
 }
 
-function courseMembersStudentCtrl($scope, $stateParams, $http) {
+function editUserModalCtrl($scope, $uibModalInstance, user) {
+    $scope.user = {};
+    for (var i in user) {
+        $scope.user[i] = user[i];
+    }
+    $scope.ok = function () {
+        $uibModalInstance.close($scope.user);
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}
+
+function confirmModalCtrl($scope, $uibModalInstance, des) {
+    $scope.des = des;
+    $scope.ok = function () {
+        $uibModalInstance.close($scope.user);
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}
+
+function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootScope, toaster) {
+    $scope.students = [];
     $scope.options = [{value: '学号', key: 'sid'}, {key: 'sname', value:'姓名'}, {key: 'college', value: '学院'},
         {key: 'major', value: '专业'}, {key: 'grade', value: '年级'}];
-    $scope.filterCondition = $scope.options[0].key;
-    
+    $scope.filterCondition = $scope.options[0];
+
     $http.post('/getCourseStudent', {
         cid: $stateParams.courseID
     }).success(function (res) {
         $scope.students = res;
     });
+
     $scope.changeFileterCondition = function (condition) {
         $scope.filterCondition = condition;
+    };
+    
+    $scope.open = function (user) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'partials/editStudentModal',
+            controller: editUserModalCtrl,
+            resolve: {
+                user: function () {
+                    return user;
+                }
+            }
+        });
+        modalInstance.result.then(function (newUser) {
+            $http.post('/editStudent', {
+                sid: user.sid,
+                student: newUser,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success",  "修改成功！", "", 2000);
+                    for (var i in newUser) {
+                        user[i] = newUser[i];
+                    }
+                } else {
+                    toaster.pop("warning", "修改失败", "", 2000);
+                }
+            });
+        });
+    };
+    
+    $scope.delete = function (user) {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "是否删除该学生?";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            $http.post('/deleteStudent', {
+                sid: user.sid,
+                userInfo: $rootScope.userInfo,
+                cid: $stateParams.courseID
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success", "删除成功！", "", 2000);
+                    $scope.students.splice($scope.students.indexOf(user), 1);
+                } else {
+                    toaster.pop("warning", "删除失败", "", 2000);
+                }
+            });
+        });
+    };
+
+    $scope.reset = function (user) {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "重置后密码为学号，是否重置？";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            $http.post('/resetStudent', {
+                sid: user.sid,
+                userInfo: $rootScope.userInfo,
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success", "重置成功！", "", 2000);
+                } else {
+                    toaster.pop("warning", "重置失败", "", 2000);
+                }
+            });
+        });
     }
 }
 
-function courseMembersTeacherCtrl($scope, $stateParams, $http) {
+function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootScope, toaster) {
     $http.post('getCourseTeacher', {
         cid: $stateParams.courseID
     }).success(function (res) {
         $scope.teachers = res;
     });
+
+    $scope.open = function (user) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'partials/editTeacherModal',
+            controller: editUserModalCtrl,
+            resolve: {
+                user: function () {
+                    return user;
+                }
+            }
+        });
+        modalInstance.result.then(function (newUser) {
+            $http.post('/editTeacher', {
+                sid: user.tid,
+                student: newUser,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success",  "修改成功！", "", 2000);
+                    for (var i in newUser) {
+                        user[i] = newUser[i];
+                    }
+                } else {
+                    toaster.pop("warning", "修改失败", "", 2000);
+                }
+            });
+        });
+    };
+
+    $scope.delete = function (user) {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "是否删除该教师?";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            $http.post('/deleteTeacher', {
+                sid: user.sid,
+                userInfo: $rootScope.userInfo,
+                cid: $stateParams.courseID
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success", "删除成功！", "", 2000);
+                    $scope.students.splice($scope.teachers.indexOf(user), 1);
+                } else {
+                    toaster.pop("warning", "删除失败", "", 2000);
+                }
+            });
+        });
+    };
+
+    $scope.reset = function (user) {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "重置后密码为工号，是否重置？";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            $http.post('/resetTeacher', {
+                sid: user.sid,
+                userInfo: $rootScope.userInfo,
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success", "重置成功！", "", 2000);
+                } else {
+                    toaster.pop("warning", "重置失败", "", 2000);
+                }
+            });
+        });
+    }
 }
 
 function deleteUserCtrl($scope) {
@@ -910,7 +1103,7 @@ function postMessageCtrl($scope, $rootScope, $http, toaster) {
 
 function allMessagesCtrl($scope, $http, $rootScope, toaster) {
     $rootScope.$watch('userInfo', function () {
-        if ($rootScope.userInfo) {
+        if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2)) {
             $http.post('/getMessages', {
                 userInfo: $rootScope.userInfo
             }).success(function (res) {
