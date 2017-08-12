@@ -1754,3 +1754,96 @@ exports.resetTeacher = function (req, res) {
             });
     }
 };
+
+exports.deleteStudents = function (req, res) {
+    var students = req.body.students;
+    var cid = req.body.cid;
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 2) {
+        var query = "";
+        for (var i = 0; i < students.length; i++) {
+            query += "delete from StudentCourse where " +
+                "sid = '" + students[i].sid +  "' and cid = '" + cid + "';";
+        }
+        if (students.length > 0) {
+            con.query(query, function (err, result) {
+                if (err) {
+                    console.log("Delete from StudentCourse in deleteStudents: " + err);
+                    res.json({
+                        status: false
+                    });
+                } else {
+                    res.json({
+                        status: true
+                    });
+                }
+            });
+        }
+    } else if (userInfo.level == 3) {
+        var query = "";
+        for (var i = 0; i < students.length; i++) {
+            query += "delete from Student where " +
+                "sid = '" + students[i].sid + "';"
+        }
+        con.query(query, function (err, result) {
+            if (err) {
+                console.log("Delete from Student in deleteStudents: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    }
+};
+
+exports.deleteTeachers = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var cid = req.body.cid;
+    var teachers = req.body.teachers;
+
+    if (userInfo.level == 2) {
+        var query = "";
+        for (var i = 0; i < teachers.length; i++) {
+            query += "delete from TeacherCourse where " +
+                "tid = '" + teachers[i].tid + "'and cid = '" + cid + "';"
+        }
+        if (teachers.length > 0) {
+            con.query(query, function (err, result) {
+                if (err) {
+                    console.log("Delete from TeacherCourse in deleteTeachers: " + err);
+                    res.json({
+                        status: false
+                    });
+                } else {
+                    res.json({
+                        status: true
+                    });
+                }
+            });
+        }
+    } else if (userInfo.level == 3) {
+        var query = "";
+        for (var i = 0; i < teachers.length; i++) {
+            query += "delete from Teacher where " +
+                "tid = '" + teachers[i].tid + "';";
+        }
+        if (teachers.length > 0) {
+            con.query(query, function (err, result) {
+                if (err) {
+                    console.log("Delete from Teacher in deleteTeachers: " + err);
+                    res.json({
+                        status: false
+                    });
+                } else {
+                    res.json({
+                        status: true
+                    });
+                }
+            });
+        }
+    }
+};

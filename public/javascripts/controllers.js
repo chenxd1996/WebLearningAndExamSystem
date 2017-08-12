@@ -237,8 +237,9 @@ function confirmModalCtrl($scope, $uibModalInstance, des) {
     };
 }
 
-function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootScope, toaster) {
+function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootScope, toaster, $filter) {
     $scope.students = [];
+    $scope.studentsSelected = [];
     $scope.options = [{value: '学号', key: 'sid'}, {key: 'sname', value:'姓名'}, {key: 'college', value: '学院'},
         {key: 'major', value: '专业'}, {key: 'grade', value: '年级'}];
     $scope.filterCondition = $scope.options[0];
@@ -325,7 +326,7 @@ function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootS
         modalInstance.result.then(function () {
             $http.post('/resetStudent', {
                 sid: user.sid,
-                userInfo: $rootScope.userInfo,
+                userInfo: $rootScope.userInfo
             }).success(function (res) {
                 if (res.status) {
                     toaster.pop("success", "重置成功！", "", 2000);
@@ -334,10 +335,66 @@ function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootS
                 }
             });
         });
+    };
+
+    $scope.change = function () {
+        for (var i = 0; i < $scope.students.length; i++) {
+            $scope.students[i].selected = false;
+        }
+
+        $scope.studentsSelected = $filter('courseMembersFilter')($scope.students, $scope.filterCondition, $scope.filterValue);
+
+        if ($scope.selectAll && $scope.studentsSelected) {
+            for (var i = 0; i < $scope.studentsSelected.length; i++) {
+                $scope.studentsSelected[i].selected = true;
+            }
+        }
+    };
+
+    $scope.check = function (student) {
+        if (!student.selected) {
+            $scope.selectAll = false;
+        }
+    };
+    
+    $scope.deleteMultiple = function () {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "是否删除选中的学生？";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            var toDelete = [];
+            for (var i = $scope.students.length - 1; i >= 0 ; i--) {
+                if ($scope.students[i].selected) {
+                    toDelete.push($scope.students[i]);
+                }
+            }
+            $http.post('/deleteStudents', {
+                students: toDelete,
+                userInfo: $rootScope.userInfo,
+                cid: $stateParams.courseID
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop('success', "删除成功！", '', 2000);
+                    for (var i = $scope.students.length - 1; i >= 0 ; i--) {
+                        if ($scope.students[i].selected) {
+                            $scope.students.splice(i, 1);
+                        }
+                    }
+                }
+            });
+        });
     }
 }
 
-function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootScope, toaster) {
+function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootScope, toaster, $filter) {
     $scope.teachers = [];
     $scope.options = [{value: '工号', key: 'tid'}, {key: 'tname', value:'姓名'}];
     $scope.filterCondition = $scope.options[0];
@@ -431,6 +488,62 @@ function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootS
                     toaster.pop("success", "重置成功！", "", 2000);
                 } else {
                     toaster.pop("warning", "重置失败", "", 2000);
+                }
+            });
+        });
+    };
+
+    $scope.change = function () {
+        for (var i = 0; i < $scope.teachers.length; i++) {
+            $scope.teachers[i].selected = false;
+        }
+
+        $scope.teachersSelected = $filter('courseMembersFilter')($scope.teachers, $scope.filterCondition, $scope.filterValue);
+        if ($scope.selectAll && $scope.teachersSelected) {
+            for (var i = 0; i < $scope.teachersSelected.length; i++) {
+                if ($scope.teachersSelected[i].tid != $rootScope.userInfo.id)
+                    $scope.teachersSelected[i].selected = true;
+            }
+        }
+    };
+
+    $scope.check = function (teacher) {
+        if (!teacher.selected) {
+            $scope.selectAll = false;
+        }
+    };
+
+    $scope.deleteMultiple = function () {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "是否删除选中的教师？";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            var toDelete = [];
+            for (var i = $scope.teachers.length - 1; i >= 0 ; i--) {
+                if ($scope.teachers[i].selected) {
+                    toDelete.push($scope.teachers[i]);
+                }
+            }
+            $http.post('/deleteTeachers', {
+                teachers: toDelete,
+                userInfo: $rootScope.userInfo,
+                cid: $stateParams.courseID
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop('success', "删除成功！", '', 2000);
+                    for (var i = $scope.teachers.length - 1; i >= 0 ; i--) {
+                        if ($scope.teachers[i].selected) {
+                            $scope.teachers.splice(i, 1);
+                        }
+                    }
                 }
             });
         });

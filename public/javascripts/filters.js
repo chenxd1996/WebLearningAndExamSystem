@@ -17,6 +17,8 @@ angular.module('myApp.filters', []).filter('interpolate', ['version', function(v
             for (var i = 0; i < input.length; i++) {
                 if (input[i][condition.key].toString().indexOf(value) >= 0) {
                     result.push(input[i]);
+                } else {
+                    input[i].selected = false;
                 }
             }
             return result;
@@ -24,4 +26,4 @@ angular.module('myApp.filters', []).filter('interpolate', ['version', function(v
             return input
         }
     };
-});
+})

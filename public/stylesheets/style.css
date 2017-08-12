@@ -430,6 +430,13 @@ a {
   cursor: pointer;
 }
 
+.cb-center {
+  width: 20px !important;
+  height: 20px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 4px;

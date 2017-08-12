@@ -99,6 +99,9 @@ router.post('/deleteTeacher', api.deleteTeacher);
 
 router.post('/resetTeacher', api.resetTeacher);
 
+router.post('/deleteStudents', api.deleteStudents);
+
+router.post('/deleteTeachers', api.deleteTeachers);
 
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {

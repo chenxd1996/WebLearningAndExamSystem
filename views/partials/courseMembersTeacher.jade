@@ -1,4 +1,5 @@
 div(class="col-xs-8 col-xs-offset-2")
+    button(class="btn btn-danger" ng-click="deleteMultiple()") 批量删除
     div(class="input-group mb-10 pull-right courseMembersFilter")
         div(class="input-group-btn" uib-dropdown)
             button(class="btn btn-default" uib-dropdown-toggle)
@@ -7,15 +8,19 @@ div(class="col-xs-8 col-xs-offset-2")
             ul(class="dropdown-menu" uib-dropdown-menu role="menu")
                 li(role="menuitem")
                     a(ng-repeat="option in options" ng-click="changeFileterCondition(option)") {{option.value}}
-        input(ng-model="filterValue" class="form-control" placeholder="搜索")
+        input(ng-model="filterValue" class="form-control" placeholder="搜索" ng-change="change()")
     table(class="table table-hover table-bordered")
         thead
             tr
+                th
+                    input(class="checkbox" type="checkbox" class="cb-center" ng-model="selectAll" ng-change="change()")
                 th(class="text-center") 工号
                 th(class="text-center") 姓名
                 th(class="text-center") 操作
         tbody
             tr(ng-repeat="teacher in teachers | courseMembersFilter: filterCondition: filterValue" class="text-center")
+                td
+                    input(ng-if="userInfo.id != teacher.tid" class="checkbox" type="checkbox" class="cb-center" ng-model="teacher.selected" ng-change="check(teacher)")
                 td {{teacher.tid}}
                 td {{teacher.tname}}
                 td
