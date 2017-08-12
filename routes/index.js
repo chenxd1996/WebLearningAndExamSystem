@@ -14,7 +14,7 @@ router.get('/partials/:name', function (req, res) {
 });
 
 router.get('/login', function (req, res) {
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: '自主学习与考试系统' });
 });
 
 router.get('/getUserInfo', api.getUserInfo);
@@ -103,8 +103,9 @@ router.post('/resetTeacher', api.resetTeacher);
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');
+    } else {
+        res.render('index', { title: '自主学习与考试系统' });
     }
-    res.render('index', { title: '自主学习与考试系统' });
 });
 
 module.exports = router;

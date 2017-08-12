@@ -81,6 +81,10 @@ exports.logout = function (req, res) {
            status: true
         });
     });
+    /*req.session.userInfo = {};
+    res.json({
+        status: true
+    });*/
 };
 
 exports.addUser = function (req, res) {
