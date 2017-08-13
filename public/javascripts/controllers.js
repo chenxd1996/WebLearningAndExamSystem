@@ -629,7 +629,7 @@ function courseHomeCtrl($scope, $stateParams, $http) {
    });
 }
 
-function courseDataCtrl($scope, $stateParams, $http, $rootScope) {
+function courseDataCtrl($scope, $stateParams, $http, $rootScope, $uibModal, toaster) {
     var courseID = $scope.courseID = $stateParams.courseID;
     $scope.courseName = $stateParams.courseName;
     $rootScope.$watch('userInfo', function () {
