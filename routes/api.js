@@ -1861,7 +1861,7 @@ exports.deleteCourseWare = function (req, res) {
                    status: false
                 });
             } else {
-                fs.rmdir("public/CourseWares/" + cname + "/" + cwid, function (err) {
+                fs.unlink("public/CourseWares/" + cname + "/" + cwid, function (err) {
                     if (err) {
                         console.log("Remove courseWare in deleteCourseWare: " + err);
                     }
