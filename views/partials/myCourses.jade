@@ -1,24 +1,26 @@
 div(class="btn-group pull-right mr-15")
-    label(class="btn btn-sm btn-default" ng-model="radioModel" uib-btn-radio="'underway'" uncheckable) 进行中
-    label(class="btn btn-sm btn-default" ng-model="radioModel" uib-btn-radio="'end'" uncheckable) 已结束
+    label(class="btn btn-sm btn-default" ng-model="radioModel" uib-btn-radio="'progressing'" ng-click="changeStatus('progressing')") 进行中
+    label(class="btn btn-sm btn-default" ng-model="radioModel" uib-btn-radio="'ended'" ng-click="changeStatus('ended')") 已结束
 div(class="content-container")
     div(class="course-item bg-white pt-5 pr-10 pr-10 pb-5 pl-20 mr-15 mb-15 inbl" ng-repeat = "course in result.courses")
         div(class="fs-16 pt-10 pb-10")
             a(ui-sref="logined.courseDetail.courseData({courseID: course.cid, courseName: course.cname})") {{course.cname}}
         div(class="fs-13 mb-10")
             i(class="fa fa-fw fa-calendar mr-10")
-            span {{course.endTime | date: 'yyyy-MM-dd'}}
+            span 结课时间 {{course.endTime | date: 'yyyy-MM-dd'}}
         div(class="fs-13 mb-10" ng-class="{1: 'cl-info', 2: 'cl-success'}[userInfo.level]")
             i(class="fa-users fa fa-fw mr-10 fa-user-circle-o")
             span(ng-if="userInfo.level == 1") 角色是学生
             span(ng-if="userInfo.level == 2") 角色是老师
         div(class="fs-13 mb-5 mr-20")
             i(class="fa-users fa fa-fw mr-10")
-            span {{result.studentCounts[$index][0]['Count(*)']}}
+            span 学生 {{result.studentCounts[$index][0]['Count(*)']}}
             a(href="#")
                 i(class="fa fa-fw fa-bar-chart mr-10 ml-20")
                 span 课程资料 {{result.courseWaresCounts[$index][0]['Count(*)']}}
-            i(class="fa fa-fw fa-circle mr-10 ml-20 cl-green")
-            span 进行中
-    div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="result.courses.length == 0")
+            span(ng-class="{'progressing':'cl-green', 'ended': 'cl-danger'}[status]")
+                i(class="fa fa-fw fa-circle mr-10 ml-20")
+                span(ng-if="status == 'progressing'") 进行中
+                span(ng-if="status == 'ended'") 已结束
+    div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="result.courses.length  == 0")
         div(class="fs-16") 暂无数据

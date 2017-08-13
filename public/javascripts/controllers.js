@@ -12,7 +12,7 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
                     if ($rootScope.userInfo.level == 3)
                         $state.go('logined.usersManagement.addUser.multiple');
                     else if ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2) {
-                        $state.go('logined.learningSystem.myCourses');
+                        $state.go('logined.learningSystem.myCourses', {status: 'progressing'});
                     }
                 }
             });
@@ -34,7 +34,7 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
                     $state.go('logined.usersManagement.addUser.multiple');
                 }
                 else if ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2) {
-                    $state.go('logined.learningSystem.myCourses');
+                    $state.go('logined.learningSystem.myCourses', {status: 'progressing'});
                 }
             } else {
                 toaster.pop('error', "登录失败！", '账号或密码错误', 2000);
@@ -550,16 +550,18 @@ function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootS
     }
 }
 
-function myCoursesCtrl($scope, $rootScope, $http) {
+function myCoursesCtrl($scope, $rootScope, $http, $state, $stateParams) {
+    $scope.status = $scope.radioModel = $stateParams.status;
+    $scope.result = {};
+    $scope.result.courses = [];
     $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $scope.userInfo = $rootScope.userInfo;
-            $scope.radioModel = 'underway';
             $http.post('/getMyCourses', {
-                id: $scope.userInfo.id,
-                level: $scope.userInfo.level
+                userInfo: $rootScope.userInfo,
+                status: $scope.status
             }).success(function (res) {
                 if (res.status) {
                     $scope.result = res.result;
@@ -567,34 +569,48 @@ function myCoursesCtrl($scope, $rootScope, $http) {
             });
         }
     });
+    $scope.changeStatus = function (status) {
+        $state.go("logined.learningSystem.myCourses", {status: status}, {reload: true});
+    };
 }
 
-function addCourseCtrl($scope, $http, toaster) {
+function addCourseCtrl($scope, $http, toaster, $rootScope, $uibModal) {
     $scope.course = {};
     $scope.addCourse = function () {
-        $scope.course.gradesAndClasses = [];
-
-        $scope.course.teachers = $scope.teachers.split('+');
-
-        $scope.course.endTime = new Date($scope.endTime).getTime();
-
-        for (i in $scope.gradesAndClasses) {
-            if ($scope.gradesAndClasses[i].isSelected) {
-                $scope.course.gradesAndClasses.push($scope.gradesAndClasses[i]);
-            }
-        }
-
-        $scope.course.description = $scope.editorText;
+        $scope.course.endTime = $scope.endTime;
         $scope.course.name = $scope.course.name.trim().replace(/\s/g, "");
-        $http.post('/addCourse', $scope.course).
-            success(function (res) {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "是否创建该课程?";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            $http.post('/addCourse', {
+                course: $scope.course,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
                 if (res.status) {
                     toaster.pop('success', "创建成功！", '', 2000);
                 } else {
                     toaster.pop('error', "创建失败！", '', 2000);
                 }
+            });
         });
-    }
+    };
+    $scope.dateOptions = {
+        minDate: new Date(),
+        startingDay: 1
+    };
+
+    $scope.dtOpen = function () {
+        $scope.isDtOpen = true;
+    };
 }
 
 function courseDetailCtrl($scope, $location,  $stateParams, $rootScope) {
@@ -738,24 +754,18 @@ function addExerciseBankCtrl($scope, $rootScope, $http, toaster) {
     $scope.exerciseBank = {};
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
-            $http.post('/getMyCourses', $rootScope.userInfo).
-                success(function (res) {
-                    var courses = res.result.courses;
-                    $scope.courses = [];
-                    for(var i = 0; i < courses.length; i++) {
-                        if (courses[i].endTime > new Date().getTime()) {
-                            $scope.courses.push({
-                                name: courses[i].cname + " (" + courses[i].remark + ")",
-                                id: courses[i].cid
-                            });
-                        }
-                    }
+            $http.post('/getMyCourses', {
+                userInfo: $rootScope.userInfo,
+                status: 'progressing'
+            }).success(function (res) {
+                $scope.courses = res.result.courses;
+                $scope.courseSelected = $scope.courses[0];
             });
         }
     });
 
     $scope.submit = function () {
-        $scope.exerciseBank.id = $scope.courseSelected.id;
+        $scope.exerciseBank.id = $scope.courseSelected.cid;
         $http.post('/addExerciseBank', $scope.exerciseBank).
             success(function (res) {
                 if (res.status) {
@@ -824,7 +834,7 @@ function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout) {
     $scope.status = $stateParams.status;
     $scope.done = 0;
     $scope.correctNum = 0;
-
+    $scope.questions = [];
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $scope.userInfo = $rootScope.userInfo;

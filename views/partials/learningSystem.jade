@@ -1,9 +1,9 @@
 ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 1")
     li(role="presentation" uib-btn-radio="'my-courses'" ng-model="checked")
-        a(ui-sref="logined.learningSystem.myCourses") 我的课程
+        a(ui-sref="logined.learningSystem.myCourses({status: 'progressing'})") 我的课程
 ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 2")
     li(role="presentation" uib-btn-radio="'my-courses'" ng-model="checked")
-        a(ui-sref="logined.learningSystem.myCourses") 我的课程
+        a(ui-sref="logined.learningSystem.myCourses({status: 'progressing'})") 我的课程
     li(role="presentation" uib-btn-radio="'add-course'" ng-model="checked")
         a(ui-sref="logined.learningSystem.addCourse") 新建课程
 div(ui-view="")

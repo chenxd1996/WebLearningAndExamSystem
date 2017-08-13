@@ -123,83 +123,53 @@ exports.getMajorGradesAndClasses = function (req, res) {
 };
 
 exports.addCourse = function (req, res) {
-    var course = req.body;
-    var gradesAndClasses = course.gradesAndClasses;
-    var remark = "";
-    var len = gradesAndClasses.length;
-    for (var i = 0; i < len - 1; i++) {
-        remark += gradesAndClasses[i].major + gradesAndClasses[i].grade + "级" + gradesAndClasses[i].class + "班，";
-    }
-
-    remark += gradesAndClasses[len - 1].major + gradesAndClasses[len - 1].grade + "级" + gradesAndClasses[len - 1].class + "班";
+    var course = req.body.course;
     var cid = Date.now();
-    con.query('insert into Course ' +
-        'value(?, ?, ?, ?, ?)', [cid, course.name, remark, course.endTime, course.description], function (err) {
-        if (err) {
-            console.log("Insert Course: " + err);
-            res.json({
-               status: false
-            });
-        } else {
-            res.json({
-                status: true
-            });
-            var query = "";
-            var len = course.teachers.length;
-            for (var i = 0; i < len - 1; i++) {
-                query += "insert into TeacherCourse value('" + course.teachers[i] + "', '" + cid + "');";
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 2) {
+        con.query('insert into Course ' +
+            'value(?, ?, ?)', [cid, course.name, course.endTime], function (err) {
+            if (err) {
+                console.log("Insert Course: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                con.query("insert into TeacherCourse " +
+                    "value(?, ?)", [userInfo.id, cid], function (err, result) {
+                    if (err) {
+                        console.log("Insert into TeacherCourse in addCourse: " + err);
+                    } else {
+                        res.json({
+                            status: true
+                        });
+                    }
+                });
             }
-            query += "insert into TeacherCourse value('" + course.teachers[len - 1] + "', '" + cid + "')";
-
-            con.query(query, function (err, result) {
-               if (err) {
-                   console.log("Insert TeacherCourse: " + err);
-               } else {
-                   var len = gradesAndClasses.length;
-                   var query = "";
-                   for (var i = 0; i < len; i++) {
-                       query += "select sid from Student where grade = " +
-                           gradesAndClasses[i].grade + " and class = " +
-                           gradesAndClasses[i].class + " and major = '" +
-                           gradesAndClasses[i].major + "';";
-                   }
-                   con.query(query, function (err, result) {
-                      if (err) {
-                          console.log("Get sid in addCourse: " + err);
-                      } else {
-                          var query = "";
-                          for (var i = 0; i < result.length; i++) {
-                              query += "insert into StudentCourse value('" +
-                                  result[i]['sid'] + "', '" + cid + "');";
-                          }
-                          con.query(query, function (err, result) {
-                              if (err) {
-                                  console.log("Insert into StudentCourse in addCourse: " + err);
-                              } else {
-                                  var mid = new Date().getTime();
-                                  var link = "/homePage/learning-system/my-courses";
-                                  var title = "您有新的课程 \"" + course.name + "\"";
-                                  sysMessageAll(mid, link, title, cid, true);
-                              }
-                          });
-                      }
-                   });
-               }
-            });
-        }
-    });
+        });
+    }
 };
 
 exports.getMyCourses = function (req, res) {
-    var userInfo = req.body;
+    var userInfo = req.body.userInfo;
+    var status = req.body.status;
     var result = {};
     var query = "";
+    var now = new Date();
     if (userInfo.level == 1) {
-        query = "select * from Course c, StudentCourse sc where sc.sid = ? and sc.cid = c.cid;"
+        if (status == 'progressing') {
+            query = "select * from Course c, StudentCourse sc where sc.sid = ? and sc.cid = c.cid and c.endTime > ?;"
+        } else if (status == 'ended'){
+            query = "select * from Course c, StudentCourse sc where sc.sid = ? and sc.cid = c.cid and c.endTime <= ?;"
+        }
     } else if (userInfo.level == 2) {
-        query = "select * from Course c, TeacherCourse tc where tc.tid = ? and tc.cid = c.cid;"
+        if (status == 'progressing') {
+            query = "select * from Course c, TeacherCourse tc where tc.tid = ? and tc.cid = c.cid and c.endTime > ?;"
+        } else if (status == 'ended') {
+            query = "select * from Course c, TeacherCourse tc where tc.tid = ? and tc.cid = c.cid and c.endTime <= ?;"
+        }
     }
-    con.query(query, [userInfo.id], function (err, row) {
+    con.query(query, [userInfo.id, now], function (err, row) {
         if (err) {
             console.log("getMyCourses query: " + err);
             res.json({
@@ -537,6 +507,11 @@ exports.getExerciseBanks = function (req, res) {
                         if (err) {
                             console.log("Get exercises count: " + err);
                         } else {
+                            if (rows.length == 1) {
+                                var tmp = [];
+                                tmp.push(rows);
+                                rows = tmp;
+                            }
                             res.json({
                                 status: true,
                                 result: result,
@@ -571,6 +546,11 @@ exports.getExerciseBanks = function (req, res) {
                         if (err) {
                             console.log("Get exercises count: " + err);
                         } else {
+                            if (rows.length == 1) {
+                                var tmp = [];
+                                tmp.push(rows);
+                                rows = tmp;
+                            }
                             res.json({
                                 status: true,
                                 result: result,
@@ -1868,7 +1848,7 @@ exports.deleteCourseWare = function (req, res) {
                 });
                 fs.unlink("public/CourseWares/" + cname + "/" + cwid + ".swf", function (err) {
                     if (err) {
-                        console.log("Remove courseWare(swff) in deleteCourseWare: " + err);
+                        console.log("Remove courseWare(swf) in deleteCourseWare: " + err);
                     }
                 });
                 res.json({

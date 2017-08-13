@@ -47,7 +47,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
             controller: courseMembersTeacherCtrl,
             templateUrl: "partials/courseMembersTeacher"
         }).state("logined.learningSystem.myCourses", {
-            url: "/my-courses",
+            url: "/my-courses/:status",
             controller: myCoursesCtrl,
             templateUrl: "partials/myCourses"
         }).state("logined.learningSystem.addCourse", {

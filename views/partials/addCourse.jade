@@ -1,27 +1,31 @@
 div(class="panel panel-info")
     div(class="panel-heading")
-        h3 新建课程
+        h4 新建课程
     div(class="panel-body panelBody")
         div(class="col-xs-8 col-xs-offset-2")
             label 课程名称
-            input(class="form-control" type="text" placeholder="请输入课程的名称" ng-model="course.name")
-            p
-            label 课程教师
-            input(class="form-control" type="text" placeholder="请输入负责本课程的教师的工号。如有多名教师，请用加号隔开，例如：15331037+15331036" ng-model="teachers")
-            p
-            label 面向专业
-            input(major-change-listener class="form-control" type="text" placeholder="请输入课程面向的专业。如有多个专业，请用加号隔开，例如：计算机科学与技术+软件工程" ng-model="course.major")
-            p
-            label 面向年级与班级
-            div(ng-repeat="gradeAndClass in gradesAndClasses")
+            input(class="form-control mb-10" type="text" placeholder="请输入课程的名称" ng-model="course.name")
+            //p
+            //label 课程教师
+            //input(class="form-control" type="text" placeholder="请输入负责本课程的教师的工号。如有多名教师，请用加号隔开，例如：15331037+15331036" ng-model="teachers")
+            //p
+            //label 面向专业
+            //input(major-change-listener class="form-control" type="text" placeholder="请输入课程面向的专业。如有多个专业，请用加号隔开，例如：计算机科学与技术+软件工程" ng-model="course.major")
+            //p
+            //label 面向年级与班级
+            //div(ng-repeat="gradeAndClass in gradesAndClasses")
                 label(class="checkbox-inline")
                     input(type="checkbox" class="checkbox" ng-model="gradeAndClass.isSelected")
                     span {{gradeAndClass.major + gradeAndClass.grade + "级" + gradeAndClass.class + "班"}}
-            p
+            //p
             label 课程结束时间
-            input(class="form-control" type="text" placeholder="请输入课程结束时间，如：2018/01/30" ng-model = "endTime")
-            p
-            label 课程描述
-            div(editor)
-            p
-            button(class="btn btn-primary pull-right" ng-click="addCourse()") 确认
+            div(class="input-group mb-10")
+                input(readonly type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="endTime" is-open="isDtOpen" datepicker-options="dateOptions" current-text="今天" clear-text="清除" close-text="关闭" popup-placement="bottom-right")
+                span(class="input-group-btn")
+                    button(type="button" class="btn btn-default" ng-click="dtOpen()")
+                        i(class="glyphicon glyphicon-calendar")
+            //p
+            //label 课程描述
+            //div(editor)
+            //p
+            button(class="btn btn-primary pull-right" ng-click="addCourse()") 创建

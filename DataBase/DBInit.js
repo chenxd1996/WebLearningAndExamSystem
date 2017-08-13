@@ -50,9 +50,7 @@ function DBInit() {
     con.query("create table if not exists Course(" +
         "cid varchar(32)," +
         "cname varchar(20)," +
-        "remark varchar(400)," +
         "endTime varchar(32)," +
-        "description varchar(10000)," +
         "primary key(cid))", function (err, result) {
             if (err) {
                 console.log("Course: " + err);

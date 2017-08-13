@@ -25,7 +25,7 @@ ul(ng-if="userInfo.level == 3" class="nav nav-pills nav-stacked navbar-inverse n
                 span(ng-if="showDetail")  个人资料
 ul(ng-if="userInfo.level == 2" class="nav nav-pills nav-stacked navbar-inverse navbar-fixed-top myNav navNarrow text-center" responsive-navigation)
     li(role="presentation" ng-class="{'learning-system': 'active'}[checked]" ng-click="changeStatus('learning-system')")
-        a(ui-sref="logined.learningSystem.myCourses")
+        a(ui-sref="logined.learningSystem.myCourses({status: 'progressing'})")
             span(class="glyphicon glyphicon-book" aria-hidden="true")
                 span(ng-if="showDetail")  学习系统
     li(role="presentation" ng-class="{'exercise-system': 'active'}[checked]" ng-click="changeStatus('exercise-system')")
@@ -50,7 +50,7 @@ ul(ng-if="userInfo.level == 2" class="nav nav-pills nav-stacked navbar-inverse n
                         b(ng-if="messagesNum >= 100") N
 ul(ng-if="userInfo.level == 1" class="nav nav-pills nav-stacked navbar-inverse navbar-fixed-top myNav navNarrow text-center" responsive-navigation)
     li(role="presentation" ng-class="{'learning-system': 'active'}[checked]" ng-click="changeStatus('learning-system')")
-        a(ui-sref="logined.learningSystem.myCourses")
+        a(ui-sref="logined.learningSystem.myCourses({status: 'progressing'})")
             span(class="glyphicon glyphicon-book" aria-hidden="true")
                 span(ng-if="showDetail")  学习系统
     li(role="presentation" ng-class="{'exercise-system': 'active'}[checked]" ng-click="changeStatus('exercise-system')")

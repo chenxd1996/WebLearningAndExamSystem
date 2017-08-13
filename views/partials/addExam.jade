@@ -9,7 +9,7 @@ div(class="panel panel-info")
             input(class="form-control mb-5" ng-model="examName")
             label 考试日期
             div(class="input-group mb-5")
-                input(type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="examDate" is-open="isDtOpen" datepicker-options="dateOptions" current-text="今天" clear-text="清除" close-text="关闭" popup-placement="bottom-right")
+                input(readonly type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="examDate" is-open="isDtOpen" datepicker-options="dateOptions" current-text="今天" clear-text="清除" close-text="关闭" popup-placement="bottom-right")
                 span(class="input-group-btn")
                     button(type="button" class="btn btn-primary" ng-click="dtOpen()")
                         i(class="glyphicon glyphicon-calendar")
