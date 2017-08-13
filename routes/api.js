@@ -338,8 +338,8 @@ exports.uploadCourseWares = function (req, res) {
                 }
             });
             con.query("insert into CourseWare " +
-                "value('" + filename + "', '" +
-                req.file.originalname + "', '" +
+                "value('" + req.file.filename + "', '" +
+                filename + "', '" +
                 req.file.mimetype + "');", function (err, result) {
                 if (err) {
                     console.log("Insert into CourseWare: " + err);
