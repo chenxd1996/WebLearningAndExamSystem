@@ -27,7 +27,7 @@ div(class="content-container courseWare-list")
             span(class="col-xs-2 text-center") 学习情况
         li(ng-repeat="courseWare in courseWares")
             div(class="message-op col-xs-1")
-                a(ng-click="check($index)" class="fa-lg fa fa-fw fa-trash-o"  uib-tooltip="点击将删除该课件" tooltip-trigger="'mouseenter'" tooltip-placement="top")
+                a(ng-click="delete($index)" class="fa-lg fa fa-fw fa-trash-o"  uib-tooltip="点击将删除该课件" tooltip-trigger="'mouseenter'" tooltip-placement="top")
             div(class="courseWare-name col-xs-9")
                 div
                     a(ui-sref="logined.courseDetail.courseWareDetail({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})")

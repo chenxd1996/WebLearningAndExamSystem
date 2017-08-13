@@ -642,6 +642,32 @@ function courseDataCtrl($scope, $stateParams, $http, $rootScope) {
             });
         }
     });
+    
+    $scope.delete = function (index) {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "是否删除该课件？";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            $http.post('/deleteCourseWare', {
+                userInfo: $rootScope.userInfo,
+                cwid: $scope.courseWares[index].cid
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop('success', "删除成功！", '', 2000);
+                    $scope.courseWares.splice(index, 1);
+                }
+            });
+        });
+    }
+
 }
 
 function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {

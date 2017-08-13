@@ -103,6 +103,8 @@ router.post('/deleteStudents', api.deleteStudents);
 
 router.post('/deleteTeachers', api.deleteTeachers);
 
+router.post('/deleteCourseWare', api.deleteCourseWare);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

@@ -1847,3 +1847,7 @@ exports.deleteTeachers = function (req, res) {
         }
     }
 };
+
+exports.deleteCourseWare = function (req, res) {
+    console.log(req.body);
+};
