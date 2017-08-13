@@ -40,7 +40,6 @@ function DBInit() {
 
     con.query("create table if not exists Admin(" +
         "aid varchar(20)," +
-        "aname varchar(15)," +
         "password varchar(33)," +
         "primary key(aid))", function (err, result) {
             if (err) {
