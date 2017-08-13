@@ -465,7 +465,7 @@ window.FlexPaperViewerEmbedding = window.$f = function(id, args) {
                     "<h2>Your browser is not compatible with FlexPaper</h2>" +
                         "<h3>Upgrade to a newer browser or download Adobe Flash Player 10 or higher.</h3>" +
                         "<p>Click on the icon below to download the latest version of Adobe Flash" +
-                        "<a href='http://www.adobe.com/go/getflashplayer'><img src='"
+                        "<a href='http://www.adobe.com/go/getflashplayer' target="_blank"><img src='"
                         + pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>";
 
                 if (root.tagName == 'A') {
