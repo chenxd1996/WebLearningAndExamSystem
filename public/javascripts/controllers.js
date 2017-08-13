@@ -658,7 +658,7 @@ function courseDataCtrl($scope, $stateParams, $http, $rootScope, $uibModal, toas
         modalInstance.result.then(function () {
             $http.post('/deleteCourseWare', {
                 userInfo: $rootScope.userInfo,
-                cwid: $scope.courseWares[index].cid
+                cwid: $scope.courseWares[index].cwid
             }).success(function (res) {
                 if (res.status) {
                     toaster.pop('success', "删除成功！", '', 2000);
