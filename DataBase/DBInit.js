@@ -324,7 +324,7 @@ function DBInit() {
     con.query("select count(*) from Admin", function (err, result) {
         if (result[0]['count(*)'] == 0) {
             con.query("insert into Admin " +
-                "values('8888', '25d55ad283aa400af464c76d713c07ad')", function (err, result) {
+                "value('8888', '25d55ad283aa400af464c76d713c07ad')", function (err, result) {
                 if (err) {
                     console.log("Insert a admin at the beginning: " + err);
                 }
