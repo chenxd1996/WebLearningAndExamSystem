@@ -22,10 +22,13 @@ div(class="content-container courseWare-list")
                 span(ng-if="!courseWare.learningTime") 0分钟
     ul(ng-if="courseWares.length > 0 && userInfo.level == 2")
         li
-            span(class="col-xs-10") 课件名称
+            span(class="col-xs-1") 操作
+            span(class="col-xs-9") 课件名称
             span(class="col-xs-2 text-center") 学习情况
         li(ng-repeat="courseWare in courseWares")
-            div(class="courseWare-name col-xs-10")
+            div(class="message-op col-xs-1")
+                a(ng-click="check($index)" class="fa-lg fa fa-fw fa-trash-o"  uib-tooltip="点击将删除该课件" tooltip-trigger="'mouseenter'" tooltip-placement="top")
+            div(class="courseWare-name col-xs-9")
                 div
                     a(ui-sref="logined.courseDetail.courseWareDetail({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})")
                         span {{courseWare.cname}}
@@ -33,12 +36,4 @@ div(class="content-container courseWare-list")
                 a(class="fa fa-lg fa-fw fa-bar-chart-o" ui-sref="logined.courseDetail.learningSituation({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})")
     div(ng-if="courseWares.length == 0" class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20")
         div(class="fs-16") 暂无数据
-//div(class="panel panel-info")
-    div(class="panel-heading")
-        h3 所有课件
-    div(class="panel-body panelBody")
-        div(class="list-group")
-            a(ui-sref="logined.courseDetail.courseWareDetail({courseID: courseID, cwid: courseWare.cwid, courseName: courseName})" class="list-group-item" ng-repeat="courseWare in courseWares") {{courseWare.cname}}
-           //a(target="_blank" ng-href="getCourseWare?cid={{courseWare.cwid}}&type={{courseWare.mimetype}}" class="list-group-item" ng-repeat="courseWare in courseWares") {{courseWare.cname}}
-
 
