@@ -644,7 +644,6 @@ function courseDataCtrl($scope, $stateParams, $http, $rootScope, $uibModal, toas
     });
     
     $scope.delete = function (index) {
-        console.log($scope.courseWares[index]);
         var modalInstance = $uibModal.open({
             animation: false,
             size: 'sm',
@@ -659,7 +658,8 @@ function courseDataCtrl($scope, $stateParams, $http, $rootScope, $uibModal, toas
         modalInstance.result.then(function () {
             $http.post('/deleteCourseWare', {
                 userInfo: $rootScope.userInfo,
-                cwid: $scope.courseWares[index].cwid
+                cwid: $scope.courseWares[index].cwid,
+                cname: $scope.courseName
             }).success(function (res) {
                 if (res.status) {
                     toaster.pop('success', "删除成功！", '', 2000);

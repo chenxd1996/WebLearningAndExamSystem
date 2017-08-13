@@ -1849,5 +1849,27 @@ exports.deleteTeachers = function (req, res) {
 };
 
 exports.deleteCourseWare = function (req, res) {
-    console.log(req.body);
+    var userInfo = req.body.userInfo;
+    var cwid = req.body.cwid;
+    var cname = req.bodyOutputType.cname;
+    if (userInfo.level == 2) {
+        con.query("delete from CourseWare " +
+            "where cid = ?;", cwid, function (err, result) {
+            if (err) {
+                console.log("Delete from CourseWare in deleteCourseWare: " + err);
+                res.json({
+                   status: false
+                });
+            } else {
+                fs.rmdir("public/CourseWares/" + cname + "/" + cwid, function (err) {
+                    if (err) {
+                        console.log("Remove courseWare in deleteCourseWare: " + err);
+                    } 
+                });
+                res.json({
+                   status: true
+                });
+            }
+        })
+    }
 };
