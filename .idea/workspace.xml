@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3216e0a6-c310-4b3b-97cb-4af60415d0dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/controllers.js" afterPath="$PROJECT_DIR$/public/javascripts/controllers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/filters.js" afterPath="$PROJECT_DIR$/public/javascripts/filters.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/style.css" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api.js" afterPath="$PROJECT_DIR$/routes/api.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/courseMembersStudent.jade" afterPath="$PROJECT_DIR$/views/partials/courseMembersStudent.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/courseMembersTeacher.jade" afterPath="$PROJECT_DIR$/views/partials/courseMembersTeacher.jade" />
-    </list>
+    <list default="true" id="3216e0a6-c310-4b3b-97cb-4af60415d0dc" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -59,7 +51,7 @@
         <entry file="file://$PROJECT_DIR$/views/partials/courseMembersTeacher.jade">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="329">
-              <caret line="22" column="61" lean-forward="true" selection-start-line="22" selection-start-column="61" selection-end-line="22" selection-end-column="61" />
+              <caret line="22" column="61" lean-forward="false" selection-start-line="22" selection-start-column="61" selection-end-line="22" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -99,7 +91,7 @@
         <entry file="file://$PROJECT_DIR$/public/javascripts/bootstrap-wysiwyg.min.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
-              <caret line="9" column="5689" lean-forward="true" selection-start-line="9" selection-start-column="5689" selection-end-line="9" selection-end-column="5689" />
+              <caret line="9" column="5689" lean-forward="false" selection-start-line="9" selection-start-column="5689" selection-end-line="9" selection-end-column="5689" />
               <folding />
             </state>
           </provider>
@@ -108,8 +100,8 @@
       <file leaf-file-name="controllers.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/controllers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10">
-              <caret line="516" column="44" lean-forward="true" selection-start-line="516" selection-start-column="44" selection-end-line="516" selection-end-column="44" />
+            <state relative-caret-position="-11557">
+              <caret line="516" column="44" lean-forward="false" selection-start-line="516" selection-start-column="44" selection-end-line="516" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -508,12 +500,12 @@
       <workItem from="1501937878213" duration="11000" />
       <workItem from="1501938123418" duration="6000" />
       <workItem from="1501938142907" duration="79690000" />
-      <workItem from="1502329615894" duration="69272000" />
+      <workItem from="1502329615894" duration="69456000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="780970000" />
+    <option name="totallyTimeSpent" value="781154000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -534,7 +526,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32817337" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24963397" sideWeight="0.19970194" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2506964" sideWeight="0.4941435" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2506964" sideWeight="0.4941435" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1816828" sideWeight="0.39430895" order="2" side_tool="true" content_ui="tabs" />
@@ -902,7 +894,7 @@
     <entry file="file://$PROJECT_DIR$/public/javascripts/bootstrap-wysiwyg.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
-          <caret line="9" column="5689" lean-forward="true" selection-start-line="9" selection-start-column="5689" selection-end-line="9" selection-end-column="5689" />
+          <caret line="9" column="5689" lean-forward="false" selection-start-line="9" selection-start-column="5689" selection-end-line="9" selection-end-column="5689" />
           <folding />
         </state>
       </provider>
@@ -934,7 +926,7 @@
     <entry file="file://$PROJECT_DIR$/views/partials/courseMembersTeacher.jade">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
-          <caret line="22" column="61" lean-forward="true" selection-start-line="22" selection-start-column="61" selection-end-line="22" selection-end-column="61" />
+          <caret line="22" column="61" lean-forward="false" selection-start-line="22" selection-start-column="61" selection-end-line="22" selection-end-column="61" />
           <folding />
         </state>
       </provider>
@@ -957,8 +949,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/controllers.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10">
-          <caret line="516" column="44" lean-forward="true" selection-start-line="516" selection-start-column="44" selection-end-line="516" selection-end-column="44" />
+        <state relative-caret-position="-11557">
+          <caret line="516" column="44" lean-forward="false" selection-start-line="516" selection-start-column="44" selection-end-line="516" selection-end-column="44" />
           <folding />
         </state>
       </provider>
