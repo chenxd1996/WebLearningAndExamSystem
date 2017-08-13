@@ -1863,7 +1863,12 @@ exports.deleteCourseWare = function (req, res) {
             } else {
                 fs.unlink("public/CourseWares/" + cname + "/" + cwid, function (err) {
                     if (err) {
-                        console.log("Remove courseWare in deleteCourseWare: " + err);
+                        console.log("Remove courseWare(pdf) in deleteCourseWare: " + err);
+                    }
+                });
+                fs.unlink("public/CourseWares/" + cname + "/" + cwid + ".swf", function (err) {
+                    if (err) {
+                        console.log("Remove courseWare(swff) in deleteCourseWare: " + err);
                     }
                 });
                 res.json({
