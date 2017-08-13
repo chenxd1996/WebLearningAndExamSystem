@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3216e0a6-c310-4b3b-97cb-4af60415d0dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api.js" afterPath="$PROJECT_DIR$/routes/api.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/learningSituation.jade" afterPath="$PROJECT_DIR$/views/partials/learningSituation.jade" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,11 +19,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="api.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="api.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/api.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="248">
               <caret line="341" column="24" lean-forward="false" selection-start-line="341" selection-start-column="24" selection-end-line="341" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="learningSituation.jade" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/views/partials/learningSituation.jade">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="57" lean-forward="false" selection-start-line="14" selection-start-column="57" selection-end-line="14" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -44,16 +54,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
               <caret line="341" column="30" lean-forward="false" selection-start-line="341" selection-start-column="30" selection-end-line="341" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="directives.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/javascripts/directives.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -131,7 +131,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$</find>
       <find>timeout</find>
       <find>z-index</find>
       <find>learningS</find>
@@ -161,6 +160,7 @@
       <find>logo</find>
       <find>logou</find>
       <find>logout</find>
+      <find>insert into CourseWare</find>
     </findStrings>
     <replaceStrings>
       <replace>on delete set null</replace>
@@ -199,7 +199,6 @@
         <option value="$PROJECT_DIR$/views/partials/courseWareDetail.jade" />
         <option value="$PROJECT_DIR$/views/partials/postMessage.jade" />
         <option value="$PROJECT_DIR$/views/partials/allMessages.jade" />
-        <option value="$PROJECT_DIR$/views/partials/learningSituation.jade" />
         <option value="$PROJECT_DIR$/fileUploader/fileReciever.js" />
         <option value="$PROJECT_DIR$/views/partials/singleAdd" />
         <option value="$PROJECT_DIR$/views/partials/multiAdd.jade" />
@@ -227,6 +226,7 @@
         <option value="$PROJECT_DIR$/views/partials/courseData.jade" />
         <option value="$PROJECT_DIR$/DataBase/DBInit.js" />
         <option value="$PROJECT_DIR$/routes/api.js" />
+        <option value="$PROJECT_DIR$/views/partials/learningSituation.jade" />
       </list>
     </option>
   </component>
@@ -503,12 +503,12 @@
       <workItem from="1501938123418" duration="6000" />
       <workItem from="1501938142907" duration="79690000" />
       <workItem from="1502329615894" duration="69456000" />
-      <workItem from="1502589003522" duration="2511000" />
+      <workItem from="1502589003522" duration="2631000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="783665000" />
+    <option name="totallyTimeSpent" value="783785000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -656,13 +656,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="60" lean-forward="false" selection-start-line="1" selection-start-column="60" selection-end-line="1" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/partials/learningSituation.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="70" lean-forward="false" selection-start-line="20" selection-start-column="70" selection-end-line="20" selection-end-column="70" />
         </state>
       </provider>
     </entry>
@@ -932,6 +925,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="248">
           <caret line="341" column="24" lean-forward="false" selection-start-line="341" selection-start-column="24" selection-end-line="341" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/partials/learningSituation.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="57" lean-forward="false" selection-start-line="14" selection-start-column="57" selection-end-line="14" selection-end-column="57" />
           <folding />
         </state>
       </provider>

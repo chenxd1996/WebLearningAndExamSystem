@@ -7,12 +7,12 @@ div(class="container-content")
                 table(class="table")
                     thead
                         tr
-                            th 学号
-                            th 姓名
-                            th 进度
-                            th 已学时长
+                            th(class="text-center") 学号
+                            th(class="text-center") 姓名
+                            th(class="text-center") 进度
+                            th(class="text-center") 已学时长
                     tbody
-                        tr(ng-repeat="result in results")
+                        tr(ng-repeat="result in results" class="text-center")
                             td {{result.sid}}
                             td {{result.sname}}
                             td {{result.progress * 100}}%
