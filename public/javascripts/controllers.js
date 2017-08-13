@@ -644,6 +644,7 @@ function courseDataCtrl($scope, $stateParams, $http, $rootScope, $uibModal, toas
     });
     
     $scope.delete = function (index) {
+        console.log($scope.courseWares[index]);
         var modalInstance = $uibModal.open({
             animation: false,
             size: 'sm',
