@@ -1245,7 +1245,7 @@ exports.editPassword = function (req, res) {
             "where tid = ?;";
     } else if (userInfo.level == 3) {
         query = "update Admin " +
-            "set password = ?, name " +
+            "set password = ? " +
             "where aid = ?;";
     }
     con.query(query, [password, userInfo.id], function (err) {

@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3216e0a6-c310-4b3b-97cb-4af60415d0dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/app.js" afterPath="$PROJECT_DIR$/public/javascripts/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/controllers.js" afterPath="$PROJECT_DIR$/public/javascripts/controllers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/style.css" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api.js" afterPath="$PROJECT_DIR$/routes/api.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/addExam.jade" afterPath="$PROJECT_DIR$/views/partials/addExam.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/homePage.jade" afterPath="$PROJECT_DIR$/views/partials/homePage.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/learningSystem.jade" afterPath="$PROJECT_DIR$/views/partials/learningSystem.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/myCourses.jade" afterPath="$PROJECT_DIR$/views/partials/myCourses.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/myExerciseBank.jade" afterPath="$PROJECT_DIR$/views/partials/myExerciseBank.jade" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -31,8 +22,8 @@
       <file leaf-file-name="api.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/api.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="491">
-              <caret line="1252" column="31" lean-forward="false" selection-start-line="1252" selection-start-column="31" selection-end-line="1252" selection-end-column="31" />
+            <state relative-caret-position="270">
+              <caret line="1247" column="29" lean-forward="false" selection-start-line="1247" selection-start-column="29" selection-end-line="1247" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -521,12 +512,12 @@
       <workItem from="1502589003522" duration="3759000" />
       <workItem from="1502594977795" duration="13489000" />
       <workItem from="1502670829509" duration="3289000" />
-      <workItem from="1502680531266" duration="156000" />
+      <workItem from="1502680531266" duration="243000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="801847000" />
+    <option name="totallyTimeSpent" value="801934000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -545,7 +536,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28705147" sideWeight="0.5058565" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2506964" sideWeight="0.4941435" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2506964" sideWeight="0.4941435" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24963397" sideWeight="0.19970194" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -954,8 +945,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="1252" column="31" lean-forward="false" selection-start-line="1252" selection-start-column="31" selection-end-line="1252" selection-end-column="31" />
+        <state relative-caret-position="270">
+          <caret line="1247" column="29" lean-forward="false" selection-start-line="1247" selection-start-column="29" selection-end-line="1247" selection-end-column="29" />
           <folding />
         </state>
       </provider>
