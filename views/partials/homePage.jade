@@ -29,7 +29,7 @@ ul(ng-if="userInfo.level == 2" class="nav nav-pills nav-stacked navbar-inverse n
             span(class="glyphicon glyphicon-book" aria-hidden="true")
                 span(ng-if="showDetail")  学习系统
     li(role="presentation" ng-class="{'exercise-system': 'active'}[checked]" ng-click="changeStatus('exercise-system')")
-        a(ui-sref="logined.exerciseSystem.myExerciseBank")
+        a(ui-sref="logined.exerciseSystem.myExerciseBank({status: 'progressing'})")
             span(class="glyphicon glyphicon-tasks" aria-hidden="true")
                 span(ng-if="showDetail")  题库系统
     li(role="presentation" ng-class="{'exam-system': 'active'}[checked]" ng-click="changeStatus('exam-system')")
@@ -54,7 +54,7 @@ ul(ng-if="userInfo.level == 1" class="nav nav-pills nav-stacked navbar-inverse n
             span(class="glyphicon glyphicon-book" aria-hidden="true")
                 span(ng-if="showDetail")  学习系统
     li(role="presentation" ng-class="{'exercise-system': 'active'}[checked]" ng-click="changeStatus('exercise-system')")
-        a(ui-sref="logined.exerciseSystem.myExerciseBank")
+        a(ui-sref="logined.exerciseSystem.myExerciseBank({status: 'progressing'})")
             span(class="glyphicon glyphicon-tasks" aria-hidden="true")
                 span(ng-if="showDetail")  题库系统
     li(role="presentation" ng-class="{'exam-system': 'active'}[checked]" ng-click="changeStatus('exam-system')")

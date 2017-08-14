@@ -128,7 +128,7 @@ exports.addCourse = function (req, res) {
     var userInfo = req.body.userInfo;
     if (userInfo.level == 2) {
         con.query('insert into Course ' +
-            'value(?, ?, ?)', [cid, course.name, course.endTime], function (err) {
+            'value(?, ?, ?)', [cid, course.name, new Date(course.endTime).getTime()], function (err) {
             if (err) {
                 console.log("Insert Course: " + err);
                 res.json({
@@ -155,7 +155,7 @@ exports.getMyCourses = function (req, res) {
     var status = req.body.status;
     var result = {};
     var query = "";
-    var now = new Date();
+    var now = new Date().getTime();
     if (userInfo.level == 1) {
         if (status == 'progressing') {
             query = "select * from Course c, StudentCourse sc where sc.sid = ? and sc.cid = c.cid and c.endTime > ?;"
@@ -488,9 +488,17 @@ exports.addExerciseBank = function (req, res) {
 };
 
 exports.getExerciseBanks = function (req, res) {
-    if (req.body.level == 1) {
-        con.query("select c.cname, eb.eid, eb.ename from StudentCourse sc, Course c, ExerciseBank eb, ExerciseBankCourse ec " +
-            "where sc.sid = ? and sc.cid = c.cid and ec.cid = c.cid and eb.eid = ec.eid;", req.body.userInfo.id, function (err, result) {
+    var now = new Date().getTime();
+    if (req.body.userInfo.level == 1) {
+        var query = "";
+        if (req.body.status == "progressing") {
+            query = "select c.cname, eb.eid, eb.ename from StudentCourse sc, Course c, ExerciseBank eb, ExerciseBankCourse ec " +
+                "where sc.sid = ? and sc.cid = c.cid and ec.cid = c.cid and eb.eid = ec.eid and c.endTime > ?;";
+        } else if (req.body.status == "ended") {
+            query = "select c.cname, eb.eid, eb.ename from StudentCourse sc, Course c, ExerciseBank eb, ExerciseBankCourse ec " +
+                "where sc.sid = ? and sc.cid = c.cid and ec.cid = c.cid and eb.eid = ec.eid and c.endTime <= ?;";
+        }
+        con.query(query, [req.body.userInfo.id, now], function (err, result) {
             if (err) {
                 console.log("get student exercise banks: " + err);
                 res.json({
@@ -527,9 +535,16 @@ exports.getExerciseBanks = function (req, res) {
                 }
             }
         });
-    } else if (req.body.level == 2) {
-        con.query("select * from TeacherCourse tc, Course c, ExerciseBank e, ExerciseBankCourse ec " +
-            "where tc.tid = ? and tc.cid = c.cid and ec.cid = c.cid and e.eid = ec.eid;", req.body.userInfo.id, function (err, result) {
+    } else if (req.body.userInfo.level == 2) {
+        var query = "";
+        if (req.body.status == "progressing") {
+            query = "select * from TeacherCourse tc, Course c, ExerciseBank e, ExerciseBankCourse ec " +
+                "where tc.tid = ? and tc.cid = c.cid and ec.cid = c.cid and e.eid = ec.eid and c.endTime > ?;";
+        } else if (req.body.status == "ended") {
+            query = "select * from TeacherCourse tc, Course c, ExerciseBank e, ExerciseBankCourse ec " +
+                "where tc.tid = ? and tc.cid = c.cid and ec.cid = c.cid and e.eid = ec.eid and c.endTime <= ?;";
+        }
+        con.query(query, [req.body.userInfo.id, now], function (err, result) {
             if (err) {
                 console.log("get teacher exercise banks:" + err);
                 res.json({
@@ -690,29 +705,46 @@ exports.getExercise = function (req, res) {
 exports.submitAndGetAnswer = function (req, res) {
     var options = req.body.options;
     var userInfo = req.body.userInfo;
+    var eid = req.body.eid;
     var answer = "";
     for (var i = 0; i < options.length - 1; i++) {
         answer += options[i].op;
     }
     answer += options[options.length - 1].op;
-    if (userInfo && userInfo.level == 1) {
-        con.query("insert into StudentExercise " +
-            "value(?,?,?);", [userInfo.id, options[0].eid, answer], function (err, result) {
-            if (err) {
-                console.log("Insert into StudentExercise: " + err);
-            }
-            con.query("select * from Answer " +
-                "where eid = ?;", options[0].eid, function (err, result) {
-                if (err) {
-                    console.log("get answer in submitAndGetAnswer: " + err);
-                } else {
-                    res.json({
-                        result: result
-                    });
+    con.query("select c.endTime from Course c, ExerciseBankCourse ebc " +
+        "where c.cid = ebc.cid and ebc.eid = ?", eid, function (err, result) {
+        if (err) {
+            console.log("Get course endTime in submitAndGetAnswer");
+        } else {
+            var now = new Date().getTime();
+            console.log(result[0].endTime > now);
+            if (result[0].endTime > now) {
+                if (userInfo && userInfo.level == 1) {
+                    con.query("insert into StudentExercise " +
+                        "value(?,?,?);", [userInfo.id, options[0].eid, answer], function (err, result) {
+                        if (err) {
+                            console.log("Insert into StudentExercise: " + err);
+                        }
+                        con.query("select * from Answer " +
+                            "where eid = ?;", options[0].eid, function (err, result) {
+                            if (err) {
+                                console.log("get answer in submitAndGetAnswer: " + err);
+                            } else {
+                                res.json({
+                                    status: true,
+                                    result: result
+                                });
+                            }
+                        });
+                    })
                 }
-            });
-        })
-    }
+            } else {
+                res.json({
+                   status: false
+                });
+            }
+        }
+    });
 };
 
 exports.getCourseExerciseBanks = function (req, res) {

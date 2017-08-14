@@ -777,7 +777,7 @@ function addExerciseBankCtrl($scope, $rootScope, $http, toaster) {
 }
 
 function myExerciseBankCtrl($scope, $http, $rootScope, $stateParams, $state) {
-    $scope.status = $stateParams.status;
+    $scope.status = $scope.radioModel = $stateParams.status;
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $scope.userInfo = $rootScope.userInfo;
@@ -790,6 +790,9 @@ function myExerciseBankCtrl($scope, $http, $rootScope, $stateParams, $state) {
             });
         }
     });
+    $scope.changeStatus = function (status) {
+        $state.go("logined.exerciseSystem.myExerciseBank", {status: status}, {reload: true});
+    }
 }
 
 function exerciseBankDetailCtrl($scope, $rootScope, $stateParams, $location) {
@@ -832,7 +835,7 @@ function addExerciseCtrl($scope, $http, $stateParams, toaster) {
     }
 }
 
-function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout) {
+function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout, toaster) {
     $scope.status = $stateParams.status;
     $scope.done = 0;
     $scope.correctNum = 0;
@@ -893,19 +896,24 @@ function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout) {
 
         $http.post('/submitAndGetAnswer', {
             options: ops,
-            userInfo: $rootScope.userInfo
+            userInfo: $rootScope.userInfo,
+            eid: $stateParams.exerciseBankID
         }).success(function (res) {
-            $scope.done += 1;
-            var result = res.result;
-            $scope.questions[index].answers = result[0].answer.trim().replace(/\s/g,"");
-            if (answers == $scope.questions[index].answers) {
-                $scope.questions[index].isTrue = true;
+            if (res.status) {
+                $scope.done += 1;
+                var result = res.result;
+                $scope.questions[index].answers = result[0].answer.trim().replace(/\s/g,"");
+                if (answers == $scope.questions[index].answers) {
+                    $scope.questions[index].isTrue = true;
+                } else {
+                    $scope.questions[index].isTrue = false;
+                }
+                $timeout(function () {
+                    $scope.questions[index].isShow = true;
+                });
             } else {
-                $scope.questions[index].isTrue = false;
+                toaster.pop('warning', '课程已结束，不能再提交', "", 2000);
             }
-            $timeout(function () {
-                $scope.questions[index].isShow = true;
-            });
         });
     }
 }

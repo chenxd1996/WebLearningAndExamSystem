@@ -1,9 +1,9 @@
 ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 1")
     li(role="presentation" uib-btn-radio="'my-exercise-bank'" ng-model="checked")
-        a(ui-sref="logined.exerciseSystem.myExerciseBank") 我的题库
+        a(ui-sref="logined.exerciseSystem.myExerciseBank({status:'progressing'})") 我的题库
 ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 2")
     li(role="presentation" uib-btn-radio="'my-exercise-bank'" ng-model="checked")
-        a(ui-sref="logined.exerciseSystem.myExerciseBank") 我的题库
+        a(ui-sref="logined.exerciseSystem.myExerciseBank({status: 'progressing'})") 我的题库
     li(role="presentation" uib-btn-radio="'add-exercise-bank'" ng-model="checked")
         a(ui-sref="logined.exerciseSystem.addExerciseBank") 新建题库
 div(ui-view="")
