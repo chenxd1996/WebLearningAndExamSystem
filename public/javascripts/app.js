@@ -108,7 +108,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
             controller: addExerciseBankCtrl,
             templateUrl: "partials/addExerciseBank"
         }).state("logined.exerciseSystem.myExerciseBank", {
-            url: "/exercise-system/my-exercise-bank",
+            url: "/exercise-system/my-exercise-bank/:status",
             controller: myExerciseBankCtrl,
             templateUrl: "partials/myExerciseBank"
         }).state("logined.exerciseBankDetail", {

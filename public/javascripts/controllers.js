@@ -553,7 +553,6 @@ function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootS
 function myCoursesCtrl($scope, $rootScope, $http, $state, $stateParams) {
     $scope.status = $scope.radioModel = $stateParams.status;
     $scope.result = {};
-    $scope.result.courses = [];
     $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
@@ -777,14 +776,17 @@ function addExerciseBankCtrl($scope, $rootScope, $http, toaster) {
     }
 }
 
-function myExerciseBankCtrl($scope, $http, $rootScope) {
+function myExerciseBankCtrl($scope, $http, $rootScope, $stateParams, $state) {
+    $scope.status = $stateParams.status;
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $scope.userInfo = $rootScope.userInfo;
-            $http.post('/getExerciseBanks', $rootScope.userInfo)
-                .success(function (res) {
-                    $scope.result = res.result;
-                    $scope.counts = res.counts;
+            $http.post('/getExerciseBanks', {
+                userInfo: $rootScope.userInfo,
+                status: $scope.status
+            }).success(function (res) {
+                $scope.result = res.result;
+                $scope.counts = res.counts;
             });
         }
     });
@@ -926,18 +928,11 @@ function examSystemCtrl($scope, $rootScope, $location, $state) {
 function addExamCtrl($scope, $rootScope, $http, toaster) {
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
-            $http.post('/getMyCourses', $rootScope.userInfo).
-            success(function (res) {
-                var courses = res.result.courses;
-                $scope.courses = [];
-                for(var i = 0; i < courses.length; i++) {
-                    if (courses[i].endTime > new Date().getTime()) {
-                        $scope.courses.push({
-                            name: courses[i].cname + " (" + courses[i].remark + ")",
-                            id: courses[i].cid
-                        });
-                    }
-                }
+            $http.post('/getMyCourses', {
+                userInfo: $rootScope.userInfo,
+                status: 'progressing'
+            }).success(function (res) {
+                $scope.courses = res.result.courses;
             });
         }
     });
@@ -956,7 +951,7 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
 
     $scope.getCourseExerciseBanks = function () {
         $http.post('/getCourseExerciseBanks', {
-            cid: $scope.courseSelected.id
+            cid: $scope.courseSelected.cid
         }).success(function (res) {
             if (res.status) {
                 $scope.ebs = res.result;
@@ -966,7 +961,7 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
 
     $scope.submit = function () {
         var exam = {};
-        exam.cid = $scope.courseSelected.id;
+        exam.cid = $scope.courseSelected.cid;
         exam.examName = $scope.examName;
         exam.examDate = $scope.examDate;
         exam.startTime = $scope.startTime;

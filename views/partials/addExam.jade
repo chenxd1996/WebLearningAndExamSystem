@@ -4,7 +4,7 @@ div(class="panel panel-info")
     div(class="panel-body panelBody")
         div(class="col-xs-8 col-xs-offset-2")
             label 考试所属课程
-            select(class="form-control mb-5" ng-model="courseSelected" ng-change="getCourseExerciseBanks()" ng-options="course.name for course in courses")
+            select(class="form-control mb-5" ng-model="courseSelected" ng-change="getCourseExerciseBanks()" ng-options="course.cname for course in courses")
             label 考试名称
             input(class="form-control mb-5" ng-model="examName")
             label 考试日期

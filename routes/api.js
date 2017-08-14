@@ -490,7 +490,7 @@ exports.addExerciseBank = function (req, res) {
 exports.getExerciseBanks = function (req, res) {
     if (req.body.level == 1) {
         con.query("select c.cname, eb.eid, eb.ename from StudentCourse sc, Course c, ExerciseBank eb, ExerciseBankCourse ec " +
-            "where sc.sid = ? and sc.cid = c.cid and ec.cid = c.cid and eb.eid = ec.eid;", req.body.id, function (err, result) {
+            "where sc.sid = ? and sc.cid = c.cid and ec.cid = c.cid and eb.eid = ec.eid;", req.body.userInfo.id, function (err, result) {
             if (err) {
                 console.log("get student exercise banks: " + err);
                 res.json({
@@ -529,7 +529,7 @@ exports.getExerciseBanks = function (req, res) {
         });
     } else if (req.body.level == 2) {
         con.query("select * from TeacherCourse tc, Course c, ExerciseBank e, ExerciseBankCourse ec " +
-            "where tc.tid = ? and tc.cid = c.cid and ec.cid = c.cid and e.eid = ec.eid;", req.body.id, function (err, result) {
+            "where tc.tid = ? and tc.cid = c.cid and ec.cid = c.cid and e.eid = ec.eid;", req.body.userInfo.id, function (err, result) {
             if (err) {
                 console.log("get teacher exercise banks:" + err);
                 res.json({
@@ -1250,7 +1250,7 @@ exports.editPassword = function (req, res) {
     }
     con.query(query, [password, userInfo.id], function (err) {
         if (err) {
-            console.log("Check password: " + err);
+            console.log("update password: " + err);
         } else {
             res.json({});
         }

@@ -414,6 +414,10 @@ a {
   height: 100%
 }
 
+.ng-cloak {
+  display: none;
+}
+
 .panel-dropdown-toggle {
   cursor: pointer;
 }

@@ -6,4 +6,4 @@ ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 2")
         a(ui-sref="logined.learningSystem.myCourses({status: 'progressing'})") 我的课程
     li(role="presentation" uib-btn-radio="'add-course'" ng-model="checked")
         a(ui-sref="logined.learningSystem.addCourse") 新建课程
-div(ui-view="")
+div(ui-view="" ng-cloak class="ng-cloak")
