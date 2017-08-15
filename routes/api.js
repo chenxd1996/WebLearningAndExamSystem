@@ -5,6 +5,7 @@ var path = require("path");
 var exec = require("child_process").exec;
 var excelParser = require('excel-parser');
 var crypto = require('crypto');
+var rimraf = require('rimraf');
 
 exports.loginCheck = function (req, res) {
     var id = req.body.id;
@@ -1892,5 +1893,54 @@ exports.deleteCourseWare = function (req, res) {
                 });
             }
         })
+    }
+};
+
+exports.editCourse = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var course = req.body.course;
+    if (userInfo.level == 2) {
+        con.query("update Course " +
+            "set cname=?, endTime=? " +
+            "where cid=?;", [course.cname, new Date(course.endTime).getTime(), course.cid], function (err, result) {
+            if (err) {
+                console.log("Update course in editCourse: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    }
+};
+
+exports.deleteCourse = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var course = req.body.course;
+    if (userInfo.level == 2) {
+        con.query("delete c, eb, e from Course c left join ExerciseBankCourse ebc on ebc.cid = c.cid " +
+            "left join ExerciseBank eb on eb.eid = ebc.eid left join ExamCourse ec on ec.cid = c.cid " +
+            "left join Exam e on e.eid = ec.eid " +
+            "where c.cid = ?;", course.cid, function (err, result) {
+            if (err) {
+                console.log("Delete course in deleteCourse: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                rimraf('public/CourseWares/' + course.cname, function (err) {
+                    if (err) {
+                        console.log("Delete CourseWare in deleteCourse: " + err);
+                    } else {
+                        res.json({
+                            status: true
+                        });
+                    }
+                });
+            }
+        });
     }
 };

@@ -110,7 +110,7 @@ function learningSystemCtrl($scope, $location, $rootScope) {
             $scope.userInfo = $rootScope.userInfo;
         }
     });
-    var options = ['my-courses', 'add-course'];
+    var options = ['my-courses', 'add-course', 'courses-management'];
     var path = $location.path();
     for (var i = 0; i < options.length; i++) {
         if (path.indexOf(options[i]) >= 0) {
@@ -612,7 +612,7 @@ function addCourseCtrl($scope, $http, toaster, $rootScope, $uibModal) {
     };
 }
 
-function coursesManagementCtrl($scope, $rootScope, $http) {
+function coursesManagementCtrl($scope, $rootScope, $http, toaster, $uibModal) {
     $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
@@ -627,6 +627,84 @@ function coursesManagementCtrl($scope, $rootScope, $http) {
             });
         }
     });
+
+    $scope.edit = function(course) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'partials/editCourseModal',
+            controller: editCourseModalCtrl,
+            resolve: {
+                course: function () {
+                    return course;
+                }
+            }
+        });
+        modalInstance.result.then(function (newCourse) {
+            $http.post('/editCourse', {
+                course: newCourse,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success",  "修改成功！", "", 2000);
+                    for (var i in newCourse) {
+                        course[i] = newCourse[i];
+                    }
+                } else {
+                    toaster.pop("warning", "修改失败", "", 2000);
+                }
+            });
+        });
+    };
+
+    $scope.delete = function (course) {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "删除课程将同时删除相关题库、课件以及考试，是否确定删除该课程?";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            $http.post('/deleteCourse', {
+                course: course,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success", "删除成功！", "", 2000);
+                    $scope.courses.splice($scope.courses.indexOf(course), 1);
+                } else {
+                    toaster.pop("warning", "删除失败", "", 2000);
+                }
+            });
+        });
+    };
+}
+
+function editCourseModalCtrl($scope, $uibModalInstance, course) {
+    $scope.course = {};
+    for (var i in course) {
+        $scope.course[i] = course[i];
+    }
+    $scope.ok = function () {
+        $uibModalInstance.close($scope.course);
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+    $scope.dateOptions = {
+        minDate: new Date(),
+        startingDay: 1
+    };
+
+    $scope.dtOpen = function () {
+        $scope.isDtOpen = true;
+    };
 }
 
 function courseDetailCtrl($scope, $location,  $stateParams, $rootScope) {
