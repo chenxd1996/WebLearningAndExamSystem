@@ -36,7 +36,7 @@ div(class="panel panel-info")
                             button(type="button" class="btn btn-danger btn-xs" ng-click="item.remove()")
                                 i(class="glyphicon glyphicon-trash")
                                 span 移除
-            div
+            div(class="pb-10")
                 div
                     label 队列进度:
                 div(class="progress" style="")
@@ -54,3 +54,5 @@ div(class="panel panel-info")
                     i(class="fa fa-fw fa-file")
                     span 选择文件
                     input(type="file" class="file" nv-file-select uploader="uploader")
+            div(class="bs-callout bs-callout-info")
+                h4 注意：课件仅支持pdf格式

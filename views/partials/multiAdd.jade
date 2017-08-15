@@ -33,7 +33,7 @@ div(class="panel-body panelBody")
                         button(type="button" class="btn btn-danger btn-xs" ng-click="item.remove()")
                             i(class="glyphicon glyphicon-trash")
                             span 移除
-        div
+        div(class="pb-10")
             div
                 label 队列进度:
             div(class="progress" style="")
@@ -51,3 +51,5 @@ div(class="panel-body panelBody")
                 i(class="fa fa-fw fa-file")
                 span 选择文件
                 input(type="file" class="file" nv-file-select uploader="uploader")
+        div(class="bs-callout bs-callout-info")
+            h4 注意：导入名单仅支持xlsx格式
