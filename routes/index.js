@@ -117,6 +117,10 @@ router.post('/editExercise', api.editExercise);
 
 router.post('/deleteExercise', api.deleteExercise);
 
+router.post('/editExam', api.editExam);
+
+router.post('/deleteExam', api.deleteExam);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

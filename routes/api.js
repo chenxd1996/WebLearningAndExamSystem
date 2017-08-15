@@ -479,7 +479,7 @@ exports.addExerciseBank = function (req, res) {
                             console.log("Get course name in addExerciseBank: " + err);
                         } else {
                             var mid = new Date().getTime();
-                            var link = "/homePage/exercise-system/exercise-system/my-exercise-bank";
+                            var link = "/homePage/exercise-system/exercise-system/my-exercise-bank/progressing";
                             var title = "您所在的课程 \"" + result[0]['cname'] + "\" 有新的题库 \"" + req.body.name + "\" ";
                             sysMessageAll(mid, link, title, req.body.id, false);
                         }
@@ -1100,7 +1100,7 @@ exports.addMessage = function (req, res) {
     var tid = req.body.tid;
     var mid = new Date().getTime();
     con.query("select sid from StudentCourse " +
-        "where cid=?;", message.courseSelected.id, function (err, result) {
+        "where cid=?;", message.courseSelected.cid, function (err, result) {
         if (err) {
             console.log("Select sid from StudentCourse in addMessage: " + err);
         } else {
@@ -1108,7 +1108,7 @@ exports.addMessage = function (req, res) {
                 var query = "";
                 for (var i = 0; i < result.length; i++) {
                     query += "insert into StudentMessage(sid, mid, cid, title, content, posterId) " +
-                        "values('" + result[i]['sid'] + "', '" + mid + "', '" + message.courseSelected.id + "', '" +
+                        "values('" + result[i]['sid'] + "', '" + mid + "', '" + message.courseSelected.cid + "', '" +
                         message.title + "', '" + message.text + "', '" + tid + "');";
                 }
                 con.query(query, function (err) {
@@ -1122,14 +1122,14 @@ exports.addMessage = function (req, res) {
     if (message.includeTeacher) {
         var query = "";
         con.query("select tid from TeacherCourse " +
-            "where cid=?;", [message.courseSelected.id], function (err, result) {
+            "where cid=?;", [message.courseSelected.cid], function (err, result) {
             if (err) {
                 console.log("Select tid from TeacherCourse in addMessage: " + err);
             } else {
                 if (result.length > 0) {
                     for (var i = 0; i < result.length; i++) {
                         query += "insert into TeacherMessage(tid, mid, cid, title, content, posterId) " +
-                            "values('" + result[i]['tid'] + "', '" + mid + "', '" + message.courseSelected.id + "', '" +
+                            "values('" + result[i]['tid'] + "', '" + mid + "', '" + message.courseSelected.cid + "', '" +
                             message.title + "', '" + message.text + "', '" + tid + "');";
                     }
                     con.query(query, function (err) {
@@ -1477,7 +1477,7 @@ function addUser(user, userInfo, cid, res) {
                                                     console.log("Get course name in addUser: " + err);
                                                 } else {
                                                     var mid = new Date().getTime();
-                                                    var link = "/homePage/learning-system/my-courses";
+                                                    var link = "/homePage/learning-system/my-courses/progressing";
                                                     var title = "您有新的课程 \"" + result[0]['cname'] + "\"";
                                                     sysMessageSingle(user.id, mid, link, title, false);
                                                 }
@@ -1505,7 +1505,7 @@ function addUser(user, userInfo, cid, res) {
                                         console.log("Get course name in addUser: " + err);
                                     } else {
                                         var mid = new Date().getTime();
-                                        var link = "/homePage/learning-system/my-courses";
+                                        var link = "/homePage/learning-system/my-courses/progressing";
                                         var title = "您有新的课程 \"" + result[0]['cname'] + "\"";
                                         sysMessageSingle(user.id, mid, link, title, false);
                                     }
@@ -1567,7 +1567,7 @@ function addUser(user, userInfo, cid, res) {
                                         console.log("Get course name in addUser: " + err);
                                     } else {
                                         var mid = new Date().getTime();
-                                        var link = "/homePage/learning-system/my-courses";
+                                        var link = "/homePage/learning-system/my-courses/progressing";
                                         var title = "您有新的课程 \"" + result[0]['cname'] + "\"";
                                         sysMessageSingle(user.id, mid, link, title, true);
                                     }
@@ -2057,6 +2057,49 @@ exports.deleteExercise = function (req, res) {
                 console.log("Delete exercise in deleteExercise: " + err);
                 res.json({
                     status: false
+                });
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    }
+};
+
+exports.editExam = function (req, res) {
+    var exam = req.body.exam;
+    var userInfo = req.body.userInfo;
+    exam.startTime = new Date(exam.startTime);
+    exam.endTime = new Date(exam.endTime);
+    if (userInfo.level == 2) {
+        con.query("update Exam " +
+            "set startTime = ?, endTime=?, ename = ? " +
+            "where eid = ?;", [exam.startTime.getTime(), exam.endTime.getTime(), exam.ename, exam.eid], function (err) {
+            if (err) {
+                console.log("Update exam in editExam: " + err);
+                res.json({
+                   status: false
+                });
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    }
+};
+
+exports.deleteExam = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var eid = req.body.eid;
+    if (userInfo.level == 2) {
+        con.query("delete from Exam " +
+            "where eid = ?;", eid, function (err) {
+            if (err) {
+                console.log("Delete exam in deleteExam: " + err);
+                res.json({
+                   status: false
                 });
             } else {
                 res.json({

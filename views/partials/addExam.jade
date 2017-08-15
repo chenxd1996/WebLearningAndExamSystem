@@ -17,8 +17,8 @@ div(class="panel panel-info")
             div(class="mb-5" uib-timepicker ng-model="startTime" hour-step="hstep" minute-step="mstep")
             label 考试结束时间
             div(class="mb-5" uib-timepicker ng-model="endTime"  hour-step="hstep" minute-step="mstep" min="startTime")
-            label 考试内容
-            input(type="number" min="1" class="form-control mb-5" ng-model="exerciseNum" placeholder="题目数量" uib-tooltip="请输入考试题目数量" tooltip-trigger="'focus'" tooltip-placement="top")
+            label 题库
+            //input(type="number" min="1" class="form-control mb-5" ng-model="exerciseNum" placeholder="题目数量" uib-tooltip="请输入考试题目数量" tooltip-trigger="'focus'" tooltip-placement="top")
             hr
             div(class="input-group mb-10" ng-repeat="eb in ebs")
                 span(class="input-group-addon") {{eb.ename}}

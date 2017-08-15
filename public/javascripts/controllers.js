@@ -1027,34 +1027,36 @@ function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout, toaster
                 $scope.questions = res.exercise;
                 $scope.options = res.options;
                 var toDelete = [];
-                for (var i = 0; i < $scope.options.length; i++) {
-                    if ($scope.questions[i].stuAnswer) {
-                        if ($scope.status == 'uncompleted') {
-                            toDelete.push(i);
-                        } else {
-                            $scope.questions[i].isShow = true;
-                            $scope.questions[i].answers = $scope.questions[i].answer.trim().replace(/\s/g,"");
-                            if ($scope.questions[i].stuAnswer == $scope.questions[i].answer) {
-                                $scope.questions[i].isTrue = true;
-                                $scope.correctNum += 1;
+                if (res.exercise.length > 0) {
+                    for (var i = 0; i < $scope.options.length; i++) {
+                        if ($scope.questions[i].stuAnswer) {
+                            if ($scope.status == 'uncompleted') {
+                                toDelete.push(i);
                             } else {
-                                $scope.questions[i].isTrue = false;
-                            }
-                            for (var j = 0; j < $scope.options[i].length; j++) {
-                                if ($scope.questions[i].stuAnswer.indexOf($scope.options[i][j].op) >= 0) {
-                                    $scope.options[i][j].checked = true;
+                                $scope.questions[i].isShow = true;
+                                $scope.questions[i].answers = $scope.questions[i].answer.trim().replace(/\s/g,"");
+                                if ($scope.questions[i].stuAnswer == $scope.questions[i].answer) {
+                                    $scope.questions[i].isTrue = true;
+                                    $scope.correctNum += 1;
+                                } else {
+                                    $scope.questions[i].isTrue = false;
+                                }
+                                for (var j = 0; j < $scope.options[i].length; j++) {
+                                    if ($scope.questions[i].stuAnswer.indexOf($scope.options[i][j].op) >= 0) {
+                                        $scope.options[i][j].checked = true;
+                                    }
                                 }
                             }
-                        }
-                    } else {
-                        if ($scope.status == 'completed') {
-                            toDelete.push(i);
+                        } else {
+                            if ($scope.status == 'completed') {
+                                toDelete.push(i);
+                            }
                         }
                     }
-                }
-                for (var i = toDelete.length - 1; i >= 0; i--) {
-                    $scope.questions.splice(toDelete[i], 1);
-                    $scope.options.splice(toDelete[i], 1);
+                    for (var i = toDelete.length - 1; i >= 0; i--) {
+                        $scope.questions.splice(toDelete[i], 1);
+                        $scope.options.splice(toDelete[i], 1);
+                    }
                 }
             });
         }
@@ -1238,6 +1240,9 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
         }).success(function (res) {
             if (res.status) {
                 $scope.ebs = res.result;
+                for (var i = 0; i < $scope.ebs.length; i++) {
+                    $scope.ebs[i].exerciseNum = 0;
+                }
             }
         });
     };
@@ -1250,7 +1255,15 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
         exam.startTime = $scope.startTime;
         exam.endTime = $scope.endTime;
         exam.exerciseNum = $scope.exerciseNum;
-        exam.examPoints = 100.0 / $scope.exerciseNum;
+        var total = 0;
+        for (var i = 0; i < $scope.ebs.length; i++) {
+            total += $scope.ebs[i].exerciseNum;
+        }
+        if (total > 0) {
+            exam.examPoints = 100.0 / total;
+        } else {
+            exam.examPoints = 0;
+        }
         exam.ebs = $scope.ebs;
         $http.post('/addExam', exam).success(function (res) {
             if (res.status) {
@@ -1286,7 +1299,7 @@ function myExamsCtrl($scope, $http, $rootScope, $stateParams, $location, $state)
     }
 }
 
-function examsManagementCtrl($scope, $http, $rootScope) {
+function examsManagementCtrl($scope, $http, $rootScope, $uibModal, toaster) {
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post("/getMyExams", {
@@ -1298,7 +1311,129 @@ function examsManagementCtrl($scope, $http, $rootScope) {
         }
     });
 
-    $scope.edit 
+    $scope.edit = function (exam) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'partials/editExamModal',
+            controller: editExamModalCtrl,
+            resolve: {
+                exam: function () {
+                    return exam;
+                }
+            }
+        });
+        modalInstance.result.then(function (newExam) {
+            $http.post('/editExam', {
+                exam: newExam,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success",  "修改成功！", "", 2000);
+                    for (var i in newExam) {
+                        exam[i] = newExam[i];
+                    }
+                } else {
+                    toaster.pop("warning", "修改失败", "", 2000);
+                }
+            });
+        });
+    }
+
+    $scope.delete = function (exam) {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "删除考试将同时删除学生的考试成绩，是否确定删除？";
+                }
+            }
+        });
+
+        modalInstance.result.then(function () {
+            $http.post('/deleteExam', {
+                eid: exam.eid,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success", "删除成功！", "", 2000);
+                    $scope.exams.splice($scope.exams.indexOf(exam), 1);
+                } else {
+                    toaster.pop("warning", "删除失败", "", 2000);
+                }
+            });
+        });
+    }
+}
+
+function editExamModalCtrl($scope, $uibModalInstance, exam, $rootScope, $http) {
+    console.log(exam);
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
+            $http.post('/getMyCourses', {
+                userInfo: $rootScope.userInfo,
+                status: 'progressing'
+            }).success(function (res) {
+                $scope.courses = res.result.courses;
+            });
+        }
+    });
+    $scope.exam = {};
+    for (var i in exam) {
+        $scope.exam[i] = exam[i];
+    }
+    var tmpStartTime = new Date();
+    tmpStartTime.setTime($scope.exam.startTime);
+    var tmpEndTime = new Date();
+    tmpEndTime.setTime($scope.exam.endTime);
+    $scope.exam.startTime = tmpStartTime;
+    $scope.exam.endTime = tmpEndTime;
+    $scope.exam.examDate = tmpStartTime;
+
+    $scope.ok = function () {
+        $scope.exam.startTime = new Date($scope.exam.startTime);
+        $scope.exam.endTime = new Date($scope.exam.endTime);
+        $scope.exam.examDate = new Date($scope.exam.examDate);
+        $scope.exam.startTime.setFullYear($scope.exam.examDate.getFullYear());
+        $scope.exam.endTime.setFullYear($scope.exam.examDate.getFullYear());
+        $scope.exam.startTime.setMonth($scope.exam.examDate.getMonth());
+        $scope.exam.endTime.setMonth($scope.exam.examDate.getMonth());
+        $scope.exam.startTime.setDate($scope.exam.examDate.getDate());
+        $scope.exam.endTime.setDate($scope.exam.examDate.getDate());
+        $uibModalInstance.close($scope.exam);
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+    $scope.dateOptions = {
+        minDate: new Date(),
+        startingDay: 1
+    };
+
+    $scope.dtOpen = function () {
+        $scope.isDtOpen = true;
+    };
+
+    $scope.hstep = 1;
+    $scope.mstep = 1;
+
+    $scope.getCourseExerciseBanks = function () {
+        $http.post('/getCourseExerciseBanks', {
+            cid: $scope.courseSelected.cid
+        }).success(function (res) {
+            if (res.status) {
+                $scope.ebs = res.result;
+                for (var i = 0; i < $scope.ebs.length; i++) {
+                    $scope.ebs[i].exerciseNum = 0;
+                }
+            }
+        });
+    };
+
+
 }
 
 function examDetailCtrl($scope, $location, $stateParams) {
@@ -1517,18 +1652,10 @@ function postMessageCtrl($scope, $rootScope, $http, toaster) {
     $scope.message = {};
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
-            $http.post('/getMyCourses', $rootScope.userInfo).
-            success(function (res) {
-                var courses = res.result.courses;
-                $scope.courses = [];
-                for(var i = 0; i < courses.length; i++) {
-                    if (courses[i].endTime > new Date().getTime()) {
-                        $scope.courses.push({
-                            name: courses[i].cname + " (" + courses[i].remark + ")",
-                            id: courses[i].cid
-                        });
-                    }
-                }
+            $http.post('/getMyCourses', {
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                $scope.courses = res.result.courses;
             });
         }
     });

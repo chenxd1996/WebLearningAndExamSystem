@@ -1,0 +1,22 @@
+div(modal-center)
+    div(class="modal-header")
+        h3(class="modal-title" id="modal-title") 编辑课程
+    div(class="modal-body" id="modal-body")
+        label 考试所属课程
+        input(class="form-control mb-5" ng-model="exam.cname" readonly)
+        label 考试名称
+        input(class="form-control mb-5" ng-model="exam.ename")
+        label 考试日期
+        div(class="input-group mb-5")
+            input(readonly type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="exam.examDate" is-open="isDtOpen" datepicker-options="dateOptions" current-text="今天" clear-text="清除" close-text="关闭" popup-placement="bottom-right")
+            span(class="input-group-btn")
+                button(type="button" class="btn btn-primary" ng-click="dtOpen()")
+                    i(class="glyphicon glyphicon-calendar")
+        label 考试开始时间
+        div(class="mb-5" uib-timepicker ng-model="exam.startTime" hour-step="hstep" minute-step="mstep")
+        label 考试结束时间
+        div(class="mb-5" uib-timepicker ng-model="exam.endTime"  hour-step="hstep" minute-step="mstep" min="exam.startTime")
+        //input(type="number" min="1" class="form-control mb-5" ng-model="exerciseNum" placeholder="题目数量" uib-tooltip="请输入考试题目数量" tooltip-trigger="'focus'" tooltip-placement="top")
+    div(class="modal-footer")
+        button(class="btn btn-primary" type="button" ng-click="ok()") 确定
+        button(class="btn btn-warning" type="button" ng-click="cancel()") 取消
