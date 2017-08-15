@@ -1,0 +1,18 @@
+div(class="panel panel-info")
+    div(class="panel-heading")
+        h4 课程管理
+    div(class="panel-body panelBody")
+        table(class="table table-hover table-bordered")
+            thead
+                tr
+                    th(class="text-center") 课程名称
+                    th(class="text-center") 结课时间
+                    th(class="text-center") 操作
+            tbody
+                tr(ng-repeat="course in courses" class="text-center")
+                    td {{course.cname}}
+                    td {{course.endTime | date: "yyyy-MM-dd"}}
+                    td
+                        div(class="btn-group")
+                            button(class="btn btn-sm btn-info mr-5" ng-click="open(student)") 编辑
+                            button(class="btn btn-sm btn-danger mr-5" ng-click="delete(student)") 删除

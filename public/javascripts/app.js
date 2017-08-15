@@ -54,6 +54,10 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
             url: "/add-course",
             controller: addCourseCtrl,
             templateUrl: "partials/addCourse"
+        }).state("logined.learningSystem.coursesManagement", {
+            url: "/courses-management",
+            controller: coursesManagementCtrl,
+            templateUrl: "partials/coursesManagement"
         }).state("logined.courseDetail", {
             url: "/learning-system/course-detail",
             params: {courseID: null, courseName: null},

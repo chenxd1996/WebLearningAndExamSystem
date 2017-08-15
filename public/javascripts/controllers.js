@@ -612,6 +612,23 @@ function addCourseCtrl($scope, $http, toaster, $rootScope, $uibModal) {
     };
 }
 
+function coursesManagementCtrl($scope, $rootScope, $http) {
+    $rootScope.$watch(function () {
+        return $rootScope.userInfo;
+    }, function () {
+        if ($rootScope.userInfo && $rootScope.userInfo.level == 2 ) {
+            $http.post('/getMyCourses', {
+                userInfo: $rootScope.userInfo,
+                status: $scope.status
+            }).success(function (res) {
+                if (res.status) {
+                    $scope.courses = res.result.courses;
+                }
+            });
+        }
+    });
+}
+
 function courseDetailCtrl($scope, $location,  $stateParams, $rootScope) {
     $scope.courseID = $stateParams.courseID;
     $scope.courseName = $stateParams.courseName;

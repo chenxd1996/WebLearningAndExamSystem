@@ -161,12 +161,16 @@ exports.getMyCourses = function (req, res) {
             query = "select * from Course c, StudentCourse sc where sc.sid = ? and sc.cid = c.cid and c.endTime > ?;"
         } else if (status == 'ended'){
             query = "select * from Course c, StudentCourse sc where sc.sid = ? and sc.cid = c.cid and c.endTime <= ?;"
+        } else {
+            query = "select * from Course c, StudentCourse sc where sc.sid = ? and sc.cid = c.cid;"
         }
     } else if (userInfo.level == 2) {
         if (status == 'progressing') {
             query = "select * from Course c, TeacherCourse tc where tc.tid = ? and tc.cid = c.cid and c.endTime > ?;"
         } else if (status == 'ended') {
             query = "select * from Course c, TeacherCourse tc where tc.tid = ? and tc.cid = c.cid and c.endTime <= ?;"
+        } else {
+            query = "select * from Course c, TeacherCourse tc where tc.tid = ? and tc.cid = c.cid;"
         }
     }
     con.query(query, [userInfo.id, now], function (err, row) {
