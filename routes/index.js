@@ -109,6 +109,14 @@ router.post('/editCourse', api.editCourse);
 
 router.post('/deleteCourse', api.deleteCourse);
 
+router.post('/editExerciseBank', api.editExerciseBank);
+
+router.post('/deleteExerciseBank', api.deleteExerciseBank);
+
+router.post('/editExercise', api.editExercise);
+
+router.post('/deleteExercise', api.deleteExercise);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

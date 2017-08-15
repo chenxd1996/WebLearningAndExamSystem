@@ -3,13 +3,13 @@ div(modal-center)
         h3(class="modal-title" id="modal-title") 编辑课程
     div(class="modal-body" id="modal-body")
         label 课程名称
-            input(class="form-control mb-10" type="text" placeholder="请输入课程的名称" ng-model="course.cname")
-            label 课程结束时间
-            div(class="input-group mb-10")
-                input(readonly type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="course.endTime" is-open="isDtOpen" datepicker-options="dateOptions" current-text="今天" clear-text="清除" close-text="关闭" popup-placement="bottom-right")
-                span(class="input-group-btn")
-                    button(type="button" class="btn btn-default" ng-click="dtOpen()")
-                        i(class="glyphicon glyphicon-calendar")
+        input(class="form-control mb-10" type="text" placeholder="请输入课程的名称" ng-model="course.cname")
+        label 课程结束时间
+        div(class="input-group mb-10")
+            input(readonly type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="course.endTime" is-open="isDtOpen" datepicker-options="dateOptions" current-text="今天" clear-text="清除" close-text="关闭" popup-placement="bottom-right")
+            span(class="input-group-btn")
+                button(type="button" class="btn btn-default" ng-click="dtOpen()")
+                    i(class="glyphicon glyphicon-calendar")
     div(class="modal-footer")
         button(class="btn btn-primary" type="button" ng-click="ok()") 确定
         button(class="btn btn-warning" type="button" ng-click="cancel()") 取消

@@ -6,4 +6,6 @@ ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 2")
         a(ui-sref="logined.examSystem.myExams({status: 'progressing'})") 我的考试
     li(role="presentation" uib-btn-radio="'add-exam'" ng-model="checked")
         a(ui-sref="logined.examSystem.addExam") 创建考试
+    li(role="presentation" uib-btn-radio="'exams-management'" ng-model="checked")
+        a(ui-sref="logined.examSystem.examsManagement") 考试管理
 div(ui-view="")

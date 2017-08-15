@@ -20,8 +20,11 @@ div(class="content-container")
             div(ng-repeat="option in options[$index]")
                 span {{option.op + ". "}}
                     span(ng-bind-html="option.description | trustHtml")
-            div(class="alert mt-10 alert-info" role="alert")
+            div(class="alert mb-10 mt-10 alert-info" role="alert")
                 span 正确答案: {{question.answer}}
+            div(class="btn-group pull-right")
+                button(class="btn btn-sm btn-primary mr-10" ng-click="edit(question, options[$index])") 编辑
+                button(class="btn btn-sm btn-danger" ng-click="delete(question)") 删除
     div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="questions.length == 0")
         div(class="fs-16") 暂无数据
     div(class="panel panel-default question-answer-progress" ng-if="userInfo.level == 1 && status == 'uncompleted'")

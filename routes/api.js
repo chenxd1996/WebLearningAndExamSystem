@@ -162,8 +162,6 @@ exports.getMyCourses = function (req, res) {
             query = "select * from Course c, StudentCourse sc where sc.sid = ? and sc.cid = c.cid and c.endTime > ?;"
         } else if (status == 'ended'){
             query = "select * from Course c, StudentCourse sc where sc.sid = ? and sc.cid = c.cid and c.endTime <= ?;"
-        } else {
-            query = "select * from Course c, StudentCourse sc where sc.sid = ? and sc.cid = c.cid;"
         }
     } else if (userInfo.level == 2) {
         if (status == 'progressing') {
@@ -548,6 +546,9 @@ exports.getExerciseBanks = function (req, res) {
         } else if (req.body.status == "ended") {
             query = "select * from TeacherCourse tc, Course c, ExerciseBank e, ExerciseBankCourse ec " +
                 "where tc.tid = ? and tc.cid = c.cid and ec.cid = c.cid and e.eid = ec.eid and c.endTime <= ?;";
+        } else {
+            query = "select * from TeacherCourse tc, Course c, ExerciseBank e, ExerciseBankCourse ec " +
+                "where tc.tid = ? and tc.cid = c.cid and ec.cid = c.cid and e.eid = ec.eid";
         }
         con.query(query, [req.body.userInfo.id, now], function (err, result) {
             if (err) {
@@ -689,19 +690,23 @@ exports.getExercise = function (req, res) {
                     query += "select * from Op " +
                         "where eid = '" + result1[i].eid + "' order by eid;";
                 }
-                con.query(query, function (err, result2) {
-                    if (err) {
-                        console.log("get options: " + err);
-                    } else {
-                        if (result1.length == 1) {
-                            result.options = [];
-                            result.options.push(result2);
+                if(result1.length > 0) {
+                    con.query(query, function (err, result2) {
+                        if (err) {
+                            console.log("get options: " + err);
                         } else {
-                            result.options = result2;
+                            if (result1.length == 1) {
+                                result.options = [];
+                                result.options.push(result2);
+                            } else {
+                                result.options = result2;
+                            }
+                            res.json(result);
                         }
-                        res.json(result);
-                    }
-                });
+                    });
+                } else {
+                    res.json(result);
+                }
             }
         });
     }
@@ -777,8 +782,9 @@ exports.addExam = function (req, res) {
     var examDate = new Date(req.body.examDate);
     var ename = req.body.examName;
     var examPoints = req.body.examPoints;
-    var eid = new Date().getTime();
     var ebs = req.body.ebs;
+    //if (!cid || !req.body.startTime || !req.body.endTime || !req.body.examDate || !ename || !examPoints || !ebs)
+    var eid = new Date().getTime();
     startTime.setDate(examDate.getDate());
     startTime.setMonth(examDate.getMonth());
     startTime.setFullYear(examDate.getFullYear());
@@ -918,6 +924,9 @@ exports.getMyExams = function (req, res) {
         } else if (status == "ended") {
             query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
                 "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid and e.endTime < ?;"
+        } else {
+            query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
+                "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid ;";
         }
         con.query(query, [userInfo.id, now, now], function (err, result) {
             if (err) {
@@ -1931,14 +1940,127 @@ exports.deleteCourse = function (req, res) {
                     status: false
                 });
             } else {
-                rimraf('public/CourseWares/' + course.cname, function (err) {
+                if (fs.statSync('public/CourseWares/' + course.cname).isDirectory()) {
+                    rimraf('public/CourseWares/' + course.cname, function (err) {
+                        if (err) {
+                            console.log("Delete CourseWare in deleteCourse: " + err);
+                        } else {
+                            res.json({
+                                status: true
+                            });
+                        }
+                    });
+                } else {
+                    res.json({
+                        status: true
+                    });
+                }
+            }
+        });
+    }
+};
+
+exports.editExerciseBank = function (req, res) {
+    var eb = req.body.eb;
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 2) {
+        con.query("update ExerciseBank " +
+            "set ename = ? " +
+            "where eid = ?;", [eb.ename, eb.eid], function (err) {
+            if (err) {
+                console.log("Update exercisebank in editExerciseBank: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                res.json({
+                    status: true
+                });
+            }
+        });
+    }
+};
+
+exports.deleteExerciseBank = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var eid = req.body.eid;
+    if (userInfo.level == 2) {
+        con.query("delete from ExerciseBank " +
+            "where eid = ?", eid, function (err) {
+            if (err) {
+                console.log("Delete exercise bank in deleteExerciseBank: " + err);
+                res.json({
+                   status: false
+                });
+            } else {
+                res.json({
+                   status: true
+                });
+            }
+        });
+    }
+};
+
+exports.editExercise = function (req, res) {
+    var userInfo = req.body.userInfo;
+    var exercise = req.body.exercise;
+    var options = req.body.options;
+    console.log(req.body);
+    if (userInfo.level == 2) {
+        con.query("update Exercise " +
+            "set description = ? " +
+            "where eid = ?;", [exercise.description, exercise.eid], function (err) {
+            if (err) {
+                console.log("Update exercise in editExercise: " + err);
+            } else {
+                con.query("update Answer " +
+                    "set answer = ? " +
+                    "where eid = ?;", [exercise.answer, exercise.eid], function (err) {
                     if (err) {
-                        console.log("Delete CourseWare in deleteCourse: " + err);
+                        console.log("Update answer in editExercise: " + err);
                     } else {
-                        res.json({
-                            status: true
+                        con.query("delete from op " +
+                            "where eid = ?;", exercise.eid, function (err) {
+                            if (err) {
+                                console.log("Delete old options in editExercise: " + err);
+                            } else {
+                                var query = "";
+                                for (var i = 0; i < options.length; i++) {
+                                    query += "replace into Op " +
+                                        "value('" + options[i].op + "', '" + options[i].description + "', '" + options[i].eid + "');";
+                                }
+                                con.query(query, function (err) {
+                                    if (err) {
+                                        console.log("Replace into Op in editExercise: " + err);
+                                    } else {
+                                        res.json({
+                                            status: true
+                                        });
+                                    }
+                                });
+                            }
                         });
                     }
+                });
+            }
+        });
+    }
+};
+
+exports.deleteExercise = function (req, res) {
+    var eid = req.body.eid;
+    var userInfo = req.body.userInfo;
+    if (userInfo.level == 2) {
+        con.query("delete from Exercise " +
+            "where eid = ?;", eid, function (err) {
+            if (err) {
+                console.log("Delete exercise in deleteExercise: " + err);
+                res.json({
+                    status: false
+                });
+            } else {
+                res.json({
+                    status: true
                 });
             }
         });

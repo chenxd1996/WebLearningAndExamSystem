@@ -115,6 +115,10 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
             url: "/exercise-system/my-exercise-bank/:status",
             controller: myExerciseBankCtrl,
             templateUrl: "partials/myExerciseBank"
+        }).state("logined.exerciseSystem.exerciseBanksManagement", {
+            url: "/exercise-banks-management",
+            controller: exerciseBanksManagementCtrl,
+            templateUrl: "partials/exerciseBanksManagement"
         }).state("logined.exerciseBankDetail", {
             url: "/exercise-system/exerciseBank-detail",
             params: {exerciseBankID: null},
@@ -140,6 +144,10 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'ChartJsPro
             url: "/my-exams/:status",
             controller: myExamsCtrl,
             templateUrl: "partials/myExams"
+        }).state('logined.examSystem.examsManagement', {
+            url: '/exams-management',
+            controller: examsManagementCtrl,
+            templateUrl: "partials/examsManagement"
         }).state("logined.examDetail", {
             url: "/exam-system/exam-detail",
             params: {examID: null, status: null},

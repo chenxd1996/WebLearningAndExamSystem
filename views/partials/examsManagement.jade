@@ -1,0 +1,20 @@
+div(class="panel panel-info")
+    div(class="panel-heading")
+        h4 考试管理
+    div(class="panel-body panelBody")
+        table(class="table table-hover table-bordered")
+            thead
+                tr
+                    th(class="text-center") 考试名称
+                    th(class="text-center") 考试所属课程
+                    th(class="text-center") 考试时间
+                    th(class="text-center") 操作
+            tbody
+                tr(ng-repeat="exam in exams" class="text-center")
+                    td {{exam.ename}}
+                    td {{exam.cname}}
+                    td {{exam.startTime | date: "yyyy-MM-dd"}} {{exam.startTime | date: "HH:mm"}} 至 {{exam.endTime | date: "HH:mm"}}
+                    td
+                        div(class="btn-group")
+                            button(class="btn btn-sm btn-info mr-5" ng-click="edit(exam)") 编辑
+                            button(class="btn btn-sm btn-danger mr-5" ng-click="delete(exam)") 删除

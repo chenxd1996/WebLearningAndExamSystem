@@ -6,4 +6,6 @@ ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 2")
         a(ui-sref="logined.exerciseSystem.myExerciseBank({status: 'progressing'})") 我的题库
     li(role="presentation" uib-btn-radio="'add-exercise-bank'" ng-model="checked")
         a(ui-sref="logined.exerciseSystem.addExerciseBank") 新建题库
+    li(role="presentation" uib-btn-radio="'exercise-banks-management'" ng-model="checked")
+        a(ui-sref="logined.exerciseSystem.exerciseBanksManagement") 题库管理
 div(ui-view="")

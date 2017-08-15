@@ -47,6 +47,8 @@ directive('editorBody', function () {
     return {
         restrict: 'AE',
         link: function ($scope, element, attrs) {
+            if ($scope.editorText)
+                element.context.innerHTML = $scope.editorText;
             element.css({
                 "overflow":"scroll",
                 "height":"300px",

@@ -1,0 +1,12 @@
+div(modal-center)
+    div(class="modal-header")
+        h3(class="modal-title" id="modal-title") 编辑课程
+    div(class="modal-body" id="modal-body")
+        label 题库所属课程
+        input(readonly class="form-control" ng-model="eb.cname" required)
+        p
+        label 题库名称
+        input(class="form-control" ng-model="eb.ename" placeholder="例如：无机化学")
+    div(class="modal-footer")
+        button(class="btn btn-primary" type="button" ng-click="ok()") 确定
+        button(class="btn btn-warning" type="button" ng-click="cancel()") 取消

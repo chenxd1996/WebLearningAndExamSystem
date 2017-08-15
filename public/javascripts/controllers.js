@@ -835,7 +835,7 @@ function addCourseDataCtrl($scope, $stateParams, FileUploader) {
 }
 
 function exerciseSystemCtrl($scope, $location) {
-    var options = ['add-exercise-bank', 'my-exercise-bank'];
+    var options = ['add-exercise-bank', 'my-exercise-bank', 'exercise-banks-management'];
     var path = $location.path();
     for (var i = 0; i < options.length; i++) {
         if (path.indexOf(options[i]) >= 0) {
@@ -890,6 +890,88 @@ function myExerciseBankCtrl($scope, $http, $rootScope, $stateParams, $state) {
     }
 }
 
+function exerciseBanksManagementCtrl($scope, $http, $rootScope, toaster, $uibModal) {
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $scope.userInfo = $rootScope.userInfo;
+            $http.post('/getExerciseBanks', {
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                $scope.ebs = res.result;
+            });
+        }
+    });
+
+    $scope.edit = function(eb) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'partials/editExerciseBankModal',
+            controller: editExerciseBankModalCtrl,
+            resolve: {
+                eb: function () {
+                    return eb;
+                }
+            }
+        });
+        modalInstance.result.then(function (newEb) {
+            $http.post('/editExerciseBank', {
+                eb: newEb,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success",  "修改成功！", "", 2000);
+                    for (var i in newEb) {
+                        eb[i] = newEb[i];
+                    }
+                } else {
+                    toaster.pop("warning", "修改失败", "", 2000);
+                }
+            });
+        });
+    };
+
+    $scope.delete = function (eb) {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "删除题库将影响到相关的考试，是否确定删除？";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            $http.post('/deleteExerciseBank', {
+                eid: eb.eid,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success", "删除成功！", "", 2000);
+                    $scope.ebs.splice($scope.ebs.indexOf(eb), 1);
+                } else {
+                    toaster.pop("warning", "删除失败", "", 2000);
+                }
+            });
+        });
+    };
+}
+
+function editExerciseBankModalCtrl($scope, $uibModalInstance, eb) {
+    $scope.eb = {};
+    for (var i in eb) {
+        $scope.eb[i] = eb[i];
+    }
+    $scope.ok = function () {
+        $uibModalInstance.close($scope.eb);
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}
+
 function exerciseBankDetailCtrl($scope, $rootScope, $stateParams, $location) {
     $scope.exerciseBankID = $stateParams.exerciseBankID;
     $rootScope.$watch('userInfo', function () {
@@ -930,7 +1012,7 @@ function addExerciseCtrl($scope, $http, $stateParams, toaster) {
     }
 }
 
-function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout, toaster) {
+function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout, toaster, $uibModal) {
     $scope.status = $stateParams.status;
     $scope.done = 0;
     $scope.correctNum = 0;
@@ -1010,6 +1092,104 @@ function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout, toaster
                 toaster.pop('warning', '课程已结束，不能再提交', "", 2000);
             }
         });
+    };
+
+    $scope.edit = function (exercise, options) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'partials/editExerciseModal',
+            controller: editExerciseModalCtrl,
+            resolve: {
+                exercise: function () {
+                    return exercise;
+                },
+                options: function () {
+                    return options;
+                }
+            }
+        });
+        modalInstance.result.then(function (result) {
+            $http.post('/editExercise', {
+                exercise: result.exercise,
+                options: result.options,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success",  "修改成功！", "", 2000);
+                    for (var i in result.exercise) {
+                        exercise[i] = result.exercise[i];
+                    }
+                    for (var i = 0; i < result.options.length; i++) {
+                        options[i] = result.options[i];
+                    }
+                } else {
+                    toaster.pop("warning", "修改失败", "", 2000);
+                }
+            });
+        });
+    };
+
+    $scope.delete = function (exercise) {
+        var modalInstance = $uibModal.open({
+            animation: false,
+            size: 'sm',
+            templateUrl: 'partials/confirmModal',
+            controller: confirmModalCtrl,
+            resolve: {
+                des: function () {
+                    return "删除题目将影响到相关的考试，是否确定删除？";
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            $http.post('/deleteExercise', {
+                eid: exercise.eid,
+                userInfo: $rootScope.userInfo
+            }).success(function (res) {
+                if (res.status) {
+                    toaster.pop("success", "删除成功！", "", 2000);
+                    $scope.questions.splice($scope.questions.indexOf(exercise), 1);
+                } else {
+                    toaster.pop("warning", "删除失败", "", 2000);
+                }
+            });
+        });
+    }
+}
+
+function editExerciseModalCtrl($scope, $uibModalInstance, exercise, options) {
+    $scope.editorText = exercise.description;
+    $scope.optionsNum = options.length;
+    $scope.exercise = {};
+    $scope.options = [];
+    for (var i in exercise) {
+        $scope.exercise[i] = exercise[i];
+    }
+    for (var i = 0; i < options.length; i++) {
+        tmp = {};
+        for (var j in options[i]) {
+            tmp[j] = options[i][j];
+        }
+        $scope.options.push(tmp);
+    }
+
+    $scope.ok = function () {
+        $scope.exercise.description = $scope.editorText;
+        $uibModalInstance.close({exercise: $scope.exercise, options: $scope.options});
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+    $scope.change = function (num) {
+        $scope.options = [];
+        for (var i = 0; i < num; i++) {
+            $scope.options.push({
+                op: String.fromCharCode(65 + i),
+                eid: exercise.eid
+            });
+        }
     }
 }
 
@@ -1019,7 +1199,7 @@ function examSystemCtrl($scope, $rootScope, $location, $state) {
             $scope.userInfo = $rootScope.userInfo;
         }
     });
-    var options = ['my-exams', 'add-exam'];
+    var options = ['my-exams', 'add-exam', 'exams-management'];
     for (var i  = 0; i < options.length; i++) {
         if ($location.path().indexOf(options[i]) >= 0) {
             $scope.checked = options[i];
@@ -1104,6 +1284,21 @@ function myExamsCtrl($scope, $http, $rootScope, $stateParams, $location, $state)
     $scope.changeStatus = function(status) {
         $state.go('logined.examSystem.myExams', {status: status}, {reload: true});
     }
+}
+
+function examsManagementCtrl($scope, $http, $rootScope) {
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+            $http.post("/getMyExams", {
+                userInfo: $rootScope.userInfo,
+                status: status
+            }).success(function (res) {
+                $scope.exams = res;
+            });
+        }
+    });
+
+    $scope.edit 
 }
 
 function examDetailCtrl($scope, $location, $stateParams) {
