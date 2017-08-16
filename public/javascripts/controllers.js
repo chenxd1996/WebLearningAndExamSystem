@@ -642,6 +642,7 @@ function coursesManagementCtrl($scope, $rootScope, $http, toaster, $uibModal) {
         modalInstance.result.then(function (newCourse) {
             $http.post('/editCourse', {
                 course: newCourse,
+                oldName: course.cname,
                 userInfo: $rootScope.userInfo
             }).success(function (res) {
                 if (res.status) {
@@ -715,7 +716,7 @@ function courseDetailCtrl($scope, $location,  $stateParams, $rootScope) {
     }, function () {
         $scope.userInfo = $rootScope.userInfo;
     });
-    var options = ['add-members', 'course-data', 'course-members'];
+    var options = ['add-members', 'add-course-data', 'course-data', 'course-members'];
     var path = $location.path();
     for (var i = 0; i < options.length; i++) {
         if (path.indexOf(options[i]) >= 0) {

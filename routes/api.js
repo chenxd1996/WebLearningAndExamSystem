@@ -327,7 +327,7 @@ exports.uploadCourseWares = function (req, res) {
                                 status: true
                             });
                             var mid = new Date().getTime();
-                            var link = "/homePage/learning-system/course-detail/" + cid + "/course-data";
+                            var link = "/homePage/learning-system/course-detail/" + cid + "/" + cname + "/course-data";
                             var title = "您所在的课程 \"" + cname + "\" 有新的课件 \"" + filename + "\"";
                             sysMessageAll(mid, link, title, cid, false);
 
@@ -1908,6 +1908,7 @@ exports.deleteCourseWare = function (req, res) {
 exports.editCourse = function (req, res) {
     var userInfo = req.body.userInfo;
     var course = req.body.course;
+    var oldName = req.body.oldName;
     if (userInfo.level == 2) {
         con.query("update Course " +
             "set cname=?, endTime=? " +
@@ -1918,9 +1919,21 @@ exports.editCourse = function (req, res) {
                     status: false
                 });
             } else {
-                res.json({
-                    status: true
-                });
+                if (fs.existsSync('public/CourseWares/' + oldName)) {
+                    fs.rename('public/CourseWares/' + oldName, 'public/CourseWares/' + course.cname, function (err) {
+                        if (err) {
+                            console.log("Rename in editCourse: " + err);
+                        } else {
+                            res.json({
+                                status: true
+                            });
+                        }
+                    });
+                } else {
+                    res.json({
+                        status: true
+                    });
+                }
             }
         });
     }
