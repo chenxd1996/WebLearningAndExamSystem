@@ -1940,7 +1940,7 @@ exports.deleteCourse = function (req, res) {
                     status: false
                 });
             } else {
-                if (fs.existSync('public/CourseWares/' + course.cname)) {
+                if (fs.existsSync('public/CourseWares/' + course.cname)) {
                     rimraf('public/CourseWares/' + course.cname, function (err) {
                         if (err) {
                             console.log("Delete CourseWare in deleteCourse: " + err);
