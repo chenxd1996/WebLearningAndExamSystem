@@ -1,5 +1,4 @@
 var DBConnect = require("../DataBase/DBConnect");
-var con = DBConnect.getCon();
 var fs = require("fs");
 var path = require("path");
 var exec = require("child_process").exec;
@@ -10,7 +9,7 @@ var rimraf = require('rimraf');
 exports.loginCheck = function (req, res) {
     var id = req.body.id;
     var password = req.body.password;
-
+    var con = DBConnect.getCon();
     con.query("select * from Student " +
         "where sid = ? and password = ?", [id, password], function (err, row) {
         if (err) {
@@ -96,6 +95,7 @@ exports.addUser = function (req, res) {
 };
 
 exports.getMajorGradesAndClasses = function (req, res) {
+    var con = DBConnect.getCon();
     var majors = req.body.major;
     var query = "select distinct grade, class, major from Student where";
 
@@ -124,6 +124,7 @@ exports.getMajorGradesAndClasses = function (req, res) {
 };
 
 exports.addCourse = function (req, res) {
+    var con = DBConnect.getCon();
     var course = req.body.course;
     var cid = Date.now();
     var userInfo = req.body.userInfo;
@@ -152,6 +153,7 @@ exports.addCourse = function (req, res) {
 };
 
 exports.getMyCourses = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var status = req.body.status;
     var result = {};
@@ -233,6 +235,7 @@ exports.getMyCourses = function (req, res) {
 };
 
 exports.getUserInfo = function (req, res) {
+    var con = DBConnect.getCon();
     if (req.session.userInfo) {
         var query = "";
         if (req.session.userInfo.level == 1) {
@@ -269,6 +272,7 @@ exports.getUserInfo = function (req, res) {
 };
 
 exports.getCourseInfo = function (req, res) {
+    var con = DBConnect.getCon();
     var cid = req.body.cid;
     con.query('select c.description, c.remark, t.tname from Course c, Teacher t, TeacherCourse tc ' +
         'where c.cid = ? and c.cid = tc.cid and t.tid = tc.tid;', cid, function (err, result) {
@@ -291,6 +295,7 @@ exports.getCourseInfo = function (req, res) {
 };
 
 exports.uploadCourseWares = function (req, res) {
+    var con = DBConnect.getCon();
     var cid = req.body.cid;
     var filename = req.file.originalname.slice(0, req.file.originalname.lastIndexOf('.'));
     con.query("select cname from Course " +
@@ -340,6 +345,7 @@ exports.uploadCourseWares = function (req, res) {
 };
 
 exports.getCourseWares = function (req, res) {
+    var con = DBConnect.getCon();
     var cid = req.body.cid;
     var userInfo = req.body.userInfo;
     if (userInfo.level == 1) {
@@ -368,6 +374,7 @@ exports.getCourseWares = function (req, res) {
 };
 
 exports.updateLearningStatus = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var pages = req.body.pages;
     var cwid = req.body.cwid;
@@ -421,6 +428,7 @@ exports.updateLearningStatus = function (req, res) {
 };
 
 exports.getStuLearningSituation = function (req, res) {
+    var con = DBConnect.getCon();
     var cwid = req.body.cwid;
     var cid = req.body.cid;
     con.query("select s.sid, s.sname, scw.learningTime, scw.progress from Student s left join StudentCourseWare scw " +
@@ -436,6 +444,7 @@ exports.getStuLearningSituation = function (req, res) {
 };
 
 exports.getCourseWare = function (req, res) {
+    var con = DBConnect.getCon();
     var cid = req.query.cid;
     var type = req.query.type;
     fs.readFile(path.resolve(__dirname, '../CourseWares') + path.sep + cid, function (err, data) {
@@ -456,6 +465,7 @@ exports.getCourseWare = function (req, res) {
 };
 
 exports.addExerciseBank = function (req, res) {
+    var con = DBConnect.getCon();
     var eid = new Date().getTime();
     con.query("insert into ExerciseBank " +
         "value(?, ?)", [eid, req.body.name], function (err, result) {
@@ -491,6 +501,7 @@ exports.addExerciseBank = function (req, res) {
 };
 
 exports.getExerciseBanks = function (req, res) {
+    var con = DBConnect.getCon();
     var now = new Date().getTime();
     if (req.body.userInfo.level == 1) {
         var query = "";
@@ -592,6 +603,7 @@ exports.getExerciseBanks = function (req, res) {
 };
 
 exports.addExercise = function (req, res) {
+    var con = DBConnect.getCon();
     var description = req.body.description;
     var options = req.body.options;
     var answers = req.body.answers;
@@ -661,6 +673,7 @@ exports.addExercise = function (req, res) {
 };
 
 exports.getExercise = function (req, res) {
+    var con = DBConnect.getCon();
     var ebid = req.body.ebid;
     var result = {};
     var userInfo = req.body.userInfo;
@@ -713,6 +726,7 @@ exports.getExercise = function (req, res) {
 };
 
 exports.submitAndGetAnswer = function (req, res) {
+    var con = DBConnect.getCon();
     var options = req.body.options;
     var userInfo = req.body.userInfo;
     var eid = req.body.eid;
@@ -758,6 +772,7 @@ exports.submitAndGetAnswer = function (req, res) {
 };
 
 exports.getCourseExerciseBanks = function (req, res) {
+    var con = DBConnect.getCon();
     var cid = req.body.cid;
     con.query("select eb.eid, eb.ename from ExerciseBank eb, ExerciseBankCourse ebc " +
         "where ebc.cid = ? and eb.eid = ebc.eid", cid, function (err, result) {
@@ -776,6 +791,7 @@ exports.getCourseExerciseBanks = function (req, res) {
 };
 
 exports.addExam = function (req, res) {
+    var con = DBConnect.getCon();
     var cid = req.body.cid;
     var startTime = new Date(req.body.startTime);
     var endTime = new Date(req.body.endTime);
@@ -890,6 +906,7 @@ exports.addExam = function (req, res) {
 };
 
 exports.getMyExams = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var status = req.body.status;
     if (userInfo.level == 1) {
@@ -939,6 +956,7 @@ exports.getMyExams = function (req, res) {
 };
 
 exports.getExamQuestions = function(req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var eid = req.body.eid;
     var result = {};
@@ -1017,6 +1035,7 @@ exports.getExamQuestions = function(req, res) {
 };
 
 exports.saveAnswerInExam = function (req, res) {
+    var con = DBConnect.getCon();
     var sid = req.body.sid;
     var exid = req.body.exid;
     var eid = req.body.eid;
@@ -1082,6 +1101,7 @@ exports.getSystemTime = function (req, res) {
 };
 
 exports.getExamGrades = function (req, res) {
+    var con = DBConnect.getCon();
     var eid = req.body.eid;
     con.query("select s.sid, s.sname, s.major, s.grade as Grade, s.class, se.grade from Student s, StudentExam se " +
         "where s.sid = se.sid and se.eid = ? order by se.grade desc, s.grade, s.class;" +
@@ -1096,6 +1116,7 @@ exports.getExamGrades = function (req, res) {
 };
 
 exports.addMessage = function (req, res) {
+    var con = DBConnect.getCon();
     var message = req.body.message;
     var tid = req.body.tid;
     var mid = new Date().getTime();
@@ -1147,6 +1168,7 @@ exports.addMessage = function (req, res) {
 };
 
 exports.getMessages = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var query = "";
     if (userInfo.level == 1) {
@@ -1166,6 +1188,7 @@ exports.getMessages = function (req, res) {
 };
 
 exports.getMessageDetail = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     if (userInfo.level == 1) {
         con.query("select sm.mid, sm.title, sm.content, t.tname, c.cname from StudentMessage sm left join Teacher t on sm.posterId = t.tid, Course c " +
@@ -1191,6 +1214,7 @@ exports.getMessageDetail = function (req, res) {
 
 
 exports.deleteMessage = function (req, res) {
+    var con = DBConnect.getCon();
     var mid = req.body.mid;
     var userInfo = req.body.userInfo;
     if (userInfo.level == 1) {
@@ -1219,6 +1243,7 @@ exports.deleteMessage = function (req, res) {
 };
 
 exports.messagesNum = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     if (userInfo.level == 1) {
         con.query("select count(*) as messagesNum from StudentMessage sm " +
@@ -1242,6 +1267,7 @@ exports.messagesNum = function (req, res) {
 };
 
 exports.checkPassword = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var password = req.body.password;
     var query = "";
@@ -1278,6 +1304,7 @@ exports.checkPassword = function (req, res) {
 };
 
 exports.editPassword = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var password = req.body.password;
     var query = "";
@@ -1304,6 +1331,7 @@ exports.editPassword = function (req, res) {
 };
 
 exports.importUsers = function (req, res) {
+    var con = DBConnect.getCon();
     if (!req.session.userInfo) {
         res.json({
             status: false
@@ -1375,6 +1403,7 @@ exports.importUsers = function (req, res) {
 };
 
 function sysMessageAll(mid, link, title, cid, includeTeacher, eid) {
+    var con = DBConnect.getCon();
     con.query("select sid from StudentCourse " +
         "where cid=?;", cid, function (err, result) {
         if (err) {
@@ -1424,6 +1453,7 @@ function sysMessageAll(mid, link, title, cid, includeTeacher, eid) {
 };
 
 function sysMessageSingle(id, mid, link, title, isTeacher) {
+    var con = DBConnect.getCon();
     if (isTeacher) {
         con.query("Insert into TeacherMessage(tid, mid, link, title) " +
             "values(?, ?, ?, ?);", [id, mid, link, title], function (err) {
@@ -1442,6 +1472,7 @@ function sysMessageSingle(id, mid, link, title, isTeacher) {
 }
 
 function addUser(user, userInfo, cid, res) {
+    var con = DBConnect.getCon();
     if (user.level == 1) {
         con.query("select count(*) from Student " +
             "where sid = ?;", user.id, function (err, result) {
@@ -1582,6 +1613,7 @@ function addUser(user, userInfo, cid, res) {
 }
 
 exports.getStudents = function (req, res) {
+    var con = DBConnect.getCon();
     var cid = req.body.cid;
     if (cid) {
         con.query("select s.sid, s.sname, s.college, s.major, s.grade, s.class from Student s, StudentCourse sc " +
@@ -1604,6 +1636,7 @@ exports.getStudents = function (req, res) {
 };
 
 exports.getTeachers = function (req, res) {
+    var con = DBConnect.getCon();
     var cid = req.body.cid;
     if (cid) {
         con.query("select t.tid, t.tname from Teacher t, TeacherCourse tc " +
@@ -1626,6 +1659,7 @@ exports.getTeachers = function (req, res) {
 };
 
 exports.editStudent = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var student = req.body.student;
     var sid = req.body.sid;
@@ -1649,6 +1683,7 @@ exports.editStudent = function (req, res) {
 };
 
 exports.deleteStudent = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var sid = req.body.sid;
     if (userInfo.level == 2) {
@@ -1683,6 +1718,7 @@ exports.deleteStudent = function (req, res) {
 };
 
 exports.resetStudent = function (req, res) {
+    var con = DBConnect.getCon();
     var sid = req.body.sid;
     var userInfo = req.body.userInfo;
     if (userInfo.level == 2 || userInfo.level == 3) {
@@ -1704,6 +1740,7 @@ exports.resetStudent = function (req, res) {
 };
 
 exports.editTeacher = function (req, res) {
+    var con = DBConnect.getCon();
     var teacher = req.body.teacher;
     var tid = req.body.tid;
     var userInfo = req.body.userInfo;
@@ -1726,6 +1763,7 @@ exports.editTeacher = function (req, res) {
 };
 
 exports.deleteTeacher = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var cid = req.body.cid;
     var tid = req.body.tid;
@@ -1761,6 +1799,7 @@ exports.deleteTeacher = function (req, res) {
 };
 
 exports.resetTeacher = function (req, res) {
+    var con = DBConnect.getCon();
     var tid = req.body.tid;
     var userInfo = req.body.userInfo;
     if (userInfo.level == 3) {
@@ -1782,6 +1821,7 @@ exports.resetTeacher = function (req, res) {
 };
 
 exports.deleteStudents = function (req, res) {
+    var con = DBConnect.getCon();
     var students = req.body.students;
     var cid = req.body.cid;
     var userInfo = req.body.userInfo;
@@ -1827,6 +1867,7 @@ exports.deleteStudents = function (req, res) {
 };
 
 exports.deleteTeachers = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var cid = req.body.cid;
     var teachers = req.body.teachers;
@@ -1875,6 +1916,7 @@ exports.deleteTeachers = function (req, res) {
 };
 
 exports.deleteCourseWare = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var cwid = req.body.cwid;
     var cname = req.body.cname;
@@ -1906,6 +1948,7 @@ exports.deleteCourseWare = function (req, res) {
 };
 
 exports.editCourse = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var course = req.body.course;
     var oldName = req.body.oldName;
@@ -1940,6 +1983,7 @@ exports.editCourse = function (req, res) {
 };
 
 exports.deleteCourse = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var course = req.body.course;
     if (userInfo.level == 2) {
@@ -1974,6 +2018,7 @@ exports.deleteCourse = function (req, res) {
 };
 
 exports.editExerciseBank = function (req, res) {
+    var con = DBConnect.getCon();
     var eb = req.body.eb;
     var userInfo = req.body.userInfo;
     if (userInfo.level == 2) {
@@ -1995,6 +2040,7 @@ exports.editExerciseBank = function (req, res) {
 };
 
 exports.deleteExerciseBank = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var eid = req.body.eid;
     if (userInfo.level == 2) {
@@ -2015,6 +2061,7 @@ exports.deleteExerciseBank = function (req, res) {
 };
 
 exports.editExercise = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var exercise = req.body.exercise;
     var options = req.body.options;
@@ -2061,6 +2108,7 @@ exports.editExercise = function (req, res) {
 };
 
 exports.deleteExercise = function (req, res) {
+    var con = DBConnect.getCon();
     var eid = req.body.eid;
     var userInfo = req.body.userInfo;
     if (userInfo.level == 2) {
@@ -2081,6 +2129,7 @@ exports.deleteExercise = function (req, res) {
 };
 
 exports.editExam = function (req, res) {
+    var con = DBConnect.getCon();
     var exam = req.body.exam;
     var userInfo = req.body.userInfo;
     exam.startTime = new Date(exam.startTime);
@@ -2104,6 +2153,7 @@ exports.editExam = function (req, res) {
 };
 
 exports.deleteExam = function (req, res) {
+    var con = DBConnect.getCon();
     var userInfo = req.body.userInfo;
     var eid = req.body.eid;
     if (userInfo.level == 2) {

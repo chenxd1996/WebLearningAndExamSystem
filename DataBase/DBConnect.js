@@ -17,6 +17,7 @@ con.connect(function (err) {
 });
 
 con.on('error', function (err) {
+    console.log("Mysql connection exists err: " + err);
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
         con.connect();
     } else {
