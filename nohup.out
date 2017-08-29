@@ -79,3 +79,39 @@ Connected to the database!
 [0mGET /getUserInfo [36m304 [0m2.195 ms - -[0m
 [0mPOST /messagesNum [32m200 [0m3.489 ms - 19[0m
 [0mPOST /getMyCourses [32m200 [0m5.695 ms - 845[0m
+[036m[2017-08-25 15:28:28.055] [ info]  Pool parameters query...[0m
+[036m[2017-08-25 15:28:29.006] [ info]  Loading miners...[0m
+[036m[2017-08-25 15:28:29.007] [ info]  Miners loaded successfully[0m
+[036m[2017-08-25 15:28:38.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:28:48.818] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:28:58.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:29:08.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:29:18.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:29:28.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:29:38.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:29:44.160] [ info]  Pool parameters query...[0m
+[036m[2017-08-25 15:29:48.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:29:50.472] [ info]  Loading miners...[0m
+[036m[2017-08-25 15:29:50.472] [ info]  Miners loaded successfully[0m
+[036m[2017-08-25 15:29:58.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:30:00.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:30:04.512] [ info]  Successfully connected to pool: stratum+tcp://xmr.pool.minergate.com:45560. session_id="d3e8816f-ab0a-41d0-927b-d1a349112caa"[0m
+[036m[2017-08-25 15:30:04.513] [ info]  New Job: job_id="3d8cefa0-72aa-41cd-be88-fa79b59380fe" blob="0505a6a3ffcc05417b52881df0d34f4bdc832d35a58086190bd9f88b3749e4db1601902a2a611d0000000074a2afbbb5783df8b092b407c518a880ae0e49b4d3e0848748e54b22765a150b19" target="e4a63d00"[0m
+[036m[2017-08-25 15:30:04.513] [ info]  New difficulty: 1063[0m
+[036m[2017-08-25 15:30:08.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:30:10.818] [ info]  XMR hashrate: 5.2 H/s[0m
+[036m[2017-08-25 15:30:18.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:30:20.817] [ info]  XMR hashrate: 9.89901 H/s[0m
+[036m[2017-08-25 15:30:28.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:30:30.817] [ info]  XMR hashrate: 9.52381 H/s[0m
+[036m[2017-08-25 15:30:38.818] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:30:40.817] [ info]  XMR hashrate: 10.7989 H/s[0m
+[036m[2017-08-25 15:30:42.301] [ info]  Share submitted successfully!!![0m
+[036m[2017-08-25 15:30:48.818] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:30:50.818] [ info]  XMR hashrate: 10.9 H/s[0m
+[036m[2017-08-25 15:30:55.116] [ info]  New Job: job_id="248fb879-11ca-4902-aa05-5265cb4c2c15" blob="050585a4ffcc058e7abf0f4c1bff1937ead3016218059a6c1a9aa53131e2726776994a71edf946000000009414e6174991ffbf2d5157b7f34f9ea1c138ba2b69e3bdf37c517a94b651a7d017" target="e4a63d00"[0m
+[036m[2017-08-25 15:30:55.116] [ info]  New difficulty: 1063[0m
+[036m[2017-08-25 15:30:58.817] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:31:00.818] [ info]  XMR hashrate: 10.8 H/s[0m
+[036m[2017-08-25 15:31:08.818] [ info]  XMR hashrate: 0 H/s[0m
+[036m[2017-08-25 15:31:10.817] [ info]  XMR hashrate: 10.1 H/s[0m
