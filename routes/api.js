@@ -1331,7 +1331,6 @@ exports.editPassword = function (req, res) {
 };
 
 exports.importUsers = function (req, res) {
-    console.log("haha");
     var con = DBConnect.getCon();
     if (!req.session.userInfo) {
         res.json({
