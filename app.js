@@ -24,11 +24,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var options = {
-    host: 'localhost',
-    port: 3306,
+    host: process.env.DB_ADDR || 'localhost',
+    port: process.env.DB_PORT || 3306,
     user: 'LearningAndExamSystem',
     password: 'qweasd123',
-    database: 'session',
+    database: 'LearningAndExamSystem',
     checkExpirationInterval: 6 * 60 * 60 * 1000
 };
 
@@ -43,6 +43,24 @@ app.use(session({
         maxAge: 60 * 60 * 1000 * 6
     }
 }));
+
+app.use(function(req, res, next) {
+    // 支持跨域
+    var origin = req.get('origin');
+    var headers = req.get('Access-Control-Request-Headers');
+    var methods = req.get('Access-Control-Request-Methods');
+    if (origin) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    if (headers) {
+        res.setHeader('Access-Control-Allow-Headers', headers);
+    }
+    if (methods) {
+        res.setHeader('Access-Control-Allow-Methods', methods);
+    }
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
 
 app.use('/', index);
 app.use('/users', users);

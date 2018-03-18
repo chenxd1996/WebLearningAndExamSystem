@@ -41,6 +41,7 @@ exports.loginCheck = function (req, res) {
                                 name: 'admin'
                             };
                             res.json({
+                                id: id,
                                 logined: true,
                                 level: 3,
                                 name: 'admin'
@@ -54,6 +55,7 @@ exports.loginCheck = function (req, res) {
                         name: row[0]['tname']
                     };
                     res.json({
+                        id: id,                        
                         logined: true,
                         level: 2,
                         name: row[0]['tname']
@@ -67,6 +69,7 @@ exports.loginCheck = function (req, res) {
                 name: row[0]['sname']
             };
             res.json({
+                id: id,                
                 logined: true,
                 level: 1,
                 name: row[0]['sname']

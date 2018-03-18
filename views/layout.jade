@@ -9,6 +9,8 @@ html(ng-app="myApp")
         link(rel='stylesheet', href='http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.css')
         link(rel='stylesheet', href='http://cdn.bootcss.com/font-awesome/3.0.2/css/font-awesome.css')
         link(rel='stylesheet', href='http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css')
+    body
+        block content
         script(type="text/javascript" src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.js")
         script(type="text/javascript" src='http://cdn.bootcss.com/angular.js/1.4.5/angular.js')
         script(type="text/javascript" src="http://cdn.bootcss.com/angular-ui-router/0.4.2/angular-ui-router.js")
@@ -25,11 +27,8 @@ html(ng-app="myApp")
         script(type="text/javascript" src="javascripts/flexpaper/js/flexpaper.js")
         script(type="text/javascript" src="javascripts/flexpaper/js/flexpaper_handlers.js")
         script(type="text/javascript" src="javascripts/documentViewer.js")
-    body
-        block content
-
-    script(type="text/javascript" src="javascripts/app.js")
-    script(type="text/javascript" src="javascripts/controllers.js")
-    script(type="text/javascript" src="javascripts/directives.js")
-    script(type="text/javascript" src="javascripts/filters.js")
-    script(type="text/javascript" src="javascripts/services.js")
+        script(type="text/javascript" src="javascripts/app.js")
+        script(type="text/javascript" src="javascripts/controllers.js")
+        script(type="text/javascript" src="javascripts/directives.js")
+        script(type="text/javascript" src="javascripts/filters.js")
+        script(type="text/javascript" src="javascripts/services.js")

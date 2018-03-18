@@ -4,17 +4,9 @@ directive('verticalCenter', function ($window) {
         restrict: 'AE',
         link: function ($scope, element, attrs) {
             var height = element.children("div.modal-content").eq(0).height();
-
             element.css({
-                "margin-top": ($window.innerHeight - height) / 2 + 'px',
+                "margin-top": ($window.innerHeight - height) / 2 * 0.8 + 'px',
                 "margin-bottom": 0
-            });
-
-            angular.element($window).bind('resize', function () {
-                element.css({
-                    "margin-top": ($window.innerHeight - height) / 2 + 'px',
-                    "margin-bottom": 0
-                });
             });
         }
     };

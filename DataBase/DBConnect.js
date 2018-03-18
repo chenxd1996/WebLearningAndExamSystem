@@ -1,10 +1,10 @@
 var mysql = require("mysql");
 var con = mysql.createConnection({
-    host: 'localhost',
+    host: process.env.DB_ADDR || 'localhost',
     user: 'LearningAndExamSystem',
     password: 'qweasd123',
     database: 'LearningAndExamSystem',
-    port: '3306',
+    port: process.env.DB_PORT || '3306',
     multipleStatements: true
 });
 
@@ -20,11 +20,11 @@ con.on('error', function (err) {
     console.log("Mysql connection exists err: " + err);
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
         con = mysql.createConnection({
-            host: 'localhost',
+            host: process.env.DB_ADDR || 'localhost',
             user: 'LearningAndExamSystem',
             password: 'qweasd123',
             database: 'LearningAndExamSystem',
-            port: '3306',
+            port: process.env.DB_PORT || '3306',
             multipleStatements: true
         });
         con.connect(function (err) {
