@@ -30,6 +30,7 @@ function listenError(con) {
     con.on('error', function (err) {
         console.log("Mysql connection exists err: " + err);
         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+            console.error("Mysql connection lost!");
             con.destroy();
             con = createConnection();
             connect(con);
