@@ -1,6 +1,6 @@
 var DBConnect = require("./DBConnect");
 function DBInit() {
-    var con = DBConnect.getCon();
+    var con = DBConnect.con;
 
     con.query("ALTER DATABASE LearningAndExamSystem DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci", function (err, result) {
         if (err) {

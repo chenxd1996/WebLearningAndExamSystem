@@ -1,7 +1,7 @@
 var mysql = require("mysql");
-
+var exportObj = {};
 function createConnection() {
-    var con = mysql.createConnection({
+    exportObj.con = mysql.createConnection({
         host: process.env.DB_ADDR || 'localhost',
         user: 'LearningAndExamSystem',
         password: 'qweasd123',
@@ -9,41 +9,41 @@ function createConnection() {
         port: process.env.DB_PORT || '3306',
         multipleStatements: true
     });
-    return con;
 }
 
-var con = createConnection();
+createConnection();
 
-function connect(con) {
-    con.connect(function (err) {
+function connect() {
+    exportObj.con.connect(function (err) {
         if (err) {
-            console.log("Can't connect to the database!");
+            console.log("Can't connect to the database:" + err);
         } else {
             console.log("Connected to the database!");
         }
     });
 }
 
-connect(con);
+connect();
 
-function listenError(con) {
-    con.on('error', function (err) {
+function listenError() {
+    exportObj.con.on('error', function (err) {
         console.log("Mysql connection exists err: " + err);
         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
             console.error("Mysql connection lost!");
-            con.destroy();
-            con = createConnection();
-            connect(con);
-            listenError(con);
+            exportObj.con.destroy();
+            createConnection();
+            connect(exportObj.con);
+            listenError(exportObj.con);
         } else {
             console.log("Disconnected to the database during run time: " +  err);
         }
     });
 }
 
-listenError(con);
+listenError();
 
-exports.getCon = function () {
-    return con;
-};
+// exports.getCon = function () {
+//     return con;
+// };
 
+module.exports = exportObj;

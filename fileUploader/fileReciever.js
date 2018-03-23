@@ -1,7 +1,7 @@
 var multer = require('multer');
 const path = require('path');
 var DBConnect = require("../DataBase/DBConnect");
-var con = DBConnect.getCon();
+var con = DBConnect.con;
 var fs = require("fs");
 
 var courseWareStorage = multer.diskStorage({
