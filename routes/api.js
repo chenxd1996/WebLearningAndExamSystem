@@ -308,7 +308,7 @@ exports.uploadCourseWares = function (req, res) {
         } else {
             var cname = result[0]['cname'];
             var p = "../public/CourseWares/" + cname + "/"  + req.file.filename;
-            exec('pdf2swf ' + p + ' -o ' + p + '.swf -T 9', {
+            exec('pdf2swf ' + p + ' -o ' + p + '.swf -T 9 &', {
                 cwd: __dirname
             }, function(error, stdout, stderr) {
                 if (error) {
