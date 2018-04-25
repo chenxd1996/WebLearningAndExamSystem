@@ -10,8 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3216e0a6-c310-4b3b-97cb-4af60415d0dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api.js" afterPath="$PROJECT_DIR$/routes/api.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -48,10 +47,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="api.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="api.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/api.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
+            <state relative-caret-position="1511">
               <caret line="314" column="56" lean-forward="true" selection-start-line="314" selection-start-column="56" selection-end-line="314" selection-end-column="56" />
               <folding />
             </state>
@@ -108,11 +107,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
-              <caret line="42" column="23" lean-forward="false" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="23" />
+            <state relative-caret-position="360">
+              <caret line="24" column="0" lean-forward="true" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -227,7 +226,6 @@
         <option value="$PROJECT_DIR$/views/partials/multiAdd.jade" />
         <option value="$PROJECT_DIR$/views/partials/courseDetail.jade" />
         <option value="$PROJECT_DIR$/public/javascripts/controllers.js" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/public/javascripts/app.js" />
         <option value="$PROJECT_DIR$/views/layout.jade" />
         <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
@@ -237,6 +235,7 @@
         <option value="$PROJECT_DIR$/DataBase/DBConnect.js" />
         <option value="$PROJECT_DIR$/fileUploader/fileReciever.js" />
         <option value="$PROJECT_DIR$/routes/api.js" />
+        <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
   </component>
@@ -492,12 +491,12 @@
       <workItem from="1521709032348" duration="150000" />
       <workItem from="1521791846737" duration="1362000" />
       <workItem from="1523091153338" duration="451000" />
-      <workItem from="1524619702765" duration="279000" />
+      <workItem from="1524619702765" duration="631000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="868465000" />
+    <option name="totallyTimeSpent" value="868817000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -883,14 +882,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="42" column="23" lean-forward="false" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/mysql/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
@@ -932,8 +923,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
+        <state relative-caret-position="1511">
           <caret line="314" column="56" lean-forward="true" selection-start-line="314" selection-start-column="56" selection-end-line="314" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="0" lean-forward="true" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
           <folding />
         </state>
       </provider>
