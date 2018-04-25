@@ -1236,8 +1236,18 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
     $scope.mstep = 1;
 
     $scope.getCourseExerciseBanks = function () {
-        $http.post('/getCourseExerciseBanks', {
-            cid: $scope.courseSelected.cid
+        // $http.post('/getCourseExerciseBanks', {
+        //     cid: $scope.courseSelected.cid
+        // }).success(function (res) {
+        //     if (res.status) {
+        //         $scope.ebs = res.result;
+        //         for (var i = 0; i < $scope.ebs.length; i++) {
+        //             $scope.ebs[i].exerciseNum = 0;
+        //         }
+        //     }
+        // });
+        $http.post('/getExerciseBanks', {
+            userInfo: $rootScope.userInfo
         }).success(function (res) {
             if (res.status) {
                 $scope.ebs = res.result;
