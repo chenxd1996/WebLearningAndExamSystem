@@ -74,7 +74,11 @@ directive('editor', function ($window) {
                 // });
             });
             $scope.$on('$destroy', function () {
-               editor.destroy();
+                try {
+                    editor.destroy();
+                } catch (e) {
+
+                }
             });
         }
     }
