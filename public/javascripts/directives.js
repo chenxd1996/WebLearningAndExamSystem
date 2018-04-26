@@ -64,12 +64,15 @@ directive('editor', function ($window) {
         replace: true,
         link: function ($scope, element, atts) {
             var editor = $scope.editor = UE.getEditor('container');
-            if ($scope.editorText)
-                editor.setContent($scope.editorText);
-            // 很坑，居然监听不了图片url的变化。。
-            // editor.addListener('contentChange', function () {
-            //     $scope.editorText = editor.getContent();
-            // });
+            editor.ready(function () {
+                if ($scope.editorText) {
+                    editor.setContent($scope.editorText);
+                }
+                // 很坑，居然监听不了图片url的变化。。
+                // editor.addListener('contentChange', function () {
+                //     $scope.editorText = editor.getContent();
+                // });
+            });
             $scope.$on('$destroy', function () {
                editor.destroy();
             });
