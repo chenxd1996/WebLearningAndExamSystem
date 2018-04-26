@@ -1178,12 +1178,10 @@ function editExerciseModalCtrl($scope, $uibModalInstance, exercise, options) {
 
     $scope.ok = function () {
         $scope.exercise.description = $scope.editor.getContent();
-        $scope.editor.destroy();
         $uibModalInstance.close({exercise: $scope.exercise, options: $scope.options});
     };
 
     $scope.cancel = function () {
-        $scope.editor.destroy();
         $uibModalInstance.dismiss('cancel');
     };
 
