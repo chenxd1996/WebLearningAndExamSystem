@@ -1,92 +1,94 @@
-div
-    div(class="btn-toolbar" data-role="editor-toolbar" data-target="#editor")
-        div(class="btn-group" uib-dropdown)
-            a(class="btn btn-default" uib-dropdown-toggle)
-                i(class="icon-font")
-                b(class="caret")
-            ul(class="dropdown-menu" uib-dropdown-menu role="menu")
-                li(role="menuitem")
-                    a(data-edit="fontName Serif" style="font-family: 'Serif'") Serif
-                li(role="menuitem")
-                    a(data-edit="fontName Sans" style="font-family:'Sans'") Sans
-                li(role="menuitem")
-                    a(data-edit="fontName Arial" style="font-family:'Arial'") Arial
-                li(role="menuitem")
-                    a(data-edit="fontName Arial Black" style="font-family:'Arial Black'") Arial Black
-                li(role="menuitem")
-                    a(data-edit="fontName Courier" style="font-family:'Courier'") Courier
-                li(role="menuitem")
-                    a(data-edit="fontName Courier New" style="font-family:'Courier New'") Courier New
-                li(role="menuitem")
-                    a(data-edit="fontName Comic Sans MS" style="font-family:'Comic Sans MS'") Comic Sans MS
-                li(role="menuitem")
-                    a(data-edit="fontName Helvetica" style="font-family: 'Helvetica'") Helvetica
-                li(role="menuitem")
-                    a(data-edit="fontName Impact" style="font-family:'Impact'") Impact
-                li(role="menuitem")
-                    a(data-edit="fontName Lucida Grande" style="font-family:'Lucida Grande'") Lucida Grande
-                li(role="menuitem")
-                    a(data-edit="fontName Lucida Sans" style="font-family: 'Lucida Sans'") Lucida Sans
-                li(role="menuitem")
-                    a(data-edit="fontName Tahoma" style="font-family:'Tahoma'") Tahoma
-                li(role="menuitem")
-                    a(data-edit="fontName Times" style="font-family:'Times'") Times
-                li(role="menuitem")
-                    a(data-edit="fontName Times New Roman" style="font-family:'Times New Roman'") Times New Roman
-                li(role="menuitem")
-                    a(data-edit="fontName Verdana" style="font-family:'Verdana'") Verdana
-        div(class="btn-group" uib-dropdown)
-            a(class="btn btn-default" title="" data-original-title="Font Size" uib-dropdown-toggle)
-                i(class="icon-text-height") &nbsp;
-                b(class="caret")
-            ul(class="dropdown-menu" uib-dropdown-menu role="menu")
-                li(role="menuitem")
-                    a(data-edit="fontSize 5")
-                        font(size="5") Huge
-                li(role="menuitem")
-                    a(data-edit="fontSize 3")
-                        font(size="3") Normal
-                li(role="menuitem")
-                    a(data-edit="fontSize 1")
-                        font(size="1") Small
-        div(class="btn-group")
-            a(class="btn btn-default" data-edit="bold")
-                i(class="icon-bold")
-            a(class="btn btn-default" data-edit="italic")
-                i(class="icon-italic")
-            a(class="btn btn-default" data-edit="strikethrough")
-                i(class="icon-strikethrough")
-            a(class="btn btn-default" data-edit="underline")
-                i(class="icon-underline")
-        div(class="btn-group")
-            a(class="btn btn-default" data-edit="insertunorderedlist")
-                i(class="icon-list-ul")
-            a(class="btn btn-default" data-edit="insertorderedlist")
-                i(class="icon-list-ol")
-            a(class="btn btn-default" data-edit="outdent")
-                i(class="icon-indent-left")
-            a(class="btn btn-default" data-edit="indent")
-                i(class="icon-indent-right")
-        div(class="btn-group")
-            a(class="btn btn-default" data-edit="justifyleft")
-                i(class="icon-align-left")
-            a(class="btn btn-default" data-edit="justifycenter")
-                i(class="icon-align-center")
-            a(class="btn btn-default" data-edit="justifyright")
-                i(class="icon-align-right")
-            a(class="btn btn-default" data-edit="justifyfull")
-                i(class="icon-align-justify")
-        div(class="btn-group" uib-dropdown)
-            a(class="btn btn-default" uib-dropdown-toggle)
-                i(class="icon-link")
-            div(class="dropdown-menu" uib-dropdown-menu role="menu")
-                input(class="span2" placeholder="URL" type="text" data-edit="createLink")
-                button(class="btn btn-primary" type="button") Add
-            a(class="btn btn-default" data-edit="unlink")
-                i(class="icon-cut")
-        div(class="btn-group")
-            a(class="btn btn-default" data-edit="undo")
-                i(class="icon-undo")
-            a(class="btn btn-default" data-edit="redo")
-                i(class="icon-repeat")
-    div(editor-body id="editor" class="form-control")
+//div
+//    div(class="btn-toolbar" data-role="editor-toolbar" data-target="#editor")
+//        div(class="btn-group" uib-dropdown)
+//            a(class="btn btn-default" uib-dropdown-toggle)
+//                i(class="icon-font")
+//                b(class="caret")
+//            ul(class="dropdown-menu" uib-dropdown-menu role="menu")
+//                li(role="menuitem")
+//                    a(data-edit="fontName Serif" style="font-family: 'Serif'") Serif
+//                li(role="menuitem")
+//                    a(data-edit="fontName Sans" style="font-family:'Sans'") Sans
+//                li(role="menuitem")
+//                    a(data-edit="fontName Arial" style="font-family:'Arial'") Arial
+//                li(role="menuitem")
+//                    a(data-edit="fontName Arial Black" style="font-family:'Arial Black'") Arial Black
+//                li(role="menuitem")
+//                    a(data-edit="fontName Courier" style="font-family:'Courier'") Courier
+//                li(role="menuitem")
+//                    a(data-edit="fontName Courier New" style="font-family:'Courier New'") Courier New
+//                li(role="menuitem")
+//                    a(data-edit="fontName Comic Sans MS" style="font-family:'Comic Sans MS'") Comic Sans MS
+//                li(role="menuitem")
+//                    a(data-edit="fontName Helvetica" style="font-family: 'Helvetica'") Helvetica
+//                li(role="menuitem")
+//                    a(data-edit="fontName Impact" style="font-family:'Impact'") Impact
+//                li(role="menuitem")
+//                    a(data-edit="fontName Lucida Grande" style="font-family:'Lucida Grande'") Lucida Grande
+//                li(role="menuitem")
+//                    a(data-edit="fontName Lucida Sans" style="font-family: 'Lucida Sans'") Lucida Sans
+//                li(role="menuitem")
+//                    a(data-edit="fontName Tahoma" style="font-family:'Tahoma'") Tahoma
+//                li(role="menuitem")
+//                    a(data-edit="fontName Times" style="font-family:'Times'") Times
+//                li(role="menuitem")
+//                    a(data-edit="fontName Times New Roman" style="font-family:'Times New Roman'") Times New Roman
+//                li(role="menuitem")
+//                    a(data-edit="fontName Verdana" style="font-family:'Verdana'") Verdana
+//        div(class="btn-group" uib-dropdown)
+//            a(class="btn btn-default" title="" data-original-title="Font Size" uib-dropdown-toggle)
+//                i(class="icon-text-height") &nbsp;
+//                b(class="caret")
+//            ul(class="dropdown-menu" uib-dropdown-menu role="menu")
+//                li(role="menuitem")
+//                    a(data-edit="fontSize 5")
+//                        font(size="5") Huge
+//                li(role="menuitem")
+//                    a(data-edit="fontSize 3")
+//                        font(size="3") Normal
+//                li(role="menuitem")
+//                    a(data-edit="fontSize 1")
+//                        font(size="1") Small
+//        div(class="btn-group")
+//            a(class="btn btn-default" data-edit="bold")
+//                i(class="icon-bold")
+//            a(class="btn btn-default" data-edit="italic")
+//                i(class="icon-italic")
+//            a(class="btn btn-default" data-edit="strikethrough")
+//                i(class="icon-strikethrough")
+//            a(class="btn btn-default" data-edit="underline")
+//                i(class="icon-underline")
+//        div(class="btn-group")
+//            a(class="btn btn-default" data-edit="insertunorderedlist")
+//                i(class="icon-list-ul")
+//            a(class="btn btn-default" data-edit="insertorderedlist")
+//                i(class="icon-list-ol")
+//            a(class="btn btn-default" data-edit="outdent")
+//                i(class="icon-indent-left")
+//            a(class="btn btn-default" data-edit="indent")
+//                i(class="icon-indent-right")
+//        div(class="btn-group")
+//            a(class="btn btn-default" data-edit="justifyleft")
+//                i(class="icon-align-left")
+//            a(class="btn btn-default" data-edit="justifycenter")
+//                i(class="icon-align-center")
+//            a(class="btn btn-default" data-edit="justifyright")
+//                i(class="icon-align-right")
+//            a(class="btn btn-default" data-edit="justifyfull")
+//                i(class="icon-align-justify")
+//        div(class="btn-group" uib-dropdown)
+//            a(class="btn btn-default" uib-dropdown-toggle)
+//                i(class="icon-link")
+//            div(class="dropdown-menu" uib-dropdown-menu role="menu")
+//                input(class="span2" placeholder="URL" type="text" data-edit="createLink")
+//                button(class="btn btn-primary" type="button") Add
+//            a(class="btn btn-default" data-edit="unlink")
+//                i(class="icon-cut")
+//        div(class="btn-group")
+//            a(class="btn btn-default" data-edit="undo")
+//                i(class="icon-undo")
+//            a(class="btn btn-default" data-edit="redo")
+//                i(class="icon-repeat")
+//    div(editor-body id="editor" class="form-control")
+
+div#container

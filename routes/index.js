@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var api = require('./api');
 var fileUploader = require("../fileUploader/fileReciever");
+var multiparty = require('multiparty');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -120,6 +121,21 @@ router.post('/deleteExercise', api.deleteExercise);
 router.post('/editExam', api.editExam);
 
 router.post('/deleteExam', api.deleteExam);
+
+router.get('/ueditor', api.ueditor);
+
+router.post('/ueditor', function (req, res, next) {
+    var form = new multiparty.Form();
+    form.parse(req, function (err, fields, files) {
+        if (!err) {
+            req.files = files;
+            next();
+        } else {
+            console.error('form.parse err:', err);
+            res.end();
+        }
+    });
+}, api.ueditor);
 
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {

@@ -1002,7 +1002,7 @@ function addExerciseCtrl($scope, $http, $stateParams, toaster) {
     $scope.submit = function () {
         $http.post('/addExercise', {
             ebid: $stateParams.exerciseBankID,
-            description: $scope.editorText,
+            description: $scope.editor.getContent(),
             options: $scope.options,
             answers: $scope.answer.trim().replace(/\s/g,"").split('+')
         }).success(function (res) {
@@ -1661,6 +1661,7 @@ function messageCenterCtrl($scope, $location) {
 
 function postMessageCtrl($scope, $rootScope, $http, toaster) {
     $scope.message = {};
+    // UE.getEditor('container');
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $http.post('/getMyCourses', {
@@ -1672,7 +1673,7 @@ function postMessageCtrl($scope, $rootScope, $http, toaster) {
     });
 
     $scope.submit = function () {
-        $scope.message.text = $scope.editorText;
+        $scope.message.text = $scope.editor.getContent();
         $http.post('/addMessage', {
             tid: $rootScope.userInfo.id,
             message: $scope.message

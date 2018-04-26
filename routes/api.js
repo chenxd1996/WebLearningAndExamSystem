@@ -2189,3 +2189,43 @@ exports.deleteExam = function (req, res) {
         });
     }
 };
+
+exports.ueditor = function (req, res) {
+    switch (req.query.action) {
+        case 'config': {
+            fs.readFile('ueditor/config.json', 'utf8', function (err, data) {
+                if (err) {
+                    console.error('Read ueditor/config.json err: ', err);
+                } else {
+                    res.json(JSON.parse(data.replace(/\/\*.+\*\//g, '')));
+                }
+            });
+            break;
+        }
+        case 'uploadimage': {
+            var pattern = /\/([^\/]+)\.([^\.]+)$/;
+            var match = pattern.exec(req.files.upfile[0].path);
+            var name = match[1] || '';
+            var suffix = match[2] || '';
+            var dir = 'public/uploadImages/' + req.session.userInfo.id;
+            if (!fs.existsSync(dir)){
+                fs.mkdirSync(dir);
+            }
+            var absolute_path = path.resolve(__dirname, '../public/uploadImages') + '/' + req.session.userInfo.id + '/' + name + '.'  + suffix;
+            fs.rename(req.files.upfile[0].path, absolute_path, function (err) {
+                if (err) {
+                    console.error("Move uploaded file error, ", err);
+                    res.end();
+                } else {
+                    res.json({
+                        "state": "SUCCESS",
+                        "url": 'uploadImages/' + req.session.userInfo.id + '/' + name + '.' + suffix,
+                        "title": name,
+                        "original": name
+                    });
+                }
+            });
+            break;
+        }
+    }
+};
