@@ -2096,7 +2096,7 @@ exports.editExercise = function (req, res) {
                     if (err) {
                         console.log("Update answer in editExercise: " + err);
                     } else {
-                        con.query("delete from op " +
+                        con.query("delete from Op " +
                             "where eid = ?;", exercise.eid, function (err) {
                             if (err) {
                                 console.log("Delete old options in editExercise: " + err);
