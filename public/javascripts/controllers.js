@@ -1002,7 +1002,7 @@ function addExerciseCtrl($scope, $http, $stateParams, toaster) {
     $scope.submit = function () {
         $http.post('/addExercise', {
             ebid: $stateParams.exerciseBankID,
-            description: $scope.editor.getContent(),
+            description: $scope.editorText,
             options: $scope.options,
             answers: $scope.answer.trim().replace(/\s/g,"").split('+')
         }).success(function (res) {
@@ -1177,7 +1177,7 @@ function editExerciseModalCtrl($scope, $uibModalInstance, exercise, options) {
     }
 
     $scope.ok = function () {
-        $scope.exercise.description = $scope.editor.getContent();
+        $scope.exercise.description = $scope.editorText;
         $uibModalInstance.close({exercise: $scope.exercise, options: $scope.options});
     };
 
@@ -1673,7 +1673,7 @@ function postMessageCtrl($scope, $rootScope, $http, toaster) {
     });
 
     $scope.submit = function () {
-        $scope.message.text = $scope.editor.getContent();
+        $scope.message.text = $scope.editorText;
         $http.post('/addMessage', {
             tid: $rootScope.userInfo.id,
             message: $scope.message

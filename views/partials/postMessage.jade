@@ -5,7 +5,7 @@ div(class="content-container")
         label 通知标题
         input(type="text" class="form-control mb-10" placeholder="请输入通知的标题" ng-model="message.title")
         label 通知正文
-        div(class="mb-10" editor)
+        editor(class="mb-10" id="container" content="editorText")
         label(class="checkbox-inline")
             input(type="checkbox" ng-model="message.includeTeacher")
             span 是否通知课程其他教师？

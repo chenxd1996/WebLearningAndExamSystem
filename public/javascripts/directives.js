@@ -57,28 +57,40 @@ directive('editorBody', function () {
         }
     }
 }).
-directive('editor', function ($window) {
+directive('editor', function ($window, $timeout) {
     return {
         restrict: 'AE',
         templateUrl: 'partials/editor',
         replace: true,
-        link: function ($scope, element, atts) {
-            var editor = $scope.editor = UE.getEditor('container');
-            editor.ready(function () {
-                if ($scope.editorText) {
-                    editor.setContent($scope.editorText);
-                }
-                // 很坑，居然监听不了图片url的变化。。
-                // editor.addListener('contentChange', function () {
-                //     $scope.editorText = editor.getContent();
-                // });
-            });
-            $scope.$on('$destroy', function () {
-                try {
-                    editor.destroy();
-                } catch (e) {
+        scope: {
+            content: '=content'
+        },
+        link: function ($scope, element, attrs) {
+            $timeout(function () {
+                var editor = $scope.editor = UE.getEditor(attrs.id);
+                var editorBody;
+                editor.ready(function () {
+                    editorBody = element[0].querySelector('.edui-editor-iframeholder > iframe').contentWindow.document.body;
+                    editorBody.onblur = function (e) {
+                        $scope.content = editor.getContent();
+                        $scope.$apply();
+                    };
+                    if ($scope.content) {
+                        editor.setContent($scope.content);
+                    }
+                    // 很坑，居然监听不了图片url的变化。。
+                    // editor.addListener('contentChange', function () {
+                    //     $scope.editorText = editor.getContent();
+                    // });
+                });
+                $scope.$on('$destroy', function () {
+                    try {
+                        editor.destroy();
+                        editorBody.onblur = null;
+                    } catch (e) {
 
-                }
+                    }
+                });
             });
         }
     }

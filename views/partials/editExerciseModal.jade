@@ -3,14 +3,14 @@ div(modal-center)
         h3(class="modal-title" id="modal-title") 编辑课程
     div(class="modal-body" id="modal-body")
         label 题目描述
-        div(editor)
+        editor(id="container" content="editorText")
         p
         label 题目选项
         input(class="form-control" type="number" min="2" max="26" ng-model="optionsNum" placeholder="题目选项数" ng-change="change(optionsNum)")
         p
         div(class="input-group mb-5" ng-repeat="option in options")
             span(class="input-group-addon") {{option.op}}
-            input(class="form-control" type="text" ng-model="option.description")
+            editor(id="{{'' + $index}}" content="option.description")
         label 题目答案
         input(class="form-control mb-10" type="text" placeholder="如： A, AB, ABC等" ng-model="exercise.answer")
     div(class="modal-footer")
