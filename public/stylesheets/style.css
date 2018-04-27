@@ -500,6 +500,11 @@ a {
   color: #5bc0de;
 }
 
+.option {
+  display: flex;
+  align-items: flex-start;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 4px;

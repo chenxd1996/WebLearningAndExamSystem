@@ -7,8 +7,9 @@ div(class="content-container")
             div(ng-repeat="option in options[$index]")
                 label(class="checkbox-inline")
                     input(type="checkbox" ng-model="option.checked" ng-disabled="question.isShow")
-                    span {{option.op + ". "}}
-                    span(ng-bind-html="option.description | trustHtml")
+                    div.option
+                        span {{option.op + ". "}}
+                        span(ng-bind-html="option.description | trustHtml")
             div(ng-if="question.isShow" class="alert mt-10" role="alert" ng-class="{true: 'alert-success', false: 'alert-danger'}[question.isTrue]")
                 span 正确答案: {{question.answers}}
             button(ng-disabled="question.isShow" ng-if="!question.isShow" class="btn btn-sm btn-primary pull-right" ng-click="submit(options[$index], $index)") 提交
@@ -17,9 +18,9 @@ div(class="content-container")
             h4 Question {{$index + 1}}
         div(class="panel-body")
             div(ng-bind-html="question.description | trustHtml" class="mb-10")
-            div(ng-repeat="option in options[$index]")
+            div(ng-repeat="option in options[$index]").option
                 span {{option.op + ". "}}
-                    span(ng-bind-html="option.description | trustHtml")
+                span(ng-bind-html="option.description | trustHtml")
             div(class="alert mb-10 mt-10 alert-info" role="alert")
                 span 正确答案: {{question.answer}}
             div(class="btn-group pull-right")
