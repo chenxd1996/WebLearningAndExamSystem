@@ -1392,11 +1392,11 @@ exports.importUsers = function (req, res) {
                 }
                 var student = {};
                 student.id = records[i][idIndex];
-                student.name = records[i][nameIndex]? records[i][nameIndex] : "";
-                student.college = records[i][collegeIndex]? records[i][collegeIndex] : "";
-                student.major = records[i][majorIndex]? records[i][majorIndex] : "";
-                student.grade = records[i][gradeIndex]? records[i][gradeIndex] : "";
-                student.class = records[i][classIndex]? records[i][classIndex] : "";
+                student.name = records[i][nameIndex]? records[i][nameIndex] : null;
+                student.college = records[i][collegeIndex]? records[i][collegeIndex] : null;
+                student.major = records[i][majorIndex]? records[i][majorIndex] : null;
+                student.grade = records[i][gradeIndex]? records[i][gradeIndex] : null;
+                student.class = records[i][classIndex]? records[i][classIndex] : null;
                 student.password = crypto.createHash('md5').update(student.id).digest('hex').toLowerCase();
                 student.level = 1;
                 addUser(student, userInfo, cid);
