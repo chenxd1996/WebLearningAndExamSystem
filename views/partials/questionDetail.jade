@@ -1,0 +1,27 @@
+div(class="content-container")
+    div(class="bg-white pt-10 pb-20 pl-20 pr-20 message-detail")
+        div(class="message-title text-center mb-20")
+            h1(class="mb-10") {{question.title}}
+            div(class="message-detail-info")
+                span {{question.time | date: 'yyyy-MM-dd HH:mm:ss'}} / {{question.creater.name}}
+        div(class="message-body question-content")
+            div(ng-bind-html="question.content | trustHtml")
+        div(ng-repeat="answer in question.answers" class="reply-container")
+            div(class="reply-info mt-10 mb-10")
+              span(class="mr-10")
+                span(class="user-name") {{ answer.from.name }}
+                span(style="color: gray") &nbsp;回复&nbsp;
+                span(class="user-name") {{ answer.to.name }}
+              span(class="other-info mr-10") {{$index + 1}}楼 · {{ answer.time  ? (answer.time | date: 'yyyy-MM-dd HH:mm:ss') : '刚刚' }}
+              button(class="btn btn-sm btn-primary" ng-click="showModal(answer.from)") 回复
+            div(class="message-body question-content")
+              div(ng-bind-html="answer.content | trustHtml")
+        button(class="question-reply-button btn btn-primary" ng-click="showModal(question.creater)") 回复
+script(type="text/ng-template" id="addAnswerModal.html")
+    div(class="modal-header")
+        h3(class="modal-title" id="modal-title") 回复
+    div(class="modal-body" id="modal-body")
+        editor(id="container" content="editorText")
+    div(class="modal-footer")
+        button(class="btn btn-primary" type="button" ng-click="ok()") 提交
+        button(class="btn btn-warning" type="button" ng-click="cancel()") 取消

@@ -392,6 +392,7 @@ a {
 
 .message-detail {
   min-height: 550px;
+  position: relative;
 }
 
 .message-detail-info {
@@ -503,6 +504,30 @@ a {
 .option {
   display: flex;
   align-items: flex-start;
+}
+
+.question-button {
+  margin-bottom: 10px !important;
+}
+
+.question-reply-button {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+}
+
+.reply-container {
+  margin-top: 10px;
+  border-top: dotted black 1px;
+}
+
+.question-content {
+  margin: 20px 0 40px 0;
+}
+
+.other-info {
+  font-size: 12px;
+  color: gray;
 }
 
 ::-webkit-scrollbar {

@@ -2229,3 +2229,125 @@ exports.ueditor = function (req, res) {
         }
     }
 };
+
+
+exports.addQuestion = function (req, res) {
+  const con = DBConnect.con;
+  const {
+    title, courseID, content, creater
+  } = req.body;
+
+  const createrString = JSON.stringify(creater);
+  const time = new Date().getTime();
+  const queryString = `
+    INSERT INTO QuestionAndAnswer(courseId, title, content, creater, time)
+    VALUES('${courseID}', '${title}', '${content}', '${createrString}', ${time});
+  `
+  con.query(queryString, function(err) {
+    if (err) {
+      console.log('添加提问出错:', err);
+      res.end();
+    } else {
+      res.json({
+        status: "SUCCESS",
+      });
+    }
+  });
+}
+
+exports.getQuestions = function (req, res) {
+  const con = DBConnect.con;
+  const {
+    courseID,
+  } = req.body;
+
+  const queryString = `
+    SELECT id, title, creater, time FROM QuestionAndAnswer WHERE courseId = ${courseID};
+  `
+  con.query(queryString, function(err, result) {
+    if (err) {
+      console.log('获取课程提问出错: ', err);
+      res.end();
+    } else {
+      res.json({
+        status: 'SUCCESS',
+        questions: result,
+      });
+    }
+  });
+}
+
+exports.getQuestionDetail = function(req, res) {
+  const con = DBConnect.con;
+  const {
+    questionId,
+  } = req.body;
+  const queryString = `
+    SELECT * FROM QuestionAndAnswer WHERE id = ${questionId};
+  `
+  con.query(queryString, function(err, result) {
+    if (err) {
+      console.log('获取提问详情失败：', err);
+      res.end();
+    } else {
+      res.json({
+        status: 'SUCCESS',
+        question: result && result[0],
+      });
+    }
+  });
+}
+
+exports.addAnswer = function(req, res) {
+  const con = DBConnect.con;
+  const {
+    content,
+    from,
+    to,
+    questionId,
+  } = req.body;
+  const time = new Date().getTime();
+  const queryString = `
+    SELECT answers FROM QuestionAndAnswer WHERE id = ${questionId};
+  `;
+  con.query(queryString, function(err, result) {
+    if (err) {
+      console.log('获取提问失败', err);
+      res.end();
+    } else {
+      const { answers } = result[0];
+      const answersJSON = JSON.parse(answers) || [];
+      answersJSON.push({
+        content,
+        from,
+        to,
+        time,
+      });
+      const newAnswers = JSON.stringify(answersJSON).replace(/\"/g, '\\\"');
+      const updateString = `
+        UPDATE QuestionAndAnswer SET answers = '${newAnswers}' WHERE id = ${questionId};
+      `;
+      con.query(updateString, function(err) {
+        if (err) {
+          console.log('添加提问回复失败', err);
+          res.end();
+        } else {
+          res.json({
+            status: 'SUCCESS',
+          });
+        }
+      });
+      const mid = new Date().getTime();
+      const link = `/homePage/question/${questionId}`;
+      const addMessageString = `
+        INSERT INTO StudentMessage(sid, mid, title, link)
+        VALUES('${to.id}', '${mid}', '您有一个新的回复', '${link}');
+        INSERT INTO TeacherMessage(tid, mid, title, link)
+        VALUES('${to.id}', '${mid}', '您有一个新的回复', '${link}');
+      `;
+      con.query(addMessageString, function(err) {
+        console.log('添加回复消息失败', err);
+      });
+    }
+  })
+}

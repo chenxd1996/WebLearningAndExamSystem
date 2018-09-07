@@ -1,0 +1,29 @@
+div(class="content-container messages-list")
+    button(class="btn btn-primary question-button" ng-click="showModal()") 添加提问
+    ul
+        li(ng-repeat="question in questions")
+            div(class="message-op col-xs-1")
+                a(ng-click="check($index)" class="fa-lg fa fa-fw fa-trash-o"  uib-tooltip="点击将删除该问题" tooltip-trigger="'mouseenter'" tooltip-placement="top")
+            div(class="message-info col-xs-8")
+                div
+                    a(ng-href="/homePage/question/{{question.id}}")
+                        span {{ question.title }}
+            div(class="message-type col-xs-1")
+                div(class="text-center")
+                    div
+                        span {{question.creater.name}}
+            div(class="message-postTime col-xs-2")
+                span {{question.time ? (question.time | date:'yyyy-MM-dd HH:mm') : '刚刚'}}
+    div(ng-if="questions.length == 0" class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20")
+        div(class="fs-16") 暂无数据
+    script(type="text/ng-template" id="myModalContent.html")
+        div(class="modal-header")
+            h3(class="modal-title" id="modal-title") 添加问题
+        div(class="modal-body" id="modal-body")
+            span 标题：
+            input(ng-model="title" class="form-control mb-10" placeholder="请输入标题，200字以内" type="text" required)
+            span 正文：
+            editor(id="container" content="editorText")
+        div(class="modal-footer")
+          button(class="btn btn-primary" type="button" ng-click="ok()") 提交
+          button(class="btn btn-warning" type="button" ng-click="cancel()") 取消

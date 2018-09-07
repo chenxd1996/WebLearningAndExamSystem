@@ -318,6 +318,21 @@ function DBInit() {
             }
     });
 
+    con.query("create table if not exists QuestionAndAnswer(" +
+      "id int auto_increment," +
+      "courseId varchar(32)," +
+      "title varchar(255)," +
+      "content longtext," +
+      "creater varchar(100)," +
+      "time bigint," +
+      "answers longtext," +
+      "primary key(id));", function(err) {
+        if (err) {
+          console.log("QuestionAndAnswer: ", err);
+        }
+      }
+    );
+
     con.query("select count(*) from Admin", function (err, result) {
         if (result[0]['count(*)'] == 0) {
             con.query("insert into Admin " +

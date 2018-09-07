@@ -137,6 +137,14 @@ router.post('/ueditor', function (req, res, next) {
     });
 }, api.ueditor);
 
+router.post('/addQuestion', api.addQuestion);
+
+router.post('/getQuestions', api.getQuestions);
+
+router.post('/getQuestionDetail', api.getQuestionDetail);
+
+router.post('/addAnswer', api.addAnswer);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

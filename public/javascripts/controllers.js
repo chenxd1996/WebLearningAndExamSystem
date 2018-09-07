@@ -1380,7 +1380,6 @@ function examsManagementCtrl($scope, $http, $rootScope, $uibModal, toaster) {
 }
 
 function editExamModalCtrl($scope, $uibModalInstance, exam, $rootScope, $http) {
-    console.log(exam);
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $http.post('/getMyCourses', {
@@ -1729,7 +1728,7 @@ function messageDetailCtrl($scope, $http, $stateParams, $rootScope) {
     });
 }
 
-function myInformationCtrl($scope, $rootScope, $http, toaster, md5, $state) {
+function myInformationCtrl($scope, $rootScope, $http, toaster, md5) {
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && $rootScope.userInfo.level == 1) {
             $http.get('/getUserInfo').success(function (res) {
@@ -1772,6 +1771,129 @@ function myInformationCtrl($scope, $rootScope, $http, toaster, md5, $state) {
             });
         }
     }
+}
+
+function addQuestionModalCtrl($scope, $uibModalInstance, $rootScope, $http, courseID) {
+  $scope.ok = function () {
+    if (!$scope.title || !$scope.editorText) {
+      alert('标题或内容不能为空哦！');
+    } else {
+      $http.post('/addQuestion', {
+        title: $scope.title,
+        content: $scope.editorText,
+        courseID: courseID,
+        creater: $rootScope.userInfo,
+      }).success(function(res) {
+        if (res.status === 'SUCCESS') {
+          alert('提交成功');
+        } else {
+          alert('提交失败');
+        }
+        $uibModalInstance.close({
+          title: $scope.title,
+          content: $scope.editorText,
+          courseID: courseID,
+          creater: $rootScope.userInfo,
+        });
+      });
+    }
+  };
+
+  $scope.cancel = function () {
+      $uibModalInstance.dismiss('cancel');
+  };
+}
+
+function questionAndAnswerCtrl($scope, $http, $uibModal) {
+  const courseID = $scope.$parent.courseID;
+  $http.post('/getQuestions', {
+    courseID: courseID,
+  }).success(function(res) {
+    $scope.questions = res.questions.sort(function(questionA, questionB) {
+      return questionB.time - questionA.time;
+    });
+    $scope.questions.forEach(item => {
+      item.creater = JSON.parse(item.creater);
+    });
+  });
+  $scope.showModal = function() {
+    const instance = $uibModal.open({
+      templateUrl: 'myModalContent.html',
+      controller: addQuestionModalCtrl,
+      // controllerAs: '$ctrl',
+      resolve: {
+        courseID: function () {
+          return courseID;
+        }
+      }
+    });
+    instance.result.then(function(res) {
+      $scope.questions.unshift(res);
+    });
+  };
+}
+
+function addAnswerModalCtrl($scope, $http, questionId, $rootScope, $uibModalInstance, toUser) {
+  $scope.ok = function () {
+    if (!$scope.editorText) {
+      alert('回复内容不能为空哦！');
+    } else {
+      $http.post('/addAnswer', {
+        content: $scope.editorText,
+        questionId: questionId,
+        from: $rootScope.userInfo,
+        to: toUser,
+      }).success(function(res) {
+        if (res.status === 'SUCCESS') {
+          alert('提交成功');
+        } else {
+          alert('提交失败');
+        }
+        $uibModalInstance.close({
+          content: $scope.editorText,
+          questionId: questionId,
+          from: $rootScope.userInfo,
+          to: toUser,
+        });
+      });
+    }
+  };
+
+  $scope.cancel = function () {
+      $uibModalInstance.dismiss('cancel');
+  };
+}
+
+function questionDetail($scope, $state, $http, $uibModal) {
+  let question = {};
+  $http.post('/getQuestionDetail', {
+    questionId: $state.params.questionId,
+  }).success(function(res) {
+    question = $scope.question = res.question;
+    question.creater = JSON.parse(question.creater);
+    if (question.answers) {
+      question.answers = JSON.parse(question.answers);
+    } else {
+      question.answers = [];
+    }
+  });
+  $scope.showModal = function(toUser) {
+    const instance = $uibModal.open({
+      templateUrl: 'addAnswerModal.html',
+      controller: addAnswerModalCtrl,
+      // controllerAs: '$ctrl',
+      resolve: {
+        questionId: function () {
+          return question.id;
+        },
+        toUser: toUser,
+      }
+    });
+    instance.result.then(function(res) {
+      question.answers.push(res);
+    });
+  };
+  
 }
 
 function isValidPassword(password) {
