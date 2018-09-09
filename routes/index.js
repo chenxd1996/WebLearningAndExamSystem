@@ -145,6 +145,10 @@ router.post('/getQuestionDetail', api.getQuestionDetail);
 
 router.post('/addAnswer', api.addAnswer);
 
+router.post('/deleteQuestion', api.deleteQuestion);
+
+router.post('/addDuration', api.addDuration);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');

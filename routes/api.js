@@ -72,7 +72,8 @@ exports.loginCheck = function (req, res) {
                 id: id,                
                 logined: true,
                 level: 1,
-                name: row[0]['sname']
+                name: row[0].sname,
+                duration: row[0].duration,
             });
         }
     });
@@ -242,7 +243,7 @@ exports.getUserInfo = function (req, res) {
     if (req.session.userInfo) {
         var query = "";
         if (req.session.userInfo.level == 1) {
-            query = "select major, college, class from Student " +
+            query = "select major, college, class, duration from Student " +
                 "where sid = ?;";
             con.query(query, req.session.userInfo.id, function (err, result) {
                 if (err) {
@@ -254,8 +255,9 @@ exports.getUserInfo = function (req, res) {
                         level: req.session.userInfo.level,
                         name: req.session.userInfo.name,
                         major: result[0]['major'],
-                        college: result[0]['college'],
-                        class: result[0]['class']
+                        college: result[0].college,
+                        class: result[0].class,
+                        duration: result[0].duration,
                     });
                 }
             });
@@ -798,19 +800,20 @@ exports.addExam = function (req, res) {
     var cid = req.body.cid;
     var startTime = new Date(req.body.startTime);
     var endTime = new Date(req.body.endTime);
-    var examDate = new Date(req.body.examDate);
+    var examStartDate = new Date(req.body.examStartDate);
+    var examEndDate = new Date(req.body.examEndDate);
     var ename = req.body.examName;
     var examPoints = req.body.examPoints;
     var ebs = req.body.ebs;
     //if (!cid || !req.body.startTime || !req.body.endTime || !req.body.examDate || !ename || !examPoints || !ebs)
     var eid = new Date().getTime();
-    startTime.setDate(examDate.getDate());
-    startTime.setMonth(examDate.getMonth());
-    startTime.setFullYear(examDate.getFullYear());
+    startTime.setDate(examStartDate.getDate());
+    startTime.setMonth(examStartDate.getMonth());
+    startTime.setFullYear(examStartDate.getFullYear());
     startTime.setSeconds(0);
-    endTime.setDate(examDate.getDate());
-    endTime.setMonth(examDate.getMonth());
-    endTime.setFullYear(examDate.getFullYear());
+    endTime.setDate(examEndDate.getDate());
+    endTime.setMonth(examEndDate.getMonth());
+    endTime.setFullYear(examEndDate.getFullYear());
     endTime.setSeconds(0);
     con.query("insert into Exam " +
         "value(?, ?, ?, ? ,?);", [eid, ename, examPoints, startTime.getTime(), endTime.getTime()], function (err, result) {
@@ -1633,7 +1636,7 @@ exports.getStudents = function (req, res) {
     var con = DBConnect.con;
     var cid = req.body.cid;
     if (cid) {
-        con.query("select s.sid, s.sname, s.college, s.major, s.grade, s.class from Student s, StudentCourse sc " +
+        con.query("select s.sid, s.duration, s.sname, s.college, s.major, s.grade, s.class from Student s, StudentCourse sc " +
             "where s.sid = sc.sid and sc.cid = ? order by s.sid;", cid, function (err, result) {
             if (err) {
                 console.log("Get course's students: " + err);
@@ -2350,4 +2353,42 @@ exports.addAnswer = function(req, res) {
       });
     }
   })
+}
+
+exports.deleteQuestion = function(req, res) {
+  const { questionId } = req.body;
+  const con = DBConnect.con;
+  const queryString = `
+    DELETE FROM QuestionAndAnswer WHERE id = ${questionId};
+  `;
+  con.query(queryString, function(err) {
+    if (err) {
+      console.log('删除提问失败', err);
+      res.end();
+    } else {
+      res.json({
+        status: 'SUCCESS'
+      });
+    }
+  });
+}
+
+exports.addDuration = function(req, res) {
+  const con = DBConnect.con;
+  const { duration } = req.body;
+  const userInfo = req.session.userInfo;
+  const id = userInfo && userInfo.id;
+  const queryString = `
+    UPDATE Student SET duration = ${duration} WHERE sid = '${id}'
+  `;
+  con.query(queryString, function(err) {
+    if (err) {
+      console.log('更新学生访问时间出错', err);
+      res.end();
+    } else {
+      res.json({
+        status: 'SUCCESS',
+      });
+    }
+  });
 }

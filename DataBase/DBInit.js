@@ -22,6 +22,7 @@ function DBInit() {
         "grade int(4)," +
         "class int(3)," +
         "password varchar(33)," +
+        "duration bigint default 0," + 
         "primary key(sid))", function (err, result) {
             if (err) {
                 console.log("Student: " + err);

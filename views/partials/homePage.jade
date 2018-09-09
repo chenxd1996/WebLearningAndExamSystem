@@ -9,6 +9,8 @@ div(class="header")
                     a 姓名：{{userInfo.name}}
                 li(role="menuitem")
                     a 账号：{{userInfo.id}}
+                li(role="menuitem" ng-if="userInfo.level === 1")
+                    a 访问时长：{{hours}}小时{{minutes}}分{{seconds}}秒
                 li(class="divider")
                 li(role="menuitem")
                     a(ng-click="logout()" href="#" class="text-center")

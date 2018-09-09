@@ -13,7 +13,7 @@ div(class="panel panel-info")
                 tr(ng-repeat="exam in exams" class="text-center")
                     td {{exam.ename}}
                     td {{exam.cname}}
-                    td {{exam.startTime | date: "yyyy-MM-dd"}} {{exam.startTime | date: "HH:mm"}} 至 {{exam.endTime | date: "HH:mm"}}
+                    td {{exam.startTime | date: "yyyy-MM-dd HH:mm"}}  至 {{exam.endTime | date: "yyyy-MM-dd HH:mm"}}
                     td
                         div(class="btn-group")
                             button(class="btn btn-sm btn-info mr-5" ng-click="edit(exam)") 编辑

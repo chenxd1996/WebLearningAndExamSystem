@@ -28,7 +28,8 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
                 $rootScope.userInfo = {
                     id: $scope.user.id,
                     name: data.name,
-                    level: data.level
+                    level: data.level,
+                    duration: data.duration,
                 };
                 if ($rootScope.userInfo.level == 3) {
                     $state.go('logined.usersManagement.addUser.multiple');
@@ -44,7 +45,7 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
 }
 
 //controller for homepage router
-function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout) {
+function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout, $interval) {
     $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
@@ -55,7 +56,8 @@ function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout) {
                     $rootScope.userInfo = {
                         id: result.id,
                         name: result.name,
-                        level: result.level
+                        level: result.level,
+                        duration: result.duration,
                     };
                 }
             });
@@ -67,6 +69,30 @@ function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout) {
                     $rootScope.messagesNum = res[0].messagesNum;
                 });
             }
+        }
+        const userInfo = $rootScope.userInfo;
+        if (userInfo && userInfo.level === 1) {
+          $scope.duration = userInfo.duration;
+          $scope.addRemoteDuration = function() {
+            $http.post('/addDuration', {
+              duration: $scope.duration,
+            });
+          }
+          $scope.addDuration = function() {
+            $scope.duration++;
+            let duration = $scope.duration;
+            $scope.hours = Math.floor(duration / 3600);
+            duration %= 3600;
+            $scope.minutes = Math.floor(duration / 60);
+            duration %= 60;
+            $scope.seconds = Math.floor(duration);
+          } 
+          $scope.addRemoteDurationTimer = $interval($scope.addRemoteDuration, 60000);
+          $scope.addDurationTimer = $interval($scope.addDuration, 1000);
+          $scope.$on('$destroy', function() {
+            $interval.cancel($scope.addRemoteDurationTimer);
+            $interval.cancel($scope.addDurationTimer);
+          });
         }
     });
     var options = ['learning-system', 'exam-system', 'exercise-system', 'my-information', 'users-management', 'message-center'];
@@ -238,6 +264,11 @@ function confirmModalCtrl($scope, $uibModalInstance, des) {
 }
 
 function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootScope, toaster, $filter) {
+    $rootScope.$watch('userInfo', function () {
+        if ($rootScope.userInfo) {
+          $scope.userInfo = $rootScope.userInfo;
+        }
+    });
     $scope.students = [];
     $scope.studentsSelected = [];
     $scope.options = [{value: '学号', key: 'sid'}, {key: 'sname', value:'姓名'}, {key: 'college', value: '学院'},
@@ -248,6 +279,14 @@ function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootS
         cid: $stateParams.courseID
     }).success(function (res) {
         $scope.students = res;
+        $scope.students.forEach(function(item) {
+          let duration = item.duration;
+          item.hours = Math.floor(duration / 3600);
+          duration %= 3600;
+          item.minutes = Math.floor(duration / 60);
+          duration %= 60;
+          item.seconds = Math.floor(duration);
+        });
     });
 
     $scope.changeFileterCondition = function (condition) {
@@ -1228,9 +1267,13 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
         startingDay: 1
     };
 
-    $scope.dtOpen = function () {
-        $scope.isDtOpen = true;
+    $scope.startDateOpen = function () {
+        $scope.isStartDateOpen = true;
     };
+
+    $scope.endDateOpen = function() {
+      $scope.isEndDateOpen = true;
+    }
 
     $scope.hstep = 1;
     $scope.mstep = 1;
@@ -1262,7 +1305,8 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
         var exam = {};
         exam.cid = $scope.courseSelected.cid;
         exam.examName = $scope.examName;
-        exam.examDate = $scope.examDate;
+        exam.examStartDate = $scope.examStartDate;
+        exam.examEndDate = $scope.examEndDate;
         exam.startTime = $scope.startTime;
         exam.endTime = $scope.endTime;
         exam.exerciseNum = $scope.exerciseNum;
@@ -1400,18 +1444,20 @@ function editExamModalCtrl($scope, $uibModalInstance, exam, $rootScope, $http) {
     tmpEndTime.setTime($scope.exam.endTime);
     $scope.exam.startTime = tmpStartTime;
     $scope.exam.endTime = tmpEndTime;
-    $scope.exam.examDate = tmpStartTime;
+    $scope.exam.examStartDate = tmpStartTime;
+    $scope.exam.examEndDate = tmpEndTime;
 
     $scope.ok = function () {
         $scope.exam.startTime = new Date($scope.exam.startTime);
         $scope.exam.endTime = new Date($scope.exam.endTime);
-        $scope.exam.examDate = new Date($scope.exam.examDate);
-        $scope.exam.startTime.setFullYear($scope.exam.examDate.getFullYear());
-        $scope.exam.endTime.setFullYear($scope.exam.examDate.getFullYear());
-        $scope.exam.startTime.setMonth($scope.exam.examDate.getMonth());
-        $scope.exam.endTime.setMonth($scope.exam.examDate.getMonth());
-        $scope.exam.startTime.setDate($scope.exam.examDate.getDate());
-        $scope.exam.endTime.setDate($scope.exam.examDate.getDate());
+        $scope.exam.examStartDate = new Date($scope.exam.examStartDate);
+        $scope.exam.examEndDate = new Date($scope.exam.examEndDate);
+        $scope.exam.startTime.setFullYear($scope.exam.examStartDate.getFullYear());
+        $scope.exam.endTime.setFullYear($scope.exam.examEndDate.getFullYear());
+        $scope.exam.startTime.setMonth($scope.exam.examStartDate.getMonth());
+        $scope.exam.endTime.setMonth($scope.exam.examEndDate.getMonth());
+        $scope.exam.startTime.setDate($scope.exam.examStartDate.getDate());
+        $scope.exam.endTime.setDate($scope.exam.examEndDate.getDate());
         $uibModalInstance.close($scope.exam);
     };
 
@@ -1423,9 +1469,13 @@ function editExamModalCtrl($scope, $uibModalInstance, exam, $rootScope, $http) {
         startingDay: 1
     };
 
-    $scope.dtOpen = function () {
-        $scope.isDtOpen = true;
+    $scope.startDateOpen = function () {
+        $scope.isStartDateOpen = true;
     };
+
+    $scope.endDateOpen = function () {
+      $scope.isEndDateOpen = true;
+  };
 
     $scope.hstep = 1;
     $scope.mstep = 1;
@@ -1804,7 +1854,12 @@ function addQuestionModalCtrl($scope, $uibModalInstance, $rootScope, $http, cour
   };
 }
 
-function questionAndAnswerCtrl($scope, $http, $uibModal) {
+function questionAndAnswerCtrl($scope, $http, $uibModal, $rootScope) {
+  $rootScope.$watch(function () {
+    return $rootScope.userInfo;
+}, function () {
+   $scope.userInfo = $rootScope.userInfo;
+});
   const courseID = $scope.$parent.courseID;
   $http.post('/getQuestions', {
     courseID: courseID,
@@ -1831,6 +1886,20 @@ function questionAndAnswerCtrl($scope, $http, $uibModal) {
       $scope.questions.unshift(res);
     });
   };
+  $scope.delete = function(questionId) {
+    $http.post('/deleteQuestion', {
+      questionId: questionId,
+    }).success(function(res) {
+      if (res.status === 'SUCCESS') {
+        alert('删除成功');
+        $scope.questions = $scope.questions.filter(function(item) {
+          return item.id !== questionId;
+        });
+      } else {
+        alert('删除失败');
+      }
+    });
+  }
 }
 
 function addAnswerModalCtrl($scope, $http, questionId, $rootScope, $uibModalInstance, toUser) {

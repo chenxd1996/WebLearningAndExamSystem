@@ -19,6 +19,7 @@ table(class="table table-hover table-bordered")
             th(class="text-center") 专业
             th(class="text-center") 年级
             th(class="text-center") 班级
+            th(class="text-center" ng-if="userInfo.level === 2") 访问时长
             th(class="text-center") 操作
     tbody
         tr(ng-repeat="student in students | courseMembersFilter: filterCondition: filterValue" class="text-center")
@@ -30,6 +31,7 @@ table(class="table table-hover table-bordered")
             td {{student.major}}
             td {{student.grade}}
             td {{student.class}}
+            td(ng-if="userInfo.level === 2") {{student.hours}}小时{{student.minutes}}分钟{{student.seconds}}秒
             td
                 div(class="btn-group")
                     button(class="btn btn-sm btn-info mr-5" ng-click="open(student)") 编辑

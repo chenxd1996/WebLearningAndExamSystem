@@ -6,11 +6,17 @@ div(modal-center)
         input(class="form-control mb-5" ng-model="exam.cname" readonly)
         label 考试名称
         input(class="form-control mb-5" ng-model="exam.ename")
-        label 考试日期
+        label 考试开始日期
         div(class="input-group mb-5")
-            input(readonly type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="exam.examDate" is-open="isDtOpen" datepicker-options="dateOptions" current-text="今天" clear-text="清除" close-text="关闭" popup-placement="bottom-right")
+            input(readonly type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="exam.examStartDate" is-open="isStartDateOpen" datepicker-options="dateOptions" current-text="今天" clear-text="清除" close-text="关闭" popup-placement="bottom-right")
             span(class="input-group-btn")
-                button(type="button" class="btn btn-primary" ng-click="dtOpen()")
+                button(type="button" class="btn btn-primary" ng-click="startDateOpen()")
+                    i(class="glyphicon glyphicon-calendar")
+        label 考试结束日期
+        div(class="input-group mb-5")
+            input(readonly type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="exam.examEndDate" is-open="isEndDateOpen" datepicker-options="dateOptions" current-text="今天" clear-text="清除" close-text="关闭" popup-placement="bottom-right")
+            span(class="input-group-btn")
+                button(type="button" class="btn btn-primary" ng-click="endDateOpen()")
                     i(class="glyphicon glyphicon-calendar")
         label 考试开始时间
         div(class="mb-5" uib-timepicker ng-model="exam.startTime" hour-step="hstep" minute-step="mstep")

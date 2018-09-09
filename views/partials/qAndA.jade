@@ -3,7 +3,7 @@ div(class="content-container messages-list")
     ul
         li(ng-repeat="question in questions")
             div(class="message-op col-xs-1")
-                a(ng-click="check($index)" class="fa-lg fa fa-fw fa-trash-o"  uib-tooltip="点击将删除该问题" tooltip-trigger="'mouseenter'" tooltip-placement="top")
+                a(ng-if="userInfo.level > 1 || question.creater.id === userInfo.id" ng-click="delete(question.id)" class="fa-lg fa fa-fw fa-trash-o"  uib-tooltip="点击将删除该问题" tooltip-trigger="'mouseenter'" tooltip-placement="top")
             div(class="message-info col-xs-8")
                 div
                     a(ng-href="/homePage/question/{{question.id}}")

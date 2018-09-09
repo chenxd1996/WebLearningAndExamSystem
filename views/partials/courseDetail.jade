@@ -6,11 +6,12 @@ ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 1")
 ul(class="nav nav-tabs nav-pills" ng-if="userInfo.level == 2")
     li(role="presentation" uib-btn-radio="'course-data'" ng-model="checked")
         a(ui-sref="logined.courseDetail.courseData({courseID: courseID})") 课程资料
-        a(ui-sref="logined.courseDetail.courseData({courseID: courseID})") Q & A
     li(role="presentation" uib-btn-radio="'add-course-data'" ng-model="checked")
         a(ui-sref="logined.courseDetail.addCourseData({courseID: courseID})") 上传课件
     li(role="presentation" uib-btn-radio="'course-members'" ng-model="checked")
         a(ui-sref="logined.courseDetail.courseMembers.student") 课程成员
     li(role="presentation" uib-btn-radio="'add-members'" ng-model="checked" uib-dropdown)
         a(ui-sref="logined.courseDetail.addMembers.multiple") 添加成员
+    li(role="presentation" uib-btn-radio="question-and-answer" ng-model="checked")
+      a(ui-sref="logined.courseDetail.questionAndAnswer({courseID: courseID})") Q & A
 div(ui-view="" class="h-100")
