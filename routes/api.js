@@ -1500,8 +1500,13 @@ function addUser(user, userInfo, cid, res) {
                 console.log("Select count(*) from Student in addUser: " + err);
             } else {
                 if (result[0]['count(*)'] == 0) {
-                    con.query("insert into Student" +
-                        " value(?, ?, ?, ?, ?, ?, ?);", [user.id, user.name, user.college, user.major, user.grade, user.class, user.password],
+                    const queryString = `
+                      insert into Student(sid, sname, college, major, grade, class, password)
+                      values('${user.id}', '${user.name}', '${user.college || ""}', '${user.major || ""}',
+                        ${user.grade}, ${user.class}, '${user.password}'
+                      )
+                    `;
+                    con.query(queryString,
                         function (err, result) {
                             if (err) {
                                 console.log("Insert into Student in addUser: " + err);
