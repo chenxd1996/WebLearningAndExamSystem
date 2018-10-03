@@ -236,6 +236,13 @@ function courseMembersCtrl($scope, $location) {
     $scope.changeStatus = function (status) {
         $scope.status = status;
     };
+    $scope.totalItems = 1;
+    $scope.maxSize = 10;
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 20;
+    $scope.updateTotal = function(total) {
+      $scope.totalItems = total;
+    }
 }
 
 function editUserModalCtrl($scope, $uibModalInstance, user) {
@@ -275,18 +282,23 @@ function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootS
         {key: 'major', value: '专业'}, {key: 'grade', value: '年级'}];
     $scope.filterCondition = $scope.options[0];
 
-    $http.post('/getStudents', {
-        cid: $stateParams.courseID
-    }).success(function (res) {
-        $scope.students = res;
-        $scope.students.forEach(function(item) {
-          let duration = item.duration;
-          item.hours = Math.floor(duration / 3600);
-          duration %= 3600;
-          item.minutes = Math.floor(duration / 60);
-          duration %= 60;
-          item.seconds = Math.floor(duration);
-        });
+    $scope.$watch('currentPage', function() {
+      $http.post('/getStudents', {
+          cid: $stateParams.courseID,
+          itemsPerPage: $scope.itemsPerPage,
+          currentPage: $scope.currentPage,
+      }).success(function (res) {
+          $scope.updateTotal(res.total);
+          $scope.students = res.users;
+          $scope.students.forEach(function(item) {
+            let duration = item.duration;
+            item.hours = Math.floor(duration / 3600);
+            duration %= 3600;
+            item.minutes = Math.floor(duration / 60);
+            duration %= 60;
+            item.seconds = Math.floor(duration);
+          });
+      });
     });
 
     $scope.changeFileterCondition = function (condition) {
@@ -438,10 +450,15 @@ function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootS
     $scope.options = [{value: '工号', key: 'tid'}, {key: 'tname', value:'姓名'}];
     $scope.filterCondition = $scope.options[0];
 
-    $http.post('getTeachers', {
-        cid: $stateParams.courseID
-    }).success(function (res) {
-        $scope.teachers = res;
+    $scope.$watch('currentPage', function() {
+      $http.post('getTeachers', {
+        cid: $stateParams.courseID,
+        itemsPerPage: $scope.itemsPerPage,
+        currentPage: $scope.currentPage,        
+      }).success(function (res) {
+          $scope.updateTotal(res.total);
+          $scope.teachers = res.users;
+      });
     });
 
     $scope.changeFileterCondition = function (condition) {

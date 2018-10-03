@@ -530,6 +530,12 @@ a {
   color: gray;
 }
 
+.pagination {
+  display: flex !important;
+  justify-content: center;
+  width: 100%;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 4px;

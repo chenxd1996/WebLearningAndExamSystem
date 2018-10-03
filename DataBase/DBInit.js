@@ -1,7 +1,5 @@
-var DBConnect = require("./DBConnect");
+const con = require("./DBConnect");
 function DBInit() {
-    var con = DBConnect.con;
-
     con.query("ALTER DATABASE LearningAndExamSystem DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci", function (err, result) {
         if (err) {
             console.log("Set utf8: " + err);
@@ -16,9 +14,9 @@ function DBInit() {
 
     con.query("create table if not exists Student(" +
         "sid varchar(20)," +
-        "sname varchar(15)," +
-        "college varchar(15)," +
-        "major varchar(15)," +
+        "sname varchar(100)," +
+        "college varchar(100)," +
+        "major varchar(100)," +
         "grade int(4)," +
         "class int(3)," +
         "password varchar(33)," +
@@ -31,7 +29,7 @@ function DBInit() {
 
     con.query("create table if not exists Teacher(" +
         "tid varchar(20)," +
-        "tname varchar(15)," +
+        "tname varchar(100)," +
         "password varchar(33)," +
         "primary key(tid))", function (err, result) {
             if (err) {
@@ -50,7 +48,7 @@ function DBInit() {
 
     con.query("create table if not exists Course(" +
         "cid varchar(32)," +
-        "cname varchar(20)," +
+        "cname varchar(100)," +
         "endTime varchar(32)," +
         "primary key(cid))", function (err, result) {
             if (err) {

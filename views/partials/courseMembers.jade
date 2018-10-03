@@ -12,3 +12,19 @@ div(class="panel panel-info")
                     a(ui-sref=".teacher" ng-click="changeStatus('teacher')") 教师
     div(class="panel-body panelBody")
         div(ui-view="")
+    div
+      ul(
+        class="pagination"
+        uib-pagination
+        total-items="totalItems"
+        ng-model="currentPage"
+        items-per-page="itemsPerPage"
+        max-size="maxSize"
+        class="pagination-sm"
+        boundary-links="true"
+        force-ellipses="true"
+        previous-text="前一页"
+        next-text="后一页"
+        first-text="首页"
+        last-text="末页"
+      )
