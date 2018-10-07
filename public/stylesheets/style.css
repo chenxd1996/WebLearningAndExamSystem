@@ -536,6 +536,12 @@ a {
   width: 100%;
 }
 
+.all-question .submit-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 4px;

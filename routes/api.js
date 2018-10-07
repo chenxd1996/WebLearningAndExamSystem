@@ -6,6 +6,7 @@ var exec = require("child_process").exec;
 var excelParser = require('excel-parser');
 var crypto = require('crypto');
 var rimraf = require('rimraf');
+const { queryPromise } = require('../utils');
 
 exports.loginCheck = function (req, res) {
     var id = req.body.id;
@@ -810,6 +811,7 @@ exports.addExam = function (req, res) {
     var ename = req.body.examName;
     var examPoints = req.body.examPoints;
     var ebs = req.body.ebs;
+    const type = req.body.isMock ? 0 : 1;
     //if (!cid || !req.body.startTime || !req.body.endTime || !req.body.examDate || !ename || !examPoints || !ebs)
     var eid = new Date().getTime();
     startTime.setDate(examStartDate.getDate());
@@ -821,7 +823,7 @@ exports.addExam = function (req, res) {
     endTime.setFullYear(examEndDate.getFullYear());
     endTime.setSeconds(0);
     con.query("insert into Exam " +
-        "value(?, ?, ?, ? ,?);", [eid, ename, examPoints, startTime.getTime(), endTime.getTime()], function (err, result) {
+        "value(?, ?, ?, ? ,?, ?);", [eid, ename, examPoints, startTime.getTime(), endTime.getTime(), type], function (err, result) {
         if (err) {
             console.log("Insert into Exam: " + err);
         } else {
@@ -986,8 +988,8 @@ exports.getExamQuestions = function(req, res) {
     var eid = req.body.eid;
     var result = {};
     if (userInfo) {
-        con.query("select startTime, endTime, points from Exam " +
-            "where eid = ?;", eid, function (err, result3) {
+        con.query("select startTime, endTime, points, type from Exam " +
+            "where eid = ?;", eid, async function (err, result3) {
             if (err) {
                 console.log("Get exam in getExamQuestions: " + err);
             } else {
@@ -995,18 +997,26 @@ exports.getExamQuestions = function(req, res) {
                 var query = "";
                 var params;
                 if (userInfo.level == 1) {
+                    try {
+                      const result4 = await queryPromise(con, `select grade, isSubmit from StudentExam 
+                      where sid = ? and eid = ?`, [userInfo.id, eid]);
+                      result.grade = result4[0].grade;
+                      result.isSubmit = result4[0].isSubmit;
+                    } catch (e) {
+                      console.error("Get student grade: " + err);
+                    }
                     var now = new Date().getTime();
                     params = [userInfo.id, eid];
                     if (result3[0].startTime > now) {
                         res.json(null);
+                    } else if (result.isSubmit || result3[0].endTime < now) {
+                      query = ("select e.description, e.eid, seq.stuAnswer, a.answer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid and seq.sid = ?, Exercise e, " +
+                          "Answer a where ee.eid = ? and ee.exid = e.eid and a.eid = ee.exid " +
+                          "order by e.eid;");
                     } else if (result3[0].startTime <= now && result3[0].endTime >= now) {
                         query = "select e.description, e.eid, seq.stuAnswer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid and seq.sid = ?, Exercise e " +
                             "where ee.eid = ? and ee.exid = e.eid " +
                             "order by e.eid;"
-                    } else if (result3[0].endTime < now) {
-                        query = ("select e.description, e.eid, seq.stuAnswer, a.answer from ExamExercise ee left join StudentExamQuestion seq on ee.eid = seq.eid and ee.exid = seq.exid and seq.sid = ?, Exercise e, " +
-                            "Answer a where ee.eid = ? and ee.exid = e.eid and a.eid = ee.exid " +
-                            "order by e.eid;");
                     }
                 } else if (userInfo.level == 2) {
                     params = eid;
@@ -1035,21 +1045,8 @@ exports.getExamQuestions = function(req, res) {
                                 } else {
                                     result.options = result2;
                                 }
-                                if (result3[0].endTime < now) {
-                                    con.query("select grade from StudentExam " +
-                                        "where sid = ? and eid = ?", [userInfo.id, eid], function (err, result4) {
-                                        if (err) {
-                                            console.log("Get student grade: " + err);
-                                        } else{
-                                            result.grade = result4[0];
-                                            result.now = new Date().getTime();
-                                            res.json(result);
-                                        }
-                                    });
-                                } else {
-                                    result.now = new Date().getTime();
-                                    res.json(result);
-                                }
+                                result.now = new Date().getTime();
+                                res.json(result);
                             }
                         });
                     }
@@ -2413,7 +2410,26 @@ exports.addDuration = function(req, res) {
   `;
   con.query(queryString, function(err) {
     if (err) {
-      console.log('更新学生访问时间出错', err);
+      console.error('更新学生访问时间出错', err);
+      res.end();
+    } else {
+      res.json({
+        status: 'SUCCESS',
+      });
+    }
+  });
+}
+
+exports.submitAnswer = function(req, res) {
+  const { sid, eid } = req.body;
+  console.log(sid, eid);
+  const queryString = `
+    UPDATE StudentExam SET isSubmit = true WHERE sid = '${sid}'
+    AND eid = '${eid}'
+  `;
+  con.query(queryString, function(err) {
+    if (err) {
+      console.error(err);
       res.end();
     } else {
       res.json({

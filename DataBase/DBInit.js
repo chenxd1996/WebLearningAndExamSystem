@@ -112,6 +112,7 @@ function DBInit() {
         "points float default 0," +
         "startTime varchar(32)," +
         "endTime varchar(32)," +
+        "type tinyint," +
         "primary key(eid))", function (err, result) {
             if (err) {
                 console.log("Exam: " + err);
@@ -239,6 +240,7 @@ function DBInit() {
         "sid varchar(10)," +
         "eid varchar(32)," +
         "grade float default 0," +
+        "isSubmit boolean," +
         "primary key(sid, eid)," +
         "foreign key(sid) references Student(sid) on delete cascade on update cascade," +
         "foreign key(eid) references Exam(eid) on delete cascade on update cascade)", function (err, result) {

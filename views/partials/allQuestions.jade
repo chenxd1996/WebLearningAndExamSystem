@@ -1,4 +1,4 @@
-div(class="content-container")
+div(class="content-container all-question")
     div(ng-if="userInfo.level == 1" class="panel" ng-repeat="question in questions" ng-class="{'panel-success' : question.isTrue, 'panel-danger' : !question.isTrue && question.isShow, 'panel-info': !question.isShow}")
         div(class="panel-heading")
             h4 Question {{$index + 1}}
@@ -6,7 +6,7 @@ div(class="content-container")
             div(ng-bind-html="question.description | trustHtml" class="mb-10")
             div(ng-repeat="option in options[$index]")
                 label(class="checkbox-inline")
-                    input(type="checkbox" ng-model="option.checked" ng-disabled="question.isShow" ng-change="changeAnswer(question.eid, options[$parent.$index])")
+                    input(type="checkbox" ng-model="option.checked" ng-disabled="question.isShow || isSubmit" ng-change="changeAnswer(question.eid, options[$parent.$index])")
                     span {{option.op + ". "}}
                     span(ng-bind-html="option.description | trustHtml")
             div(ng-if="question.isShow" class="alert mt-10" role="alert" ng-class="{true: 'alert-success', false: 'alert-danger'}[question.isTrue]")
@@ -27,7 +27,7 @@ div(class="content-container")
                 span(class="pull-right")
                     span(class="cl-warning")
                         i(class="fa fa-fw fa-clock-o")
-                        span 剩余时间: {{leftTime | date: "HH:mm:ss"}}
+                        span 剩余时间: {{hours}}小时{{minutes}}分{{seconds}}秒
         div(class="panel-body")
             div(class="progress")
                 div(class="progress-bar" role="progressbar" aria-valuenow="{{done}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (done / questions.length) * 100 + '%'}" style="width: 0%;")
@@ -42,5 +42,7 @@ div(class="content-container")
             div(class="progress")
                 div(class="progress-bar" role="progressbar" aria-valuenow="{{correctNum}}" aria-valuemin="0" aria-valuemax="{{questions.length}}" ng-style="{'width' : (correctNum / questions.length) * 100 + '%'}" style="width: 0%;")
             span {{correctNum}} / {{questions.length}}
+    div(class="submit-button-container" ng-if="userInfo.level === 1 && type === 0 && !isSubmit")
+      button(class="btn btn-primary" ng-click="submitAnswer()") 提交
     div(class="bg-white mt-10 pt-5 pr-10 pr-10 pb-5 pl-20" ng-if="!questions && userInfo.level")
         div(class="fs-16") 考试未开始

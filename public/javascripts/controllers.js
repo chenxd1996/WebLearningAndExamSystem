@@ -1327,6 +1327,7 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
         exam.startTime = $scope.startTime;
         exam.endTime = $scope.endTime;
         exam.exerciseNum = $scope.exerciseNum;
+        exam.isMock = $scope.isMock;
         var total = 0;
         for (var i = 0; i < $scope.ebs.length; i++) {
             total += $scope.ebs[i].exerciseNum;
@@ -1525,7 +1526,7 @@ function examDetailCtrl($scope, $location, $stateParams) {
     }
 }
 
-function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $timeout, $state) {
+function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $timeout, $state, $uibModal) {
     var eid = $stateParams.examID;
     $scope.status = $stateParams.status;
     $scope.done = 0;
@@ -1540,18 +1541,20 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                     return;
                 }
                 if (res.grade) {
-                    $scope.grade = res.grade.grade;
+                    $scope.grade = res.grade;
                 } else {
                     $scope.grade = 0;
                 }
+                $scope.isSubmit = res.isSubmit;
                 $scope.startTime = res.exam.startTime;
                 $scope.endTime = res.exam.endTime;
                 $scope.points = res.exam.points;
+                $scope.type = res.exam.type;
                 $scope.now = res.now;
                 $scope.questions = res.exercise;
                 $scope.options = res.options;
                 for (var i = 0; i < $scope.options.length; i++) {
-                    if ($scope.status == "ended") {
+                    if ($scope.status == "ended" || $scope.isSubmit) {
                         $scope.questions[i].isShow = true;
                         if ($scope.questions[i].stuAnswer) {
                             var stuAnswer = $scope.questions[i].stuAnswer.trim().replace(/\s/g, "");
@@ -1581,15 +1584,13 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                             $scope.now = $scope.now + 1000;
                             $timeout(function () {
                                 var ms = $scope.endTime - $scope.now;
-                                var hours = ms / (1000 * 60 * 60);
-                                ms = ms % (1000 * 60 * 60);
-                                var minutes = ms / (1000 * 60);
-                                ms = ms % (1000 * 60);
-                                var seconds = ms / 1000;
-                                $scope.leftTime  = new Date();
-                                $scope.leftTime.setHours(hours);
-                                $scope.leftTime.setMinutes(minutes);
-                                $scope.leftTime.setSeconds(seconds);
+                                if (ms >= 0) {
+                                  $scope.hours = Math.floor(ms / (1000 * 60 * 60));
+                                  ms = ms % (1000 * 60 * 60);
+                                  $scope.minutes = Math.floor(ms / (1000 * 60));
+                                  ms = ms % (1000 * 60);
+                                  $scope.seconds = Math.floor(ms / 1000);
+                                }
                             });
                         } else if ($scope.status == "progressing") {
                             $state.go("logined.examDetail.allQuestions", {
@@ -1640,6 +1641,28 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                 }
             }
         });
+    };
+
+    $scope.submitAnswer = function() {
+      var modalInstance = $uibModal.open({
+          animation: false,
+          size: 'sm',
+          templateUrl: 'partials/confirmModal',
+          controller: confirmModalCtrl,
+          resolve: {
+              des: function () {
+                return "提交之后不能再修改答案，确定提交吗?";
+              }
+          }
+      });
+      modalInstance.result.then(function () {
+        $http.post('/submitAnswer', {
+          sid: $rootScope.userInfo.id,
+          eid: eid,
+        }).success(function() {
+          location.reload();
+        });
+      });
     };
 
 }
