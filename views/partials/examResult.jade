@@ -21,16 +21,29 @@ div(class="content-container")
                             td {{student.class}}
                             td {{student.grade.toFixed(1)}}
                             td {{student.rank}}
-                ul(class="pagination pagination-sm")
-                    li(ng-class="{'disabled': currentPage == 0}" ng-click="lastPage()")
-                        a(href="#" aria-label="Last")
-                            span(aria-hidden="true") &laquo;
-                    li(ng-repeat="page in studentsPages" ng-class="{'active': currentPage == $index}" ng-click="setPage($index)")
-                        a(href="#")
-                            span {{$index + 1}}
-                    li(ng-class="{'disabled': currentPage == studentsPages.length - 1}" ng-click="nextPage()")
-                        a(href="#" aria-label="Next")
-                            span(aria-hidden="true") &raquo;
+                //- ul(class="pagination pagination-sm")
+                //-     li(ng-class="{'disabled': currentPage == 0}" ng-click="lastPage()")
+                //-         a(href="#" aria-label="Last")
+                //-             span(aria-hidden="true") &laquo;
+                //-     li(ng-repeat="page in studentsPages" ng-class="{'active': currentPage == $index}" ng-click="setPage($index)")
+                //-         a(href="#")
+                //-             span {{$index + 1}}
+                //-     li(ng-class="{'disabled': currentPage == studentsPages.length - 1}" ng-click="nextPage()")
+                //-         a(href="#" aria-label="Next")
+                //-             span(aria-hidden="true") &raquo;
+                ul(
+                  uib-pagination
+                  total-items="studentsPages.length"
+                  ng-model="currentPage"
+                  max-size="5"
+                  class="pagination-sm"
+                  boundary-links="true"
+                  force-ellipses="true"
+                  first-text="首页"
+                  last-text="末页"
+                  next-text="后一页"
+                  previous-text="前一页"
+                )
         div(class="panel panel-info gdf")
             div(class="panel-heading")
                 h4 成绩分布
