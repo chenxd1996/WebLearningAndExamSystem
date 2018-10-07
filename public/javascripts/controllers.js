@@ -1669,7 +1669,7 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
 
 function examResultCtrl($scope, $stateParams, $http, $rootScope) {
     $scope.status = $stateParams.status;
-    $scope.currentPage = 0;
+    $scope.currentPage = 1;
     var eid = $stateParams.examID;
     $scope.labels = ["不及格", "60-70", "70-80", "80-90", "90-100"];
     $scope.data = [0, 0, 0, 0, 0];
