@@ -14,7 +14,7 @@ div(class="content-container")
                             th(class="text-center") 成绩
                             th(class="text-center") 排名
                     tbody
-                        tr(ng-repeat="student in studentsPages[currentPage]" style="text-align: center" ng-if="student.rank")
+                        tr(ng-repeat="student in studentsPages[currentPage - 1]" style="text-align: center" ng-if="student.rank")
                             td {{student.sname}}
                             td {{student.major}}
                             td {{student.Grade}}
