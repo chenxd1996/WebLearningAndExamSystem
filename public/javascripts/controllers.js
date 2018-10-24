@@ -1328,6 +1328,7 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
         exam.endTime = $scope.endTime;
         exam.exerciseNum = $scope.exerciseNum;
         exam.isMock = $scope.isMock;
+        exam.duration = $scope.duration;
         var total = 0;
         for (var i = 0; i < $scope.ebs.length; i++) {
             total += $scope.ebs[i].exerciseNum;
@@ -1348,7 +1349,7 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
     }
 }
 
-function myExamsCtrl($scope, $http, $rootScope, $stateParams, $location, $state) {
+function myExamsCtrl($scope, $http, $rootScope, $stateParams, $location, $state, $uibModal) {
     var status = $scope.status = $stateParams.status;
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
@@ -1369,6 +1370,33 @@ function myExamsCtrl($scope, $http, $rootScope, $stateParams, $location, $state)
     }
     $scope.changeStatus = function(status) {
         $state.go('logined.examSystem.myExams', {status: status}, {reload: true});
+    }
+    $scope.showConfirm = function(exam) {
+      var modalInstance = $uibModal.open({
+        animation: false,
+        size: 'sm',
+        templateUrl: 'partials/confirmModal',
+        controller: confirmModalCtrl,
+        resolve: {
+            des: function () {
+                return "考试须在规定时间内完成，确定开始考试吗？";
+            }
+        }
+      });
+
+      modalInstance.result.then(function () {
+          $http.post('/startExam', {
+              eid: exam.eid,
+              userInfo: $rootScope.userInfo
+          }).success(function (res) {
+              if (res.status === 'SUCCESS') {
+                $state.go("logined.examDetail.allQuestions", {
+                    status: 'progressing',
+                    examID: exam.eid,
+                });
+              }
+          });
+      });
     }
 }
 
@@ -1531,6 +1559,9 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
     $scope.status = $stateParams.status;
     $scope.done = 0;
     $scope.correctNum = 0;
+    $scope.hours = 0;
+    $scope.minutes = 0;
+    $scope.seconds = 0;
     $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post("/getExamQuestions",{
@@ -1546,6 +1577,7 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                     $scope.grade = 0;
                 }
                 $scope.isSubmit = res.isSubmit;
+                $scope.leftTime = res.leftTime;
                 $scope.startTime = res.exam.startTime;
                 $scope.endTime = res.exam.endTime;
                 $scope.points = res.exam.points;
@@ -1578,12 +1610,12 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                         }
                     }
                 }
-                if ($scope.endTime >= $scope.now && $scope.startTime <= $scope.now) {
+                if ($scope.leftTime > 0) {
                     var timeCounter = setInterval(function () {
-                        if ($scope.endTime >= $scope.now && $scope.startTime <= $scope.now) {
-                            $scope.now = $scope.now + 1000;
+                        $scope.leftTime -= 1000;
+                        if ($scope.leftTime > 0) {
                             $timeout(function () {
-                                var ms = $scope.endTime - $scope.now;
+                                var ms = $scope.leftTime;
                                 if (ms >= 0) {
                                   $scope.hours = Math.floor(ms / (1000 * 60 * 60));
                                   ms = ms % (1000 * 60 * 60);
@@ -1593,24 +1625,23 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                                 }
                             });
                         } else if ($scope.status == "progressing") {
+                            console.log('reload---------------');
                             $state.go("logined.examDetail.allQuestions", {
                                 status: 'ended',
                                 examID: eid
                             }, {
                                 reload: true
                             });
-                            clearInterval(sysTimeChecker);
                             clearInterval(timeCounter);
                         }
                     }, 1000);
-
-                    var sysTimeChecker = setInterval(function () {
-                        if ($scope.endTime >= $scope.now && $scope.startTime <= $scope.now) {
-                            $http.get('/getSystemTime').success(function (res) {
-                                $scope.now = res.now;
-                            });
-                        }
-                    }, 1000 * 60);
+                } else if ($scope.status == "progressing") {
+                    $state.go("logined.examDetail.allQuestions", {
+                        status: 'ended',
+                        examID: eid
+                    }, {
+                        reload: true
+                    });
                 }
             });
         }
@@ -1665,6 +1696,32 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
       });
     };
 
+    $scope.reExam = function() {
+      var modalInstance = $uibModal.open({
+          animation: false,
+          size: 'sm',
+          templateUrl: 'partials/confirmModal',
+          controller: confirmModalCtrl,
+          resolve: {
+              des: function () {
+                return "重测将会清空之前的作答与成绩，确定重测吗？";
+              }
+          }
+      });
+      modalInstance.result.then(function () {
+        $http.post('/startExam', {
+          userInfo: $rootScope.userInfo,
+          eid: eid,
+        }).success(function() {
+          $state.go("logined.examDetail.allQuestions", {
+            status: 'progressing',
+            examID: eid
+          }, {
+            reload: true
+          });
+        });
+      });
+    };
 }
 
 function examResultCtrl($scope, $stateParams, $http, $rootScope) {

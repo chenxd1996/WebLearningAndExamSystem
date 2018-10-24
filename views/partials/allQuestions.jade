@@ -1,4 +1,5 @@
 div(class="content-container all-question")
+    button(class="btn btn-primary mb-5" ng-click="reExam()") 重测
     div(ng-if="userInfo.level == 1" class="panel" ng-repeat="question in questions" ng-class="{'panel-success' : question.isTrue, 'panel-danger' : !question.isTrue && question.isShow, 'panel-info': !question.isShow}")
         div(class="panel-heading")
             h4 Question {{$index + 1}}

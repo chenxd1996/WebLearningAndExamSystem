@@ -151,6 +151,8 @@ router.post('/addDuration', api.addDuration);
 
 router.post('/submitAnswer', api.submitAnswer);
 
+router.post('/startExam', api.startExam);
+
 router.get('/*', function (req, res, next) {
     if (!req.session.userInfo) {
         res.redirect('/login');
