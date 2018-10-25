@@ -971,7 +971,7 @@ exports.getMyExams = function (req, res) {
             query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
                 "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid and e.endTime < ?;"
         } else {
-            query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
+            query = "select c.cname, e.* from Course c, Exam e, ExamCourse ec, TeacherCourse tc " +
                 "where tc.tid = ? and tc.cid = ec.cid and ec.eid = e.eid and c.cid = tc.cid ;";
         }
         con.query(query, [userInfo.id, now, now], function (err, result) {
@@ -2193,8 +2193,8 @@ exports.editExam = function (req, res) {
     exam.endTime = new Date(exam.endTime);
     if (userInfo.level == 2) {
         con.query("update Exam " +
-            "set startTime = ?, endTime=?, ename = ? " +
-            "where eid = ?;", [exam.startTime.getTime(), exam.endTime.getTime(), exam.ename, exam.eid], function (err) {
+            "set startTime = ?, endTime=?, ename = ?, duration = ? " +
+            "where eid = ?;", [exam.startTime.getTime(), exam.endTime.getTime(), exam.ename, exam.duration * 60, exam.eid], function (err) {
             if (err) {
                 console.log("Update exam in editExam: " + err);
                 res.json({

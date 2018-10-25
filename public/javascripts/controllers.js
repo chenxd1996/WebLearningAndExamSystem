@@ -1424,7 +1424,10 @@ function examsManagementCtrl($scope, $http, $rootScope, $uibModal, toaster) {
                 userInfo: $rootScope.userInfo,
                 status: status
             }).success(function (res) {
-                $scope.exams = res;
+                $scope.exams = res || [];
+                $scope.exams.forEach((exam) => {
+                  exam.duration = exam.duration / 60;
+                });
             });
         }
     });
