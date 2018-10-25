@@ -46,7 +46,7 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
 
 //controller for homepage router
 function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout, $interval) {
-    $rootScope.$watch(function () {
+    var unbind = $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
         if (!$rootScope.userInfo) {
@@ -126,16 +126,18 @@ function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout, $inter
             $scope.checked = status;
         });
     }
+    $scope.$on('$destroy', unbind);
 }
 
 //controller for learning system router
 
 function learningSystemCtrl($scope, $location, $rootScope) {
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $scope.userInfo = $rootScope.userInfo;
         }
     });
+    $scope.$on('$destroy', unbind);
     var options = ['my-courses', 'add-course', 'courses-management'];
     var path = $location.path();
     for (var i = 0; i < options.length; i++) {
@@ -271,11 +273,12 @@ function confirmModalCtrl($scope, $uibModalInstance, des) {
 }
 
 function courseMembersStudentCtrl($scope, $stateParams, $http, $uibModal, $rootScope, toaster, $filter) {
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
           $scope.userInfo = $rootScope.userInfo;
         }
     });
+    $scope.$on('$destroy', unbind);
     $scope.students = [];
     $scope.studentsSelected = [];
     $scope.options = [{value: '学号', key: 'sid'}, {key: 'sname', value:'姓名'}, {key: 'college', value: '学院'},
@@ -609,7 +612,7 @@ function courseMembersTeacherCtrl($scope, $stateParams, $http, $uibModal, $rootS
 function myCoursesCtrl($scope, $rootScope, $http, $state, $stateParams) {
     $scope.status = $scope.radioModel = $stateParams.status;
     $scope.result = {};
-    $rootScope.$watch(function () {
+    var unbind = $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
@@ -624,6 +627,7 @@ function myCoursesCtrl($scope, $rootScope, $http, $state, $stateParams) {
             });
         }
     });
+    $scope.$on('$destroy', unbind);
     $scope.changeStatus = function (status) {
         $state.go("logined.learningSystem.myCourses", {status: status}, {reload: true});
     };
@@ -669,7 +673,7 @@ function addCourseCtrl($scope, $http, toaster, $rootScope, $uibModal) {
 }
 
 function coursesManagementCtrl($scope, $rootScope, $http, toaster, $uibModal) {
-    $rootScope.$watch(function () {
+    var unbind = $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
         if ($rootScope.userInfo && $rootScope.userInfo.level == 2 ) {
@@ -683,6 +687,7 @@ function coursesManagementCtrl($scope, $rootScope, $http, toaster, $uibModal) {
             });
         }
     });
+    $scope.$on('$destroy', unbind);
 
     $scope.edit = function(course) {
         var modalInstance = $uibModal.open({
@@ -767,11 +772,12 @@ function editCourseModalCtrl($scope, $uibModalInstance, course) {
 function courseDetailCtrl($scope, $location,  $stateParams, $rootScope) {
     $scope.courseID = $stateParams.courseID;
     $scope.courseName = $stateParams.courseName;
-    $rootScope.$watch(function () {
+    var unbind = $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
         $scope.userInfo = $rootScope.userInfo;
     });
+    $scope.$on('$destroy', unbind);
     var options = ['add-members', 'add-course-data', 'course-data', 'course-members'];
     var path = $location.path();
     for (var i = 0; i < options.length; i++) {
@@ -799,7 +805,7 @@ function courseHomeCtrl($scope, $stateParams, $http) {
 function courseDataCtrl($scope, $stateParams, $http, $rootScope, $uibModal, toaster) {
     var courseID = $scope.courseID = $stateParams.courseID;
     $scope.courseName = $stateParams.courseName;
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post('/getCourseWares', {
                 cid: courseID,
@@ -809,6 +815,7 @@ function courseDataCtrl($scope, $stateParams, $http, $rootScope, $uibModal, toas
             });
         }
     });
+    $scope.$on('$destroy', unbind);
     
     $scope.delete = function (index) {
         var modalInstance = $uibModal.open({
@@ -844,7 +851,7 @@ function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
     $scope.canAdd = true;
     $scope.pages = [];
     $scope.pageChageCount = 0;
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && $rootScope.userInfo.level == 1) {
             var check = setInterval(function () {
                 $scope.canAdd = false;
@@ -866,6 +873,8 @@ function courseWareDetailCtrl($scope, $stateParams, $http, $rootScope) {
             });
         }
     });
+    $scope.$on('$destroy', unbind);
+
 }
 
 function learningSituationCtrl($scope, $stateParams, $http) {
@@ -903,7 +912,7 @@ function exerciseSystemCtrl($scope, $location) {
 
 function addExerciseBankCtrl($scope, $rootScope, $http, toaster) {
     $scope.exerciseBank = {};
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $http.post('/getMyCourses', {
                 userInfo: $rootScope.userInfo,
@@ -914,6 +923,7 @@ function addExerciseBankCtrl($scope, $rootScope, $http, toaster) {
             });
         }
     });
+    $scope.$on('$destroy', unbind);    
 
     $scope.submit = function () {
         $scope.exerciseBank.id = $scope.courseSelected.cid;
@@ -930,7 +940,7 @@ function addExerciseBankCtrl($scope, $rootScope, $http, toaster) {
 
 function myExerciseBankCtrl($scope, $http, $rootScope, $stateParams, $state) {
     $scope.status = $scope.radioModel = $stateParams.status;
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $scope.userInfo = $rootScope.userInfo;
             $http.post('/getExerciseBanks', {
@@ -942,13 +952,14 @@ function myExerciseBankCtrl($scope, $http, $rootScope, $stateParams, $state) {
             });
         }
     });
+    $scope.$on('$destroy', unbind);
     $scope.changeStatus = function (status) {
         $state.go("logined.exerciseSystem.myExerciseBank", {status: status}, {reload: true});
     }
 }
 
 function exerciseBanksManagementCtrl($scope, $http, $rootScope, toaster, $uibModal) {
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $scope.userInfo = $rootScope.userInfo;
             $http.post('/getExerciseBanks', {
@@ -958,6 +969,7 @@ function exerciseBanksManagementCtrl($scope, $http, $rootScope, toaster, $uibMod
             });
         }
     });
+    $scope.$on('$destroy', unbind);
 
     $scope.edit = function(eb) {
         var modalInstance = $uibModal.open({
@@ -1031,11 +1043,12 @@ function editExerciseBankModalCtrl($scope, $uibModalInstance, eb) {
 
 function exerciseBankDetailCtrl($scope, $rootScope, $stateParams, $location) {
     $scope.exerciseBankID = $stateParams.exerciseBankID;
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $scope.userInfo = $rootScope.userInfo;
         }
     });
+    $scope.$on('$destroy', unbind);    
     var options = ['add-exercise', 'all', 'completed', 'uncompleted'];
     var path = $location.path();
     for (var i = 0; i < options.length; i++) {
@@ -1074,7 +1087,7 @@ function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout, toaster
     $scope.done = 0;
     $scope.correctNum = 0;
     $scope.questions = [];
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $scope.userInfo = $rootScope.userInfo;
             $http.post('/getExercise', {
@@ -1118,6 +1131,7 @@ function exerciseCtrl($scope, $http, $stateParams, $rootScope, $timeout, toaster
             });
         }
     });
+    $scope.$on('$destroy', unbind);
 
     $scope.submit = function (options, index) {
         var ops = [];
@@ -1253,11 +1267,12 @@ function editExerciseModalCtrl($scope, $uibModalInstance, exercise, options) {
 }
 
 function examSystemCtrl($scope, $rootScope, $location, $state) {
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $scope.userInfo = $rootScope.userInfo;
         }
     });
+    $scope.$on('$destroy', unbind);
     var options = ['my-exams', 'add-exam', 'exams-management'];
     for (var i  = 0; i < options.length; i++) {
         if ($location.path().indexOf(options[i]) >= 0) {
@@ -1268,7 +1283,7 @@ function examSystemCtrl($scope, $rootScope, $location, $state) {
 }
 
 function addExamCtrl($scope, $rootScope, $http, toaster) {
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $http.post('/getMyCourses', {
                 userInfo: $rootScope.userInfo,
@@ -1278,6 +1293,7 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
             });
         }
     });
+    $scope.$on('$destroy', unbind);
 
     $scope.dateOptions = {
         minDate: new Date(),
@@ -1351,7 +1367,7 @@ function addExamCtrl($scope, $rootScope, $http, toaster) {
 
 function myExamsCtrl($scope, $http, $rootScope, $stateParams, $location, $state, $uibModal) {
     var status = $scope.status = $stateParams.status;
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post("/getMyExams", {
                 userInfo: $rootScope.userInfo,
@@ -1361,6 +1377,7 @@ function myExamsCtrl($scope, $http, $rootScope, $stateParams, $location, $state,
             });
         }
     });
+    $scope.$on('$destroy', unbind);
     var statuses = ['notStarted', 'progressing', 'ended'];
     for (var i = 0; i < statuses.length; i++) {
         if ($location.path().indexOf(statuses[i]) >= 0) {
@@ -1401,7 +1418,7 @@ function myExamsCtrl($scope, $http, $rootScope, $stateParams, $location, $state,
 }
 
 function examsManagementCtrl($scope, $http, $rootScope, $uibModal, toaster) {
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post("/getMyExams", {
                 userInfo: $rootScope.userInfo,
@@ -1411,6 +1428,7 @@ function examsManagementCtrl($scope, $http, $rootScope, $uibModal, toaster) {
             });
         }
     });
+    $scope.$on('$destroy', unbind);    
 
     $scope.edit = function (exam) {
         var modalInstance = $uibModal.open({
@@ -1470,7 +1488,7 @@ function examsManagementCtrl($scope, $http, $rootScope, $uibModal, toaster) {
 }
 
 function editExamModalCtrl($scope, $uibModalInstance, exam, $rootScope, $http) {
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $http.post('/getMyCourses', {
                 userInfo: $rootScope.userInfo,
@@ -1480,6 +1498,7 @@ function editExamModalCtrl($scope, $uibModalInstance, exam, $rootScope, $http) {
             });
         }
     });
+    $scope.$on('$destroy', unbind);
     $scope.exam = {};
     for (var i in exam) {
         $scope.exam[i] = exam[i];
@@ -1562,7 +1581,8 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
     $scope.hours = 0;
     $scope.minutes = 0;
     $scope.seconds = 0;
-    $rootScope.$watch('userInfo', function () {
+    var timeCounter;
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post("/getExamQuestions",{
                 userInfo: $rootScope.userInfo,
@@ -1611,7 +1631,7 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                     }
                 }
                 if ($scope.leftTime > 0) {
-                    var timeCounter = setInterval(function () {
+                    timeCounter = setInterval(function () {
                         $scope.leftTime -= 1000;
                         if ($scope.leftTime > 0) {
                             $timeout(function () {
@@ -1625,7 +1645,6 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                                 }
                             });
                         } else if ($scope.status == "progressing") {
-                            console.log('reload---------------');
                             $state.go("logined.examDetail.allQuestions", {
                                 status: 'ended',
                                 examID: eid
@@ -1645,6 +1664,10 @@ function allQuestionsCtrl($scope, $stateParams, $http, $rootScope, toaster, $tim
                 }
             });
         }
+    });
+    $scope.$on('$destroy', function() {
+      unbind();
+      clearInterval(timeCounter);
     });
 
     $scope.changeAnswer = function (exid, options) {
@@ -1737,7 +1760,7 @@ function examResultCtrl($scope, $stateParams, $http, $rootScope) {
         }).success(function (res) {
             $scope.students = res[0];
             $scope.disGrades = res[1];
-            $rootScope.$watch('userInfo', function () {
+            var unbind = $rootScope.$watch('userInfo', function () {
                 if ($rootScope.userInfo) {
                     for (var i = 0; i < $scope.students.length; i++) {
                         var grade = $scope.students[i].grade.toFixed(1);
@@ -1773,6 +1796,7 @@ function examResultCtrl($scope, $stateParams, $http, $rootScope) {
                     }
                 }
             });
+            $scope.$on('$destroy', unbind);            
         });
     }
 
@@ -1808,7 +1832,7 @@ function messageCenterCtrl($scope, $location) {
 function postMessageCtrl($scope, $rootScope, $http, toaster) {
     $scope.message = {};
     // UE.getEditor('container');
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2 )) {
             $http.post('/getMyCourses', {
                 userInfo: $rootScope.userInfo
@@ -1817,6 +1841,7 @@ function postMessageCtrl($scope, $rootScope, $http, toaster) {
             });
         }
     });
+    $scope.$on('$destroy', unbind);
 
     $scope.submit = function () {
         $scope.message.text = $scope.editorText;
@@ -1832,7 +1857,7 @@ function postMessageCtrl($scope, $rootScope, $http, toaster) {
 }
 
 function allMessagesCtrl($scope, $http, $rootScope, toaster) {
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && ($rootScope.userInfo.level == 1 || $rootScope.userInfo.level == 2)) {
             $http.post('/getMessages', {
                 userInfo: $rootScope.userInfo
@@ -1847,6 +1872,7 @@ function allMessagesCtrl($scope, $http, $rootScope, toaster) {
         }
     });
 
+    $scope.$on('$destroy', unbind);
     $scope.check = function (index) {
         $http.post("/deleteMessage", {
             mid: $scope.messages[index].mid,
@@ -1863,7 +1889,7 @@ function allMessagesCtrl($scope, $http, $rootScope, toaster) {
 
 function messageDetailCtrl($scope, $http, $stateParams, $rootScope) {
     var mid = $stateParams.mid;
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo) {
             $http.post("/getMessageDetail", {
                 mid: mid,
@@ -1873,10 +1899,11 @@ function messageDetailCtrl($scope, $http, $stateParams, $rootScope) {
             });
         }
     });
+    $scope.$on('$destroy', unbind);
 }
 
 function myInformationCtrl($scope, $rootScope, $http, toaster, md5) {
-    $rootScope.$watch('userInfo', function () {
+    var unbind = $rootScope.$watch('userInfo', function () {
         if ($rootScope.userInfo && $rootScope.userInfo.level == 1) {
             $http.get('/getUserInfo').success(function (res) {
                 $scope.user = res;
@@ -1885,6 +1912,7 @@ function myInformationCtrl($scope, $rootScope, $http, toaster, md5) {
             $scope.user = $rootScope.userInfo;
         }
     });
+    $scope.$on('$destroy', unbind);
     $scope.submit = function () {
         if (!$scope.user.originalPassword) {
             if ($scope.user.newPassword || $scope.user.confirmPassword) {
@@ -1952,11 +1980,12 @@ function addQuestionModalCtrl($scope, $uibModalInstance, $rootScope, $http, cour
 }
 
 function questionAndAnswerCtrl($scope, $http, $uibModal, $rootScope) {
-  $rootScope.$watch(function () {
-    return $rootScope.userInfo;
-}, function () {
-   $scope.userInfo = $rootScope.userInfo;
-});
+  var unbind = $rootScope.$watch(function () {
+      return $rootScope.userInfo;
+  }, function () {
+    $scope.userInfo = $rootScope.userInfo;
+  });
+  $scope.$on('$destroy', unbind);
   const courseID = $scope.$parent.courseID;
   $http.post('/getQuestions', {
     courseID: courseID,

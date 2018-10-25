@@ -945,8 +945,8 @@ exports.getMyExams = function (req, res) {
             query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, StudentCourse sc " +
                 "where sc.sid = ? and sc.cid = ec.cid and ec.eid = e.eid and c.cid = sc.cid and e.startTime > ?;";
         } else if (status == "progressing") {
-            query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename, e.startExamTime from Course c, (select E.*, SE.startExamTime from Exam E left join StudentExam SE on (E.eid = SE.eid)) as e, ExamCourse ec, StudentCourse sc " +
-                "where sc.sid = ? and sc.cid = ec.cid and ec.eid = e.eid and c.cid = sc.cid and e.startTime <= ? and e.endTime >= ?;";
+            query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename, e.startExamTime from Course c, (select E.*, SE.startExamTime, SE.sid from Exam E left join StudentExam SE on (E.eid = SE.eid)) as e, ExamCourse ec, StudentCourse sc " +
+                "where sc.sid = ? and sc.sid = e.sid and sc.cid = ec.cid and ec.eid = e.eid and c.cid = sc.cid and e.startTime <= ? and e.endTime >= ?;";
         } else if (status == "ended") {
             query = "select c.cname, e.startTime, e.endTime, e.eid, e.ename from Course c, Exam e, ExamCourse ec, StudentCourse sc " +
                 "where sc.sid = ? and sc.cid = ec.cid and ec.eid = e.eid and c.cid = sc.cid and e.endTime < ?;";
@@ -1004,11 +1004,9 @@ exports.getExamQuestions = function(req, res) {
                     try {
                       const result4 = await queryPromise(con, `select grade, isSubmit, startExamTime from StudentExam 
                       where sid = ? and eid = ?`, [userInfo.id, eid]);
-                      console.log(result4[0]);
                       result.grade = result4 && result4[0].grade;
                       result.isSubmit = result4 && result4[0].isSubmit;
                       const startTime = result4 && result4[0].startExamTime || now;
-                      console.log(duration * 1000, now, startTime);
                       result.leftTime = Math.max(duration * 1000 - (now - startTime), 0);
                     } catch (e) {
                       console.error("Get student grade: " + err);
@@ -1052,6 +1050,7 @@ exports.getExamQuestions = function(req, res) {
                                 } else {
                                     result.options = result2;
                                 }
+                                result.now = now;
                                 res.json(result);
                             }
                         });
@@ -1106,10 +1105,10 @@ exports.saveAnswerInExam = function (req, res) {
                                       update StudentExam,
                                       (select sid, eid, SUM(point) as grade from StudentExamQuestion
                                       where sid = ? and eid = ?) as tb
-                                      set StudentExam.grade = tb.grade;
+                                      set StudentExam.grade = tb.grade where 
+                                      StudentExam.sid = ? and StudentExam.eid = ?;
                                     `
-  
-                                    con.query(updateString, [sid, eid], function (err, result) {
+                                    con.query(updateString, [sid, eid, sid, eid], function (err, result) {
                                         if (err) {
                                             console.log("update StudentExam: " + err);
                                         } else {
