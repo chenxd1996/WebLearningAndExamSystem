@@ -1779,16 +1779,16 @@ function examResultCtrl($scope, $stateParams, $http, $rootScope) {
                             $scope.data[4]++;
                         }
                     }
-                    var cmp = $scope.students[0].grade.toFixed(1);
+                    var cmp = Number.parseFloat($scope.students[0].grade.toFixed(1));
                     var rank = 1;
                     for (var i = 0; i < $scope.students.length; i++) {
-                        var grade = $scope.students[i].grade.toFixed(1);
+                        if (i === 10 && $rootScope.userInfo.level == 1) {
+                            $scope.students.splice(10, $scope.students.length - 10);
+                            break;
+                        }
+                        var grade = Number.parseFloat($scope.students[i].grade.toFixed(1));
                         if (grade < cmp) {
                             rank++;
-                            if (i > 9 && $rootScope.userInfo.level == 1) {
-                                $scope.students.splice(i, $scope.students.length);
-                                break;
-                            }
                             cmp = grade;
                         }
                         $scope.students[i].rank = rank;
@@ -1797,6 +1797,7 @@ function examResultCtrl($scope, $stateParams, $http, $rootScope) {
                     for (var i = 0; i < $scope.students.length; i += 10) {
                         $scope.studentsPages.push($scope.students.slice(i, i + 10));
                     }
+                    console.log($scope.studentsPages.length);
                 }
             });
             $scope.$on('$destroy', unbind);            
