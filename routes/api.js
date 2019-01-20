@@ -2412,11 +2412,10 @@ exports.deleteQuestion = function(req, res) {
 
 exports.addDuration = function(req, res) {
   // const con = DBConnect.con;
-  const { duration } = req.body;
   const userInfo = req.session.userInfo;
   const id = userInfo && userInfo.id;
   const queryString = `
-    UPDATE Student SET duration = ${duration} WHERE sid = '${id}'
+    UPDATE Student SET duration = duration + 60 WHERE sid = '${id}'
   `;
   con.query(queryString, function(err) {
     if (err) {

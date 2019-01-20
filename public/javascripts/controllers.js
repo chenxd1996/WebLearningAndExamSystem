@@ -46,6 +46,7 @@ function loginCtrl($scope, $rootScope, $http, $state, toaster, md5) {
 
 //controller for homepage router
 function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout, $interval) {
+    $scope.duration = $scope.hours = $scope.minutes = $scope.seconds = 0;
     var unbind = $rootScope.$watch(function () {
         return $rootScope.userInfo;
     }, function () {
@@ -74,9 +75,7 @@ function homeCtrl($scope, $location, $rootScope, $http, $state, $timeout, $inter
         if (userInfo && userInfo.level === 1) {
           $scope.duration = userInfo.duration;
           $scope.addRemoteDuration = function() {
-            $http.post('/addDuration', {
-              duration: $scope.duration,
-            });
+            $http.post('/addDuration');
           }
           $scope.addDuration = function() {
             $scope.duration++;
